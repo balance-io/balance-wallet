@@ -140,10 +140,9 @@ export default function createSwipeNavigator(screens, options) {
      */
     onMomentumScrollEnd = ({ nativeEvent }) => {
       const { navigation } = this.props;
+      const { currentIndex } = this.state;
 
-      const currentOffsetX = get(nativeEvent, 'contentOffset.x', 0);
-      const currentScreenIndex = Math.floor(currentOffsetX / deviceUtils.dimensions.width);
-      const currentScreenName = routeOrder[currentScreenIndex] || options.initialRouteName;
+      const currentScreenName = routeOrder[currentIndex] || options.initialRouteName;
 
       navigation.navigate(currentScreenName);
 
