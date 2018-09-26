@@ -43,6 +43,7 @@ const WalletScreen = ({
   assetsTotalUSD,
   didLoadAssetList,
   fetching,
+  onHideSplashScreen,
   onPressProfile,
   onPressWalletConnect,
   onRefreshList,
@@ -111,8 +112,11 @@ const WalletScreen = ({
         fetchData={onRefreshList}
         isEmpty={isEmpty}
         onPressWalletConnect={onPressWalletConnect}
-        onSectionsLoaded={onSectionsLoaded}
-        sections={filteredSections}
+        onSectionsLoaded={onHideSplashScreen}
+        sections={filterEmptyAssetSections([
+          sections.balances,
+          sections.collectibles
+        ])}
         showShitcoins={showShitcoins}
       />
     </Page>
@@ -129,6 +133,7 @@ WalletScreen.propTypes = {
   didLoadAssetList: PropTypes.bool,
   fetching: PropTypes.bool.isRequired,
   fetchingUniqueTokens: PropTypes.bool.isRequired,
+  onHideSplashScreen: PropTypes.func,
   onPressProfile: PropTypes.func.isRequired,
   onPressWalletConnect: PropTypes.func.isRequired,
   onRefreshList: PropTypes.func.isRequired,
