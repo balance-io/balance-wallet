@@ -6,6 +6,7 @@ import LoadingScreen from "./LoadingScreen";
 import QRScannerScreenWithData from "./QRScannerScreenWithData";
 import SendScreen from "./SendScreen";
 import LanguageScreen from "./LanguageScreen";
+import CurrencyScreen from "./CurrencyScreen";
 import SettingsScreenWithData from "./SettingsScreenWithData";
 import TransactionConfirmationScreenWithData from "./TransactionConfirmationScreenWithData";
 import WalletScreen from "./WalletScreen";
@@ -32,6 +33,10 @@ const SwipeStack = createSwipeNavigator(
     LanguageScreen: {
       name: "LanguageScreen",
       screen: LanguageScreen
+    },
+    CurrencyScreen: {
+      name: "CurrencyScreen",
+      screen: CurrencyScreen
     }
   },
   {

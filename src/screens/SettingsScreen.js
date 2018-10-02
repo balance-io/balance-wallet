@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { TouchableHighlight } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { compose, onlyUpdateForPropTypes, withHandlers } from "recompact";
 import styled from "styled-components/primitives";
 import AppVersionStamp from "../components/AppVersionStamp";
@@ -153,15 +153,17 @@ const SettingsScreen = ({
         </SettingArrowGroup>
       </SettingRow>
 
-      <SettingRow>
-        <SettingRowLabel>Currency</SettingRowLabel>
-        <SettingArrowGroup>
-          <SettingRowValue>USD</SettingRowValue>
-          <SettingRowArrow />
-        </SettingArrowGroup>
-      </SettingRow>
+      <TouchableOpacity onPress={onPressLanguage}>
+        <SettingRow>
+          <SettingRowLabel>Currency</SettingRowLabel>
+          <SettingArrowGroup>
+            <SettingRowValue>USD</SettingRowValue>
+            <SettingRowArrow />
+          </SettingArrowGroup>
+        </SettingRow>
+      </TouchableOpacity>
 
-      <TouchableHighlight onPress={onPressLanguage}>
+      <TouchableOpacity onPress={onPressLanguage}>
         <SettingRow>
           <SettingRowLabel>Language</SettingRowLabel>
           <SettingArrowGroup>
@@ -169,7 +171,7 @@ const SettingsScreen = ({
             <SettingRowArrow />
           </SettingArrowGroup>
         </SettingRow>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
       <SettingRow>
         <SettingRowLabel color={colors.blueGreyLight}>
@@ -216,7 +218,9 @@ SettingsScreen.propTypes = {
 export default compose(
   withHandlers({
     onPressLanguage: ({ navigation }) => () =>
-      navigation.navigate("LanguageScreen")
+      navigation.navigate("LanguageScreen"),
+    onPressCurrency: ({ navigation }) => () =>
+      navigation.navigate("CurrencyScreen")
   })
   // onlyUpdateForPropTypes(SettingsScreen)
 )(SettingsScreen);

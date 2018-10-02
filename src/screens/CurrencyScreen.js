@@ -6,13 +6,13 @@ import { ButtonRow } from "../components/buttons";
 import { Text } from "../components/text";
 import Icon from "../components/icons/Icon";
 import { colors, fonts, padding } from "../styles";
-import { LANGUAGES } from "../utils/constants";
+import { CURRENCIES } from "../utils/constants";
 
 const Content = styled(Column)`
   ${padding(0, 24)};
 `;
 
-const LanguageTitle = styled(Text).attrs({
+const CurrencyTitle = styled(Text).attrs({
   weight: "semibold",
   size: "big"
 })`
@@ -32,18 +32,18 @@ const SelectedIcon = styled(Icon).attrs({
   margin-left: auto;
 `;
 
-class LanguageScreen extends React.PureComponent {
+class CurrencyScreen extends React.PureComponent {
   state = {
-    selected: LANGUAGES[0].value
+    selected: CURRENCIES[0].value
   };
 
-  selectLanguage = language => {
+  selectCurrency = currency => {
     this.setState({
-      selected: language
+      selected: currency
     });
   };
 
-  sortLanguageOptions = (a, b) => {
+  sortCurrencyOptions = (a, b) => {
     if (a.label < b.label) {
       return -1;
     } else if (a.label > b.label) {
@@ -53,8 +53,8 @@ class LanguageScreen extends React.PureComponent {
     }
   };
 
-  renderLanguageOption = ({ label, value }, idx) => (
-    <ButtonRow key={idx} onPress={() => this.selectLanguage(value)}>
+  renderCurrencyOption = ({ label, value }, idx) => (
+    <ButtonRow key={idx} onPress={() => this.selectCurrency(value)}>
       <OptionLabel>{label}</OptionLabel>
       {this.state.selected === value && <SelectedIcon />}
     </ButtonRow>
@@ -70,12 +70,12 @@ class LanguageScreen extends React.PureComponent {
           onPress={onPressBackButton}
         />
         <Content>
-          <LanguageTitle weight="semibold" size="big">
-            Language
-          </LanguageTitle>
+          <CurrencyTitle weight="semibold" size="big">
+            Currency
+          </CurrencyTitle>
 
-          {LANGUAGES.sort(this.sortLanguageOptions).map(
-            this.renderLanguageOption
+          {CURRENCIES.sort(this.sortCurrencyOptions).map(
+            this.renderCurrencyOption
           )}
         </Content>
       </Page>
@@ -83,4 +83,4 @@ class LanguageScreen extends React.PureComponent {
   }
 }
 
-export default LanguageScreen;
+export default CurrencyScreen;

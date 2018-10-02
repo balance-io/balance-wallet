@@ -2,6 +2,7 @@ import chroma from "chroma-js";
 import PropTypes from "prop-types";
 
 const base = {
+  appleBlue: "#0E76FD", // 14, 118, 253
   black: "#000000", // '0, 0, 0'
   blue: "#657fe6", // '101, 127, 230'
   blueActive: "#5a71cc", // '90, 113, 204'
