@@ -21,4 +21,9 @@ const ButtonRow = ({ children, onPress, ...props }) => (
   </ButtonPressAnimation>
 );
 
+ButtonRow.propTypes = {
+  children: PropTypes.node,
+  onPress: PropTypes.func.isRequired
+};
+
 export default ButtonRow;
