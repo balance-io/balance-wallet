@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Column, Row, Page } from "../components/layout";
-import { BackButton } from "../components/header";
-import { ButtonRow } from "../components/buttons";
-import { Text } from "../components/text";
-import Icon from "../components/icons/Icon";
-import { colors, fonts, padding } from "../styles";
-import { LANGUAGES } from "../utils/constants";
+import { Column, Row, Page } from "../../components/layout";
+import { ButtonRow } from "../../components/buttons";
+import { Text } from "../../components/text";
+import Icon from "../../components/icons/Icon";
+import { colors, fonts, padding } from "../../styles";
+import { LANGUAGES } from "../../utils/constants";
 
-const Content = styled(Column)`
-  ${padding(0, 24)};
-`;
+const Content = styled(Column)``;
 
 const LanguageTitle = styled(Text).attrs({
   weight: "semibold",
@@ -63,22 +60,11 @@ class LanguageScreen extends React.PureComponent {
   render() {
     const { onPressBackButton } = this.props;
     return (
-      <Page align="stretch" component={Column} showTopInset>
-        <BackButton
-          color={colors.brightBlue}
-          direction="left"
-          onPress={onPressBackButton}
-        />
-        <Content>
-          <LanguageTitle weight="semibold" size="big">
-            Language
-          </LanguageTitle>
-
-          {LANGUAGES.sort(this.sortLanguageOptions).map(
-            this.renderLanguageOption
-          )}
-        </Content>
-      </Page>
+      <Content>
+        {LANGUAGES.sort(this.sortLanguageOptions).map(
+          this.renderLanguageOption
+        )}
+      </Content>
     );
   }
 }

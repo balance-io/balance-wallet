@@ -5,21 +5,38 @@ import IntroScreen from "./IntroScreen";
 import LoadingScreen from "./LoadingScreen";
 import QRScannerScreenWithData from "./QRScannerScreenWithData";
 import SendScreen from "./SendScreen";
-import LanguageScreen from "./LanguageScreen";
-import CurrencyScreen from "./CurrencyScreen";
-import SettingsScreenWithData from "./SettingsScreenWithData";
+// import LanguageScreen from "./LanguageScreen";
+// import CurrencyScreen from "./CurrencyScreen";
+// import SettingsScreenWithData from "./SettingsScreenWithData";
 import TransactionConfirmationScreenWithData from "./TransactionConfirmationScreenWithData";
 import WalletScreen from "./WalletScreen";
 
 import Navigation from "../navigation";
 
+// const SettingsStack = createStackNavigator(
+//   {
+//     SettingsScreen: {
+//       name: "SettingsScreen",
+//       screen: SettingsScreenWithData
+//     },
+//     LanguageScreen: {
+//       name: "LanguageScreen",
+//       screen: LanguageScreen
+//     },
+//     CurrencyScreen: {
+//       name: "CurrencyScreen",
+//       screen: CurrencyScreen
+//     }
+//   },
+//   {
+//     headerMode: "float",
+//     initialRoutename: "SettingsScreen",
+//     mode: "modal"
+//   }
+// );
+
 const SwipeStack = createSwipeNavigator(
   {
-    SettingsScreen: {
-      name: "SettingsScreen",
-      screen: SettingsScreenWithData,
-      statusBarColor: "dark-content"
-    },
     WalletScreen: {
       name: "WalletScreen",
       screen: WalletScreen,
@@ -29,19 +46,12 @@ const SwipeStack = createSwipeNavigator(
       name: "QRScannerScreen",
       screen: QRScannerScreenWithData,
       statusBarColor: "light-content"
-    },
-    LanguageScreen: {
-      name: "LanguageScreen",
-      screen: LanguageScreen
-    },
-    CurrencyScreen: {
-      name: "CurrencyScreen",
-      screen: CurrencyScreen
     }
   },
   {
     headerMode: "none",
     initialRouteName: "WalletScreen",
+    mode: "modal",
     onSwipeStart: () => Navigation.pauseNavigationActions(),
     onSwipeEnd: navigation => Navigation.resumeNavigationActions(navigation)
   }

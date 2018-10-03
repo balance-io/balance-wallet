@@ -1,226 +1,150 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { compose, onlyUpdateForPropTypes, withHandlers } from "recompact";
+import { compose, withHandlers } from "recompact";
 import styled from "styled-components/primitives";
-import AppVersionStamp from "../components/AppVersionStamp";
-import Avatar from "../components/Avatar";
-import { Button } from "../components/buttons";
-import { BackButton, Header } from "../components/header";
-import { Centered, Column, Row, Page } from "../components/layout";
-import SendFeedback from "../components/SendFeedback";
-import { Monospace, TruncatedAddress, Text } from "../components/text";
+import { Column, Row } from "../components/layout";
+import { Text } from "../components/text";
 import Icon from "../components/icons/Icon";
-import CopyTooltip from "../components/CopyTooltip";
-import QRCodeDisplay from "../components/QRCodeDisplay";
-import { colors, fonts, padding } from "../styles";
-import { deviceUtils } from "../utils";
+import SettingsSection from "./SettingsOverlay/SettingsSection";
+import LanguageSection from "./SettingsOverlay/LanguageSection";
+import CurrencySection from "./SettingsOverlay/CurrencySection";
+import { colors, borders, padding } from "../styles";
+import { Header } from "../components/header";
+
+const Overlay = styled(Column)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 15, 17, 0.4);
+`;
 
 const Content = styled(Column).attrs({
   align: "stretch",
   justify: "start"
 })`
-  ${padding(0, 24)};
   flex: 1;
+  margin-top: 120;
+  margin-left: 15;
+  margin-right: 15;
+  margin-bottom: 120;
+  ${padding(16)};
+  background: ${colors.white};
+  border-radius: 12;
 `;
 
-const FooterCol = styled(Column).attrs({
-  align: "start",
-  justify: "start"
+const HeaderRow = styled(Row).attrs({
+  align: "center"
 })`
-  ${padding(24)};
+  align-content: space-between;
+  margin-bottom: 30;
 `;
 
-const SmallAddress = styled(Monospace).attrs({
-  size: "tiny",
-  weight: "regular",
-  color: "blueGreyLight"
-})`
-  margin-top: 10;
-  max-width: ${deviceUtils.dimensions.width * (150 / deviceUtils.iPhoneXWidth)};
-`;
-
-const HeaderCol = styled(Column).attrs({
-  align: "start",
-  justify: "start"
-})`
-  margin-bottom: 24;
-`;
-
-const SettingRow = styled(Row).attrs({
-  align: "center",
-  justify: "start"
-})`
-  ${padding(20, 0)};
-  border-top-width: 1;
-  border-top-color: ${colors.lightGrey};
-  align-self: stretch;
-`;
-
-const SettingRowLabel = styled(Text).attrs({
-  size: "large"
-})``;
-
-const SettingRowValue = styled(Text).attrs({
+const HeaderTitle = styled(Text).attrs({
   size: "large",
-  color: colors.blueGreyLight
-})``;
-
-const SettingArrowGroup = styled(Row).attrs({
-  align: "center",
-  justify: "center"
+  weight: "bold"
 })`
   margin-left: auto;
+  margin-right: auto;
 `;
 
-const SettingRowArrow = styled(Icon).attrs({
+const HeaderBackButton = styled(Icon).attrs({
   name: "caret",
-  color: colors.blueGreyLight,
-  width: 20,
-  height: 15
+  direction: "left",
+  color: colors.appleBlue
 })`
-  margin-left: 6;
+  margin-right: 5;
 `;
 
-// const SeedPhraseButton = styled(Button)`
-//   margin-top: ${fonts.size.h5};
-// `;
+const HeaderAction = styled(Text).attrs({
+  size: "large",
+  weight: "semibold",
+  color: "appleBlue"
+})``;
 
-// const SeedPhraseSection = styled(Centered)`
-//   flex: 1;
-// `;
-
-// const SeedPhraseText = styled(Monospace).attrs({
-//   size: "h5",
-//   weight: "medium"
-// })`
-//   line-height: 28;
-//   max-width: 288;
-//   text-align: center;
-// `;
-
-const WalletAddressTextContainer = styled(Column).attrs({
-  align: "start",
-  justify: "start"
-})`
-  margin-top: 6;
-  margin-bottom: 6;
+const HeaderLeft = styled(TouchableOpacity)`
+  position: absolute;
+  left: 0;
+  display: ${({ visible }) => (visible ? "flex" : "none")};
+  flex-direction: row;
+  align-items: center;
 `;
 
-const SettingsScreen = ({
-  accountAddress,
-  onPressBackButton,
-  onPressLanguage,
-  onToggleShowSeedPhrase,
-  seedPhrase
-}) => (
-  <Page
-    align="stretch"
-    component={Column}
-    justify="start"
-    showBottomInset
-    showTopInset
-  >
-    {/*
-    <Header align="end" justify="end">
-      <BackButton
-        color={colors.brightBlue}
-        direction="right"
-        onPress={onPressBackButton}
-      />
-      </Header>
-      */}
+const HeaderRight = styled(TouchableOpacity)`
+  position: absolute;
+  right: 0;
+`;
 
-    <Content>
-      <HeaderCol>
-        <Avatar />
-        <WalletAddressTextContainer>
-          <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
-            <TruncatedAddress
-              address={accountAddress}
-              size="large"
-              weight="semibold"
-            />
-          </CopyTooltip>
-        </WalletAddressTextContainer>
-        <Text size="medium">Copy Share</Text>
-      </HeaderCol>
+class SettingsScreen extends React.PureComponent {
+  sections = {
+    SETTINGS: "Settings",
+    LANGUAGE: "Language",
+    CURRENCY: "Currency"
+  };
 
-      <SettingRow>
-        <SettingRowLabel>Backup</SettingRowLabel>
-        <SettingArrowGroup>
-          <SettingRowArrow />
-        </SettingArrowGroup>
-      </SettingRow>
+  state = {
+    section: this.sections.SETTINGS // settings, language, currency
+  };
 
-      <TouchableOpacity onPress={onPressLanguage}>
-        <SettingRow>
-          <SettingRowLabel>Currency</SettingRowLabel>
-          <SettingArrowGroup>
-            <SettingRowValue>USD</SettingRowValue>
-            <SettingRowArrow />
-          </SettingArrowGroup>
-        </SettingRow>
-      </TouchableOpacity>
+  handleSectionChange = section =>
+    this.setState({
+      section
+    });
 
-      <TouchableOpacity onPress={onPressLanguage}>
-        <SettingRow>
-          <SettingRowLabel>Language</SettingRowLabel>
-          <SettingArrowGroup>
-            <SettingRowValue>English</SettingRowValue>
-            <SettingRowArrow />
-          </SettingArrowGroup>
-        </SettingRow>
-      </TouchableOpacity>
+  renderActiveSection = () => {
+    switch (this.state.section) {
+      case this.sections.LANGUAGE:
+        return <LanguageSection />;
 
-      <SettingRow>
-        <SettingRowLabel color={colors.blueGreyLight}>
-          About Balance
-        </SettingRowLabel>
-      </SettingRow>
+      case this.sections.CURRENCY:
+        return <CurrencySection />;
 
-      <SettingRow>
-        <SettingRowLabel color={colors.blueGreyLight}>Legal</SettingRowLabel>
-      </SettingRow>
+      case this.sections.SETTINGS:
+      default:
+        return (
+          <SettingsSection
+            onPressLanguage={() =>
+              this.handleSectionChange(this.sections.LANGUAGE)
+            }
+            onPressCurrency={() =>
+              this.handleSectionChange(this.sections.CURRENCY)
+            }
+          />
+        );
+    }
+  };
 
-      {/*
-          <SendFeedback />
-          <SeedPhraseButton onPress={onToggleShowSeedPhrase}>
-            {seedPhrase ? "Hide" : "Show"} Seed Phrase
-          </SeedPhraseButton>
-          <SeedPhraseSection>
-            {seedPhrase && (
-              <CopyTooltip textToCopy={seedPhrase} tooltipText="Copy Seed Phrase">
-                <SeedPhraseText>{seedPhrase}</SeedPhraseText>
-              </CopyTooltip>
-            )}
-          </SeedPhraseSection>
-        */}
-    </Content>
+  render() {
+    const { visible } = this.props;
 
-    <FooterCol>
-      <QRCodeDisplay
-        size={deviceUtils.dimensions.width * (150 / deviceUtils.iPhoneXWidth)}
-        value={accountAddress}
-      />
-      <SmallAddress>{accountAddress}</SmallAddress>
-    </FooterCol>
-  </Page>
-);
+    return (
+      <Overlay>
+        <Content>
+          <HeaderRow>
+            <HeaderLeft
+              visible={this.state.section !== this.sections.SETTINGS}
+              onPress={() => this.handleSectionChange(this.sections.SETTINGS)}
+            >
+              <HeaderBackButton />
+              <HeaderAction>Settings</HeaderAction>
+            </HeaderLeft>
 
-SettingsScreen.propTypes = {
-  accountAddress: PropTypes.string,
-  onPressBackButton: PropTypes.func,
-  onToggleShowSeedPhrase: PropTypes.func,
-  seedPhrase: PropTypes.string
-};
+            <HeaderTitle>{this.state.section}</HeaderTitle>
 
-export default compose(
-  withHandlers({
-    onPressLanguage: ({ navigation }) => () =>
-      navigation.navigate("LanguageScreen"),
-    onPressCurrency: ({ navigation }) => () =>
-      navigation.navigate("CurrencyScreen")
-  })
-  // onlyUpdateForPropTypes(SettingsScreen)
-)(SettingsScreen);
+            <HeaderRight>
+              <HeaderAction>Done</HeaderAction>
+            </HeaderRight>
+          </HeaderRow>
+
+          {this.renderActiveSection()}
+        </Content>
+      </Overlay>
+    );
+  }
+}
+
+SettingsScreen.propTypes = {};
+
+export default SettingsScreen;

@@ -1,5 +1,4 @@
 import { withSafeTimeout } from "@hocs/safe-timers";
-import lang from "i18n-js";
 import { get } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
@@ -8,6 +7,12 @@ import { AssetList } from "../components/asset-list";
 import { UniqueTokenRow } from "../components/unique-token";
 import Avatar from "../components/Avatar";
 import { BalanceCoinRow } from "../components/coin-row";
+import {
+  ActivityHeaderButton,
+  Header,
+  HeaderButton
+} from "../components/header";
+import { FlexItem, Page } from "../components/layout";
 import {
   ActivityHeaderButton,
   Header,
@@ -27,6 +32,7 @@ import {
   withRequestsInit
 } from "../hoc";
 import { position } from "../styles";
+import SettingsScreen from "./SettingsScreen";
 
 const BalanceRenderItem = renderItemProps => (
   <BalanceCoinRow {...renderItemProps} />
@@ -43,6 +49,7 @@ const WalletScreen = ({
   assetsTotalUSD,
   didLoadAssetList,
   fetching,
+  navigation,
   onHideSplashScreen,
   onPressProfile,
   onPressWalletConnect,
@@ -56,7 +63,7 @@ const WalletScreen = ({
     balances: {
       data: sortAssetsByNativeAmount(assets, showShitcoins),
       renderItem: BalanceRenderItem,
-      title: lang.t("account.tab_balances"),
+      title: "Balances",
       totalItems: get(assetsTotalUSD, "amount") ? assetsCount : 0,
       totalValue: get(assetsTotalUSD, "display", "")
     },
@@ -80,25 +87,13 @@ const WalletScreen = ({
       destructiveButtonIndex,
       onPress: onToggleShowShitcoins,
       options: [
-        `${lang.t(`account.${showShitcoins ? "hide" : "show"}`)} ${lang.t(
-          "wallet.assets.no_price"
-        )}`,
-        lang.t("wallet.action.cancel")
+        `${showShitcoins ? "Hide" : "Show"} assets with no price data`,
+        "Cancel"
       ]
     };
   }
 
-  const filteredSections = filterEmptyAssetSections([
-    sections.balances,
-    sections.collectibles
-  ]);
-
-  let isEmpty = !filteredSections.length;
-  if (filteredSections.length === 1) {
-    isEmpty = areAssetsEqualToInitialAccountAssetsState(
-      filteredSections[0].data[0]
-    );
-  }
+  const settingsTab = navigation.getParam("settingsTab", false);
 
   return (
     <Page component={FlexItem} style={position.sizeAsObject("100%")}>
@@ -119,6 +114,7 @@ const WalletScreen = ({
         ])}
         showShitcoins={showShitcoins}
       />
+      <SettingsScreen visible={true} tab={settingsTab} />
     </Page>
   );
 };
@@ -149,10 +145,12 @@ export default compose(
   withHideSplashScreen,
   withRequestsInit,
   withSafeTimeout,
-  withState("didLoadAssetList", "toggleLoadAssetList", false),
   withState("showShitcoins", "toggleShowShitcoins", true),
   withHandlers({
-    onPressProfile: ({ navigation }) => () => navigation.push("SettingsScreen"),
+    onPressProfile: ({ navigation }) => () =>
+      this.setState({ settingsVisible: true }),
+    // onPressProfile: ({ navigation }) => () =>
+    //   navigation.navigate("SettingsStack"),
     onPressWalletConnect: ({ navigation }) => () =>
       navigation.navigate("QRScannerScreen"),
     onRefreshList: ({
@@ -166,16 +164,6 @@ export default compose(
       // hack: use timeout so that it looks like loading is happening
       // accountUpdateAccountAddress does not return a promise
       return new Promise(resolve => setSafeTimeout(resolve, 2000));
-    },
-    onSectionsLoaded: ({
-      didLoadAssetList,
-      onHideSplashScreen,
-      toggleLoadAssetList
-    }) => () => {
-      if (!didLoadAssetList) {
-        onHideSplashScreen();
-        toggleLoadAssetList(true);
-      }
     },
     onToggleShowShitcoins: ({
       showShitcoins,

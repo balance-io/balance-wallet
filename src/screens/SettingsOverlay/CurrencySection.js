@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Column, Row, Page } from "../components/layout";
-import { BackButton } from "../components/header";
-import { ButtonRow } from "../components/buttons";
-import { Text } from "../components/text";
-import Icon from "../components/icons/Icon";
-import { colors, fonts, padding } from "../styles";
-import { CURRENCIES } from "../utils/constants";
+import { Column, Row, Page } from "../../components/layout";
+import { BackButton } from "../../components/header";
+import { ButtonRow } from "../../components/buttons";
+import { Text } from "../../components/text";
+import Icon from "../../components/icons/Icon";
+import { colors, fonts, padding } from "../../styles";
+import { CURRENCIES } from "../../utils/constants";
 
-const Content = styled(Column)`
-  ${padding(0, 24)};
-`;
+const Content = styled(Column)``;
 
 const CurrencyTitle = styled(Text).attrs({
   weight: "semibold",
@@ -61,24 +59,12 @@ class CurrencyScreen extends React.PureComponent {
   );
 
   render() {
-    const { onPressBackButton } = this.props;
     return (
-      <Page align="stretch" component={Column} showTopInset>
-        <BackButton
-          color={colors.brightBlue}
-          direction="left"
-          onPress={onPressBackButton}
-        />
-        <Content>
-          <CurrencyTitle weight="semibold" size="big">
-            Currency
-          </CurrencyTitle>
-
-          {CURRENCIES.sort(this.sortCurrencyOptions).map(
-            this.renderCurrencyOption
-          )}
-        </Content>
-      </Page>
+      <Content>
+        {CURRENCIES.sort(this.sortCurrencyOptions).map(
+          this.renderCurrencyOption
+        )}
+      </Content>
     );
   }
 }
