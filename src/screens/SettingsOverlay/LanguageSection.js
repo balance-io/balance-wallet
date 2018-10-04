@@ -51,7 +51,11 @@ class LanguageScreen extends React.PureComponent {
   };
 
   renderLanguageOption = ({ label, value }, idx) => (
-    <ButtonRow key={idx} onPress={() => this.selectLanguage(value)}>
+    <ButtonRow
+      key={idx}
+      border={idx < LANGUAGES.length - 1}
+      onPress={() => this.selectLanguage(value)}
+    >
       <OptionLabel>{label}</OptionLabel>
       {this.state.selected === value && <SelectedIcon />}
     </ButtonRow>

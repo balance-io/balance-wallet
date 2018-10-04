@@ -21,12 +21,16 @@ const SettingRow = styled(Row).attrs({
   justify: "start"
 })`
   align-self: stretch;
-  ${padding(18, 0)};
-  border-bottom-width: 1;
+  ${padding(14, 0)};
+`;
+
+// NOTE:
+// I was having issues getting :last-child to properly
+// remove borders, so I'm using `props.border` as a workaround.
+// @hoodsy
+const SettingButton = styled(TouchableOpacity)`
+  border-bottom-width: ${({ border }) => (border ? 1 : 0)};
   border-bottom-color: ${colors.lightGrey};
-  &:last-child {
-    border-bottom-color: transparent;
-  }
 `;
 
 const PrimarySettingRow = styled(SettingRow)`
@@ -34,9 +38,11 @@ const PrimarySettingRow = styled(SettingRow)`
 `;
 
 const SettingRowIcon = styled(Image)`
-  width: 30;
-  height: 30;
-  margin-right: 10;
+  width: 42;
+  height: 42;
+  margin-left: -6;
+  margin-right: 4;
+  margin-bottom: -8;
 `;
 
 const SettingRowLabel = styled(Text).attrs({
@@ -65,53 +71,66 @@ const SettingRowArrow = styled(Icon).attrs({
   margin-left: 2;
 `;
 
-const SettingsSection = ({ onPressLanguage, onPressCurrency }) => (
-  <Column>
-    <SettingGroup>
-      <PrimarySettingRow>
-        <SettingRowIcon source={BackupIcon} />
-        <SettingRowLabel>Backup</SettingRowLabel>
-        <SettingArrowGroup>
-          <Icon name="checkmarkCircled" color={colors.blueGreyDark} />
-          <SettingRowArrow />
-        </SettingArrowGroup>
-      </PrimarySettingRow>
+class SettingsSection extends React.PureComponent {
+  render() {
+    const { onPressLanguage, onPressCurrency } = this.props;
+    return (
+      <Column>
+        <SettingGroup>
+          <SettingButton border onPress={onPressCurrency}>
+            <PrimarySettingRow>
+              <SettingRowIcon source={BackupIcon} />
+              <SettingRowLabel>Backup</SettingRowLabel>
+              <SettingArrowGroup>
+                <Icon name="checkmarkCircled" color={colors.blueGreyDark} />
+                <SettingRowArrow />
+              </SettingArrowGroup>
+            </PrimarySettingRow>
+          </SettingButton>
 
-      <TouchableOpacity onPress={onPressCurrency}>
-        <PrimarySettingRow>
-          <SettingRowIcon source={CurrencyIcon} />
-          <SettingRowLabel>Currency</SettingRowLabel>
-          <SettingArrowGroup>
-            <SettingRowValue>USD</SettingRowValue>
-            <SettingRowArrow />
-          </SettingArrowGroup>
-        </PrimarySettingRow>
-      </TouchableOpacity>
+          <SettingButton border onPress={onPressCurrency}>
+            <PrimarySettingRow>
+              <SettingRowIcon source={CurrencyIcon} />
+              <SettingRowLabel>Currency</SettingRowLabel>
+              <SettingArrowGroup>
+                <SettingRowValue>USD</SettingRowValue>
+                <SettingRowArrow />
+              </SettingArrowGroup>
+            </PrimarySettingRow>
+          </SettingButton>
 
-      <TouchableOpacity onPress={onPressLanguage}>
-        <PrimarySettingRow>
-          <SettingRowIcon source={LanguageIcon} />
-          <SettingRowLabel>Language</SettingRowLabel>
-          <SettingArrowGroup>
-            <SettingRowValue>English</SettingRowValue>
-            <SettingRowArrow />
-          </SettingArrowGroup>
-        </PrimarySettingRow>
-      </TouchableOpacity>
-    </SettingGroup>
+          <SettingButton onPress={onPressLanguage}>
+            <PrimarySettingRow>
+              <SettingRowIcon source={LanguageIcon} />
+              <SettingRowLabel>Language</SettingRowLabel>
+              <SettingArrowGroup>
+                <SettingRowValue>English</SettingRowValue>
+                <SettingRowArrow />
+              </SettingArrowGroup>
+            </PrimarySettingRow>
+          </SettingButton>
+        </SettingGroup>
 
-    <SettingGroup>
-      <SettingRow>
-        <SettingRowLabel>About Balance ⚖️</SettingRowLabel>
-      </SettingRow>
-      <SettingRow>
-        <SettingRowLabel>Leave Feedback ❤️</SettingRowLabel>
-      </SettingRow>
-      <SettingRow>
-        <SettingRowLabel>Legal 📃</SettingRowLabel>
-      </SettingRow>
-    </SettingGroup>
-  </Column>
-);
+        <SettingGroup>
+          <SettingButton border>
+            <SettingRow>
+              <SettingRowLabel>⚖️ About Balance</SettingRowLabel>
+            </SettingRow>
+          </SettingButton>
+          <SettingButton border>
+            <SettingRow>
+              <SettingRowLabel>❤️ Leave Feedback️</SettingRowLabel>
+            </SettingRow>
+          </SettingButton>
+          <SettingButton>
+            <SettingRow>
+              <SettingRowLabel>📃 Legal</SettingRowLabel>
+            </SettingRow>
+          </SettingButton>
+        </SettingGroup>
+      </Column>
+    );
+  }
+}
 
 export default SettingsSection;

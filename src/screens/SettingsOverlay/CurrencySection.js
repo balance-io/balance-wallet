@@ -52,7 +52,11 @@ class CurrencyScreen extends React.PureComponent {
   };
 
   renderCurrencyOption = ({ label, value }, idx) => (
-    <ButtonRow key={idx} onPress={() => this.selectCurrency(value)}>
+    <ButtonRow
+      key={idx}
+      border={idx < CURRENCIES.length - 1}
+      onPress={() => this.selectCurrency(value)}
+    >
       <OptionLabel>{label}</OptionLabel>
       {this.state.selected === value && <SelectedIcon />}
     </ButtonRow>

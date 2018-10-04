@@ -43,81 +43,94 @@ const UniqueTokenRenderItem = renderItemProps => (
 const filterEmptyAssetSections = sections =>
   sections.filter(({ totalItems }) => totalItems);
 
-const WalletScreen = ({
-  assets,
-  assetsCount,
-  assetsTotalUSD,
-  didLoadAssetList,
-  fetching,
-  navigation,
-  onHideSplashScreen,
-  onPressProfile,
-  onPressWalletConnect,
-  onRefreshList,
-  onSectionsLoaded,
-  onToggleShowShitcoins,
-  showShitcoins,
-  uniqueTokens
-}) => {
-  const sections = {
-    balances: {
-      data: sortAssetsByNativeAmount(assets, showShitcoins),
-      renderItem: BalanceRenderItem,
-      title: "Balances",
-      totalItems: get(assetsTotalUSD, "amount") ? assetsCount : 0,
-      totalValue: get(assetsTotalUSD, "display", "")
-    },
-    collectibles: {
-      data: buildUniqueTokenList(uniqueTokens),
-      renderItem: UniqueTokenRenderItem,
-      title: "Collectibles",
-      totalItems: uniqueTokens.length,
-      totalValue: ""
-    }
+class WalletScreen extends React.PureComponent {
+  state = {
+    settingsVisible: true
   };
 
-  const assetsByMarketValue = groupAssetsByMarketValue(assets);
-  const totalShitcoins = get(assetsByMarketValue, "noValue", []).length;
-  if (totalShitcoins) {
-    // 99 is an arbitrarily high number used to disable the 'destructiveButton' option
-    const destructiveButtonIndex = showShitcoins ? 0 : 99;
+  onToggleSettings = (visible = !this.state.settingsVisible) =>
+    this.setState({
+      settingsVisible: visible
+    });
 
-    sections.balances.contextMenuOptions = {
-      cancelButtonIndex: 1,
-      destructiveButtonIndex,
-      onPress: onToggleShowShitcoins,
-      options: [
-        `${showShitcoins ? "Hide" : "Show"} assets with no price data`,
-        "Cancel"
-      ]
+  render() {
+    const {
+      assets,
+      assetsCount,
+      assetsTotalUSD,
+      fetching,
+      navigation,
+      onHideSplashScreen,
+      onPressProfile,
+      onPressWalletConnect,
+      onRefreshList,
+      onToggleShowShitcoins,
+      showShitcoins,
+      uniqueTokens
+    } = this.props;
+
+    const sections = {
+      balances: {
+        data: sortAssetsByNativeAmount(assets, showShitcoins),
+        renderItem: BalanceRenderItem,
+        title: "Balances",
+        totalItems: get(assetsTotalUSD, "amount") ? assetsCount : 0,
+        totalValue: get(assetsTotalUSD, "display", "")
+      },
+      collectibles: {
+        data: buildUniqueTokenList(uniqueTokens),
+        renderItem: UniqueTokenRenderItem,
+        title: "Collectibles",
+        totalItems: uniqueTokens.length,
+        totalValue: ""
+      }
     };
+
+    const assetsByMarketValue = groupAssetsByMarketValue(assets);
+    const totalShitcoins = get(assetsByMarketValue, "noValue", []).length;
+    if (totalShitcoins) {
+      sections.balances.contextMenuOptions = {
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: showShitcoins ? 0 : 99, // 99 is an arbitrarily high number used to disable the 'destructiveButton' option
+        onPress: onToggleShowShitcoins,
+        options: [
+          `${showShitcoins ? "Hide" : "Show"} assets with no price data`,
+          "Cancel"
+        ]
+      };
+    }
+
+    // TODO:
+    // allow navigation to any Settings section via navigation.params
+    const settingsSection = navigation.getParam("settingsSection", false);
+
+    return (
+      <Page component={FlexItem} style={position.sizeAsObject("100%")}>
+        <Header justify="space-between">
+          <HeaderButton onPress={onPressProfile}>
+            <Avatar />
+          </HeaderButton>
+          <ActivityHeaderButton />
+        </Header>
+        <AssetList
+          fetchData={onRefreshList}
+          onPressWalletConnect={onPressWalletConnect}
+          onSectionsLoaded={onHideSplashScreen}
+          sections={filterEmptyAssetSections([
+            sections.balances,
+            sections.collectibles
+          ])}
+          showShitcoins={showShitcoins}
+        />
+        <SettingsScreen
+          tab={settingsSection}
+          visible={this.state.settingsVisible}
+          onPressClose={() => this.onToggleSettings(false)}
+        />
+      </Page>
+    );
   }
-
-  const settingsTab = navigation.getParam("settingsTab", false);
-
-  return (
-    <Page component={FlexItem} style={position.sizeAsObject("100%")}>
-      <Header justify="space-between">
-        <HeaderButton onPress={onPressProfile} transformOrigin="left">
-          <Avatar />
-        </HeaderButton>
-        {didLoadAssetList && !isEmpty && <ActivityHeaderButton />}
-      </Header>
-      <AssetList
-        fetchData={onRefreshList}
-        isEmpty={isEmpty}
-        onPressWalletConnect={onPressWalletConnect}
-        onSectionsLoaded={onHideSplashScreen}
-        sections={filterEmptyAssetSections([
-          sections.balances,
-          sections.collectibles
-        ])}
-        showShitcoins={showShitcoins}
-      />
-      <SettingsScreen visible={true} tab={settingsTab} />
-    </Page>
-  );
-};
+}
 
 WalletScreen.propTypes = {
   assets: PropTypes.array,

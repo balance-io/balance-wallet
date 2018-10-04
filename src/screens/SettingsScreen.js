@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Animated } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { compose, withHandlers } from "recompact";
 import styled from "styled-components/primitives";
@@ -10,7 +11,6 @@ import SettingsSection from "./SettingsOverlay/SettingsSection";
 import LanguageSection from "./SettingsOverlay/LanguageSection";
 import CurrencySection from "./SettingsOverlay/CurrencySection";
 import { colors, borders, padding } from "../styles";
-import { Header } from "../components/header";
 
 const Overlay = styled(Column)`
   position: absolute;
@@ -25,6 +25,7 @@ const Content = styled(Column).attrs({
   align: "stretch",
   justify: "start"
 })`
+  position: relative;
   flex: 1;
   margin-top: 120;
   margin-left: 15;
@@ -33,6 +34,7 @@ const Content = styled(Column).attrs({
   ${padding(16)};
   background: ${colors.white};
   border-radius: 12;
+  overflow: hidden;
 `;
 
 const HeaderRow = styled(Row).attrs({
@@ -77,6 +79,15 @@ const HeaderRight = styled(TouchableOpacity)`
   right: 0;
 `;
 
+const sectionStyles = {
+  position: "absolute",
+  top: 50,
+  left: 0,
+  right: 0,
+  paddingRight: 14,
+  paddingLeft: 14
+};
+
 class SettingsScreen extends React.PureComponent {
   sections = {
     SETTINGS: "Settings",
@@ -85,13 +96,44 @@ class SettingsScreen extends React.PureComponent {
   };
 
   state = {
-    section: this.sections.SETTINGS // settings, language, currency
+    section: this.sections.SETTINGS,
+    settingsXValue: new Animated.Value(0),
+    sectionXValue: new Animated.Value(350)
   };
 
-  handleSectionChange = section =>
+  onPressSection = section => {
+    Animated.parallel([
+      Animated.timing(this.state.settingsXValue, {
+        toValue: -350,
+        useNativeDriver: true
+      }).start(),
+      Animated.timing(this.state.sectionXValue, {
+        toValue: 0,
+        useNativeDriver: true
+      }).start()
+    ]);
+
     this.setState({
       section
     });
+  };
+
+  onPressBack = () => {
+    Animated.parallel([
+      Animated.timing(this.state.settingsXValue, {
+        toValue: 0,
+        useNativeDriver: true
+      }).start(),
+      Animated.timing(this.state.sectionXValue, {
+        toValue: 350,
+        useNativeDriver: true
+      }).start()
+    ]);
+
+    this.setState({
+      section: this.sections.SETTINGS
+    });
+  };
 
   renderActiveSection = () => {
     switch (this.state.section) {
@@ -103,21 +145,15 @@ class SettingsScreen extends React.PureComponent {
 
       case this.sections.SETTINGS:
       default:
-        return (
-          <SettingsSection
-            onPressLanguage={() =>
-              this.handleSectionChange(this.sections.LANGUAGE)
-            }
-            onPressCurrency={() =>
-              this.handleSectionChange(this.sections.CURRENCY)
-            }
-          />
-        );
+        return null;
     }
   };
 
   render() {
-    const { visible } = this.props;
+    const { visible, onPressClose } = this.props;
+    if (!visible) {
+      return null;
+    }
 
     return (
       <Overlay>
@@ -125,7 +161,7 @@ class SettingsScreen extends React.PureComponent {
           <HeaderRow>
             <HeaderLeft
               visible={this.state.section !== this.sections.SETTINGS}
-              onPress={() => this.handleSectionChange(this.sections.SETTINGS)}
+              onPress={this.onPressBack}
             >
               <HeaderBackButton />
               <HeaderAction>Settings</HeaderAction>
@@ -134,11 +170,33 @@ class SettingsScreen extends React.PureComponent {
             <HeaderTitle>{this.state.section}</HeaderTitle>
 
             <HeaderRight>
-              <HeaderAction>Done</HeaderAction>
+              <HeaderAction onPress={onPressClose}>Done</HeaderAction>
             </HeaderRight>
           </HeaderRow>
 
-          {this.renderActiveSection()}
+          <Animated.View
+            style={[
+              sectionStyles,
+              { transform: [{ translateX: this.state.settingsXValue }] }
+            ]}
+          >
+            <SettingsSection
+              onPressLanguage={() =>
+                this.onPressSection(this.sections.LANGUAGE)
+              }
+              onPressCurrency={() =>
+                this.onPressSection(this.sections.CURRENCY)
+              }
+            />
+          </Animated.View>
+          <Animated.View
+            style={[
+              sectionStyles,
+              { transform: [{ translateX: this.state.sectionXValue }] }
+            ]}
+          >
+            {this.renderActiveSection()}
+          </Animated.View>
         </Content>
       </Overlay>
     );
