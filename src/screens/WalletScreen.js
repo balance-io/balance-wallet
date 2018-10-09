@@ -26,6 +26,7 @@ import {
   sortAssetsByNativeAmount
 } from "../helpers/assets";
 import {
+  withAccount,
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,
@@ -55,9 +56,12 @@ class WalletScreen extends React.PureComponent {
 
   render() {
     const {
+      account,
+      accountChangeLanguage,
       assets,
       assetsCount,
       assetsTotalUSD,
+      dispatch,
       fetching,
       navigation,
       onHideSplashScreen,
@@ -123,6 +127,9 @@ class WalletScreen extends React.PureComponent {
           showShitcoins={showShitcoins}
         />
         <SettingsScreen
+          account={account}
+          accountChangeLanguage={accountChangeLanguage}
+          dispatch={dispatch}
           tab={settingsSection}
           visible={this.state.settingsVisible}
           onPressClose={() => this.onToggleSettings(false)}
@@ -153,6 +160,7 @@ WalletScreen.propTypes = {
 };
 
 export default compose(
+  withAccount,
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,

@@ -1,13 +1,20 @@
 import React, { Component } from "react";
+import { ScrollView, Dimensions } from "react-native";
 import styled from "styled-components";
 import { Column, Row, Page } from "../../components/layout";
 import { ButtonRow } from "../../components/buttons";
 import { Text } from "../../components/text";
 import Icon from "../../components/icons/Icon";
 import { colors, fonts, padding } from "../../styles";
-import { LANGUAGES } from "../../utils/constants";
+import { LANGUAGES, NUM_LANGUAGES } from "../../utils/constants";
 
-const Content = styled(Column)``;
+const Content = styled(ScrollView)`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  height: ${Dimensions.get("window").height - 300};
+`;
 
 const LanguageTitle = styled(Text).attrs({
   weight: "semibold",
@@ -27,37 +34,39 @@ const SelectedIcon = styled(Icon).attrs({
   color: colors.appleBlue
 })`
   margin-left: auto;
+  margin-right: 5;
 `;
 
 class LanguageScreen extends React.PureComponent {
   state = {
-    selected: LANGUAGES[0].value
+    selected: this.props.language || "en"
   };
 
   selectLanguage = language => {
     this.setState({
       selected: language
     });
+    this.props.onSelectLanguage(language);
   };
 
   sortLanguageOptions = (a, b) => {
-    if (a.label < b.label) {
+    if (a[1] < b[1]) {
       return -1;
-    } else if (a.label > b.label) {
+    } else if (a[1] > b[1]) {
       return 1;
     } else {
       return 0;
     }
   };
 
-  renderLanguageOption = ({ label, value }, idx) => (
+  renderLanguageOption = ([code, label], idx) => (
     <ButtonRow
       key={idx}
-      border={idx < LANGUAGES.length - 1}
-      onPress={() => this.selectLanguage(value)}
+      border={idx !== NUM_LANGUAGES - 1}
+      onPress={() => this.selectLanguage(code)}
     >
       <OptionLabel>{label}</OptionLabel>
-      {this.state.selected === value && <SelectedIcon />}
+      {this.state.selected === code && <SelectedIcon />}
     </ButtonRow>
   );
 
@@ -65,9 +74,9 @@ class LanguageScreen extends React.PureComponent {
     const { onPressBackButton } = this.props;
     return (
       <Content>
-        {LANGUAGES.sort(this.sortLanguageOptions).map(
-          this.renderLanguageOption
-        )}
+        {Object.entries(LANGUAGES)
+          .sort(this.sortLanguageOptions)
+          .map(this.renderLanguageOption)}
       </Content>
     );
   }

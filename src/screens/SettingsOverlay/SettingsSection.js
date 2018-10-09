@@ -8,6 +8,7 @@ import { Column, Row } from "../../components/layout";
 import { Text } from "../../components/text";
 import Icon from "../../components/icons/Icon";
 import { colors, borders, padding } from "../../styles";
+import { LANGUAGES } from "../../utils/constants";
 import BackupIcon from "../../assets/backup-icon.png";
 import CurrencyIcon from "../../assets/currency-icon.png";
 import LanguageIcon from "../../assets/language-icon.png";
@@ -73,7 +74,7 @@ const SettingRowArrow = styled(Icon).attrs({
 
 class SettingsSection extends React.PureComponent {
   render() {
-    const { onPressLanguage, onPressCurrency } = this.props;
+    const { language, onPressLanguage, onPressCurrency } = this.props;
     return (
       <Column>
         <SettingGroup>
@@ -104,7 +105,7 @@ class SettingsSection extends React.PureComponent {
               <SettingRowIcon source={LanguageIcon} />
               <SettingRowLabel>Language</SettingRowLabel>
               <SettingArrowGroup>
-                <SettingRowValue>English</SettingRowValue>
+                <SettingRowValue>{LANGUAGES[language] || ""}</SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>

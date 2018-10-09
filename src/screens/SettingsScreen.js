@@ -84,8 +84,8 @@ const sectionStyles = {
   top: 50,
   left: 0,
   right: 0,
-  paddingRight: 14,
-  paddingLeft: 14
+  paddingRight: 16,
+  paddingLeft: 16
 };
 
 class SettingsScreen extends React.PureComponent {
@@ -135,10 +135,23 @@ class SettingsScreen extends React.PureComponent {
     });
   };
 
+  onSelectLanguage = language => {
+    this.props.accountChangeLanguage(language);
+    // this.props.dispatch({
+    //   type: "account/ACCOUNT_CHANGE_NATIVE_CURRENCY_SUCCESS",
+    //   payload: { language }
+    // });
+  };
+
   renderActiveSection = () => {
     switch (this.state.section) {
       case this.sections.LANGUAGE:
-        return <LanguageSection />;
+        return (
+          <LanguageSection
+            language={this.props.account.language}
+            onSelectLanguage={this.onSelectLanguage}
+          />
+        );
 
       case this.sections.CURRENCY:
         return <CurrencySection />;
@@ -150,7 +163,7 @@ class SettingsScreen extends React.PureComponent {
   };
 
   render() {
-    const { visible, onPressClose } = this.props;
+    const { visible, onPressClose, account } = this.props;
     if (!visible) {
       return null;
     }
@@ -181,6 +194,7 @@ class SettingsScreen extends React.PureComponent {
             ]}
           >
             <SettingsSection
+              language={account.language}
               onPressLanguage={() =>
                 this.onPressSection(this.sections.LANGUAGE)
               }

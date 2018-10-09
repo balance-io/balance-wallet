@@ -20,7 +20,7 @@ const RowContainer = styled(Row).attrs({
 `;
 
 const ButtonRow = ({ children, border, onPress, ...props }) => (
-  <Button border={border} onPress={onPress}>
+  <Button border={border} onPress={onPress} {...props}>
     <RowContainer>{children}</RowContainer>
   </Button>
 );
