@@ -74,7 +74,7 @@ const SettingRowArrow = styled(Icon).attrs({
 
 class SettingsSection extends React.PureComponent {
   render() {
-    const { language, onPressLanguage, onPressCurrency } = this.props;
+    const { language, currency, onPressLanguage, onPressCurrency } = this.props;
     return (
       <Column>
         <SettingGroup>
@@ -94,7 +94,7 @@ class SettingsSection extends React.PureComponent {
               <SettingRowIcon source={CurrencyIcon} />
               <SettingRowLabel>Currency</SettingRowLabel>
               <SettingArrowGroup>
-                <SettingRowValue>USD</SettingRowValue>
+                <SettingRowValue>{currency || ""}</SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>

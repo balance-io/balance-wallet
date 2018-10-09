@@ -137,10 +137,10 @@ class SettingsScreen extends React.PureComponent {
 
   onSelectLanguage = language => {
     this.props.accountChangeLanguage(language);
-    // this.props.dispatch({
-    //   type: "account/ACCOUNT_CHANGE_NATIVE_CURRENCY_SUCCESS",
-    //   payload: { language }
-    // });
+  };
+
+  onSelectCurrency = currency => {
+    this.props.accountChangeNativeCurrency(currency);
   };
 
   renderActiveSection = () => {
@@ -154,7 +154,12 @@ class SettingsScreen extends React.PureComponent {
         );
 
       case this.sections.CURRENCY:
-        return <CurrencySection />;
+        return (
+          <CurrencySection
+            currency={this.props.account.nativeCurrency}
+            onSelectCurrency={this.onSelectCurrency}
+          />
+        );
 
       case this.sections.SETTINGS:
       default:
@@ -195,6 +200,7 @@ class SettingsScreen extends React.PureComponent {
           >
             <SettingsSection
               language={account.language}
+              currency={account.nativeCurrency}
               onPressLanguage={() =>
                 this.onPressSection(this.sections.LANGUAGE)
               }

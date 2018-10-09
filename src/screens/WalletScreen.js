@@ -58,6 +58,7 @@ class WalletScreen extends React.PureComponent {
     const {
       account,
       accountChangeLanguage,
+      accountChangeNativeCurrency,
       assets,
       assetsCount,
       assetsTotalUSD,
@@ -129,6 +130,7 @@ class WalletScreen extends React.PureComponent {
         <SettingsScreen
           account={account}
           accountChangeLanguage={accountChangeLanguage}
+          accountChangeNativeCurrency={accountChangeNativeCurrency}
           dispatch={dispatch}
           tab={settingsSection}
           visible={this.state.settingsVisible}

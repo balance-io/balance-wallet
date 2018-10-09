@@ -6,6 +6,7 @@ import ArrowIcon from "./svg/ArrowIcon";
 import AssetListItemSkeletonIcon from "./svg/AssetListItemSkeletonIcon";
 import AvatarIcon from "./svg/AvatarIcon";
 import BalanceLogoIcon from "./svg/BalanceLogoIcon";
+import BTCIcon from "./svg/BTCIcon";
 import CameraIcon from "./svg/CameraIcon";
 import CaretIcon from "./svg/CaretIcon";
 import CheckmarkIcon from "./svg/CheckmarkIcon";
@@ -13,6 +14,7 @@ import CheckmarkCircledIcon from "./svg/CheckmarkCircledIcon";
 import ClockIcon from "./svg/ClockIcon";
 import CloseIcon from "./svg/CloseIcon";
 import DotIcon from "./svg/DotIcon";
+import ETHIcon from "./svg/ETHIcon";
 import SpinnerIcon from "./svg/SpinnerIcon";
 import ThreeDotsIcon from "./svg/ThreeDotsIcon";
 import WalletConnectIcon from "./svg/WalletConnectIcon";
@@ -29,6 +31,7 @@ Icon.IconTypes = {
   arrow: ArrowIcon,
   avatar: AvatarIcon,
   balanceLogo: BalanceLogoIcon,
+  btc: BTCIcon,
   camera: CameraIcon,
   caret: CaretIcon,
   checkmark: CheckmarkIcon,
@@ -36,6 +39,7 @@ Icon.IconTypes = {
   clock: ClockIcon,
   close: CloseIcon,
   dot: DotIcon,
+  eth: ETHIcon,
   spinner: SpinnerIcon,
   threeDots: ThreeDotsIcon,
   walletConnect: WalletConnectIcon,

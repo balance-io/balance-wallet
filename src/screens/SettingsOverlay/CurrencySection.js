@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ScrollView, Dimensions } from "react-native";
 import styled from "styled-components";
 import { Column, Row, Page } from "../../components/layout";
 import { BackButton } from "../../components/header";
@@ -6,9 +7,15 @@ import { ButtonRow } from "../../components/buttons";
 import { Text } from "../../components/text";
 import Icon from "../../components/icons/Icon";
 import { colors, fonts, padding } from "../../styles";
-import { CURRENCIES } from "../../utils/constants";
+import { CURRENCIES, NUM_CURRENCIES } from "../../utils/constants";
 
-const Content = styled(Column)``;
+const Content = styled(ScrollView)`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  height: ${Dimensions.get("window").height - 300};
+`;
 
 const CurrencyTitle = styled(Text).attrs({
   weight: "semibold",
@@ -20,7 +27,15 @@ const CurrencyTitle = styled(Text).attrs({
 const OptionLabel = styled(Text).attrs({
   size: "large"
 })`
+  display: flex;
+  align-items: center;
   padding-right: 5;
+`;
+
+const CurrencyIcon = styled(Icon)`
+  height: 20;
+  width: 20;
+  margin-right: 5;
 `;
 
 const SelectedIcon = styled(Icon).attrs({
@@ -32,42 +47,57 @@ const SelectedIcon = styled(Icon).attrs({
 
 class CurrencyScreen extends React.PureComponent {
   state = {
-    selected: CURRENCIES[0].value
+    selected: this.props.currency || "USD"
   };
 
   selectCurrency = currency => {
     this.setState({
       selected: currency
     });
+    this.props.onSelectCurrency(currency);
   };
 
   sortCurrencyOptions = (a, b) => {
-    if (a.label < b.label) {
+    if (a[1] < b[1]) {
       return -1;
-    } else if (a.label > b.label) {
+    } else if (a[1] > b[1]) {
       return 1;
     } else {
       return 0;
     }
   };
 
-  renderCurrencyOption = ({ label, value }, idx) => (
+  renderCurrencyIcon = currency => {
+    switch (currency) {
+      case "BTC":
+        return <CurrencyIcon name="btc" color="#FF9900" />;
+
+      case "ETH":
+        return <CurrencyIcon name="eth" color="#1E2022" />;
+
+      default:
+        return null;
+    }
+  };
+
+  renderCurrencyOption = ([currency, label], idx) => (
     <ButtonRow
       key={idx}
-      border={idx < CURRENCIES.length - 1}
-      onPress={() => this.selectCurrency(value)}
+      border={idx !== NUM_CURRENCIES - 1}
+      onPress={() => this.selectCurrency(currency)}
     >
+      {this.renderCurrencyIcon(currency)}
       <OptionLabel>{label}</OptionLabel>
-      {this.state.selected === value && <SelectedIcon />}
+      {this.state.selected === currency && <SelectedIcon />}
     </ButtonRow>
   );
 
   render() {
     return (
       <Content>
-        {CURRENCIES.sort(this.sortCurrencyOptions).map(
-          this.renderCurrencyOption
-        )}
+        {Object.entries(CURRENCIES)
+          .sort(this.sortCurrencyOptions)
+          .map(this.renderCurrencyOption)}
       </Content>
     );
   }

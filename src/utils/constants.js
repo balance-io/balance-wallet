@@ -15,8 +15,12 @@ export const LANGUAGES = {
 
 export const NUM_LANGUAGES = Object.values(LANGUAGES).length;
 
-export const CURRENCIES = [
-  { value: "usd", label: "🇺🇸 USD" },
-  { value: "eur", label: "🇪🇺 EUR" },
-  { value: "btc", label: "Bitcoin" }
-];
+export const CURRENCIES = {
+  USD: "🇺🇸 USD",
+  GBP: "🇬🇧 GBP",
+  EUR: "🇪🇺 EUR",
+  BTC: "Bitcoin",
+  ETH: "Ethereum"
+};
+
+export const NUM_CURRENCIES = Object.values(CURRENCIES).length;
