@@ -1,27 +1,19 @@
-import React, { Component } from "react";
-import { ScrollView, Dimensions } from "react-native";
+import React from "react";
+import { Dimensions } from "react-native";
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Column, Row, Page } from "../../components/layout";
-import { BackButton } from "../../components/header";
-import { ButtonRow } from "../../components/buttons";
-import { Text } from "../../components/text";
-import Icon from "../../components/icons/Icon";
-import { colors, fonts, padding } from "../../styles";
-import { CURRENCIES, NUM_CURRENCIES } from "../../utils/constants";
 
-const Content = styled(ScrollView)`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex: 1;
+import { OptionList, OptionListItem } from "components/list";
+import { Text } from "components/text";
+import Icon from "components/icons/Icon";
+import { CURRENCIES, NUM_CURRENCIES } from "utils/constants";
+
+// ======================================================================
+// Styles
+// ======================================================================
+
+const CurrencyList = styled(OptionList)`
   height: ${Dimensions.get("window").height - 300};
-`;
-
-const CurrencyTitle = styled(Text).attrs({
-  weight: "semibold",
-  size: "big"
-})`
-  margin-bottom: 14;
 `;
 
 const OptionLabel = styled(Text).attrs({
@@ -38,26 +30,23 @@ const CurrencyIcon = styled(Icon)`
   margin-right: 5;
 `;
 
-const SelectedIcon = styled(Icon).attrs({
-  name: "checkmarkCircled",
-  color: colors.appleBlue
-})`
-  margin-left: auto;
-`;
+// ======================================================================
+// Component
+// ======================================================================
 
-class CurrencyScreen extends React.PureComponent {
+class CurrencySection extends React.Component {
   state = {
-    selected: this.props.currency || "USD"
+    selected: this.props.nativeCurrency || "USD"
   };
 
-  selectCurrency = currency => {
+  selectCurrency = nativeCurrency => () => {
     this.setState({
-      selected: currency
+      selected: nativeCurrency
     });
-    this.props.onSelectCurrency(currency);
+    this.props.onSelectCurrency(nativeCurrency);
   };
 
-  sortCurrencyOptions = (a, b) => {
+  sortAlphabetical = (a, b) => {
     if (a[1] < b[1]) {
       return -1;
     } else if (a[1] > b[1]) {
@@ -67,8 +56,8 @@ class CurrencyScreen extends React.PureComponent {
     }
   };
 
-  renderCurrencyIcon = currency => {
-    switch (currency) {
+  renderCurrencyIcon = nativeCurrency => {
+    switch (nativeCurrency) {
       case "BTC":
         return <CurrencyIcon name="btc" color="#FF9900" />;
 
@@ -80,27 +69,32 @@ class CurrencyScreen extends React.PureComponent {
     }
   };
 
-  renderCurrencyOption = ([currency, label], idx) => (
-    <ButtonRow
+  renderCurrencyOption = ([nativeCurrency, label], idx) => (
+    <OptionListItem
       key={idx}
       border={idx !== NUM_CURRENCIES - 1}
-      onPress={() => this.selectCurrency(currency)}
+      selected={this.state.selected === nativeCurrency}
+      onPress={this.selectCurrency(nativeCurrency)}
     >
-      {this.renderCurrencyIcon(currency)}
+      {this.renderCurrencyIcon(nativeCurrency)}
       <OptionLabel>{label}</OptionLabel>
-      {this.state.selected === currency && <SelectedIcon />}
-    </ButtonRow>
+    </OptionListItem>
   );
 
   render() {
     return (
-      <Content>
+      <CurrencyList>
         {Object.entries(CURRENCIES)
-          .sort(this.sortCurrencyOptions)
+          .sort(this.sortAlphabetical)
           .map(this.renderCurrencyOption)}
-      </Content>
+      </CurrencyList>
     );
   }
 }
 
-export default CurrencyScreen;
+CurrencySection.propTypes = {
+  nativeCurrency: PropTypes.string.isRequired,
+  onSelectCurrency: PropTypes.func.isRequired
+};
+
+export default CurrencySection;

@@ -1,55 +1,42 @@
-import React, { Component } from "react";
-import { ScrollView, Dimensions } from "react-native";
+import React from "react";
+import PropTypes from "prop-types";
+import { Dimensions } from "react-native";
 import styled from "styled-components";
-import { Column, Row, Page } from "../../components/layout";
-import { ButtonRow } from "../../components/buttons";
-import { Text } from "../../components/text";
-import Icon from "../../components/icons/Icon";
-import { colors, fonts, padding } from "../../styles";
-import { LANGUAGES, NUM_LANGUAGES } from "../../utils/constants";
 
-const Content = styled(ScrollView)`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex: 1;
+import { OptionList, OptionListItem } from "components/list";
+import { Text } from "components/text";
+import { LANGUAGES, NUM_LANGUAGES } from "utils/constants";
+
+// ======================================================================
+// Styles
+// ======================================================================
+
+const LanguageList = styled(OptionList)`
   height: ${Dimensions.get("window").height - 300};
 `;
-
-const LanguageTitle = styled(Text).attrs({
-  weight: "semibold",
-  size: "big"
-})`
-  margin-bottom: 14;
-`;
-
 const OptionLabel = styled(Text).attrs({
   size: "large"
 })`
   padding-right: 5;
 `;
 
-const SelectedIcon = styled(Icon).attrs({
-  name: "checkmarkCircled",
-  color: colors.appleBlue
-})`
-  margin-left: auto;
-  margin-right: 5;
-`;
+// ======================================================================
+// Component
+// ======================================================================
 
-class LanguageScreen extends React.PureComponent {
+class LanguageSection extends React.Component {
   state = {
     selected: this.props.language || "en"
   };
 
-  selectLanguage = language => {
+  selectLanguage = language => () => {
     this.setState({
       selected: language
     });
     this.props.onSelectLanguage(language);
   };
 
-  sortLanguageOptions = (a, b) => {
+  sortAlphabetical = (a, b) => {
     if (a[1] < b[1]) {
       return -1;
     } else if (a[1] > b[1]) {
@@ -60,26 +47,30 @@ class LanguageScreen extends React.PureComponent {
   };
 
   renderLanguageOption = ([code, label], idx) => (
-    <ButtonRow
+    <OptionListItem
       key={idx}
       border={idx !== NUM_LANGUAGES - 1}
-      onPress={() => this.selectLanguage(code)}
+      selected={this.state.selected === code}
+      onPress={this.selectLanguage(code)}
     >
       <OptionLabel>{label}</OptionLabel>
-      {this.state.selected === code && <SelectedIcon />}
-    </ButtonRow>
+    </OptionListItem>
   );
 
   render() {
-    const { onPressBackButton } = this.props;
     return (
-      <Content>
+      <LanguageList>
         {Object.entries(LANGUAGES)
-          .sort(this.sortLanguageOptions)
+          .sort(this.sortAlphabetical)
           .map(this.renderLanguageOption)}
-      </Content>
+      </LanguageList>
     );
   }
 }
 
-export default LanguageScreen;
+LanguageSection.propTypes = {
+  language: PropTypes.string.isRequired,
+  onSelectLanguage: PropTypes.func.isRequired
+};
+
+export default LanguageSection;

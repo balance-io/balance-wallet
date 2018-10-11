@@ -1,17 +1,22 @@
-import PropTypes from "prop-types";
 import React from "react";
-import { Image } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { compose, withHandlers } from "recompact";
-import styled from "styled-components/primitives";
-import { Column, Row } from "../../components/layout";
-import { Text } from "../../components/text";
-import Icon from "../../components/icons/Icon";
-import { colors, borders, padding } from "../../styles";
-import { LANGUAGES } from "../../utils/constants";
-import BackupIcon from "../../assets/backup-icon.png";
-import CurrencyIcon from "../../assets/currency-icon.png";
-import LanguageIcon from "../../assets/language-icon.png";
+import { TouchableOpacity, Image } from "react-native";
+import PropTypes from "prop-types";
+import { withNavigation } from "react-navigation";
+import styled from "styled-components";
+
+import { Column, Row } from "components/layout";
+import { Text } from "components/text";
+import Icon from "components/icons/Icon";
+import { LANGUAGES } from "utils/constants";
+import { colors, padding } from "styles";
+
+import BackupIcon from "assets/backup-icon.png";
+import CurrencyIcon from "assets/currency-icon.png";
+import LanguageIcon from "assets/language-icon.png";
+
+// ======================================================================
+// Styles
+// ======================================================================
 
 const SettingGroup = styled(Column)`
   margin-bottom: 20;
@@ -72,9 +77,28 @@ const SettingRowArrow = styled(Icon).attrs({
   margin-left: 2;
 `;
 
-class SettingsSection extends React.PureComponent {
+// ======================================================================
+// Component
+// ======================================================================
+
+class SettingsSection extends React.Component {
+  webviews = {
+    ABOUT: "https://balance.io/about",
+    FEEDBACK: "https://balance.io/about",
+    LEGAL: "https://balance.io/about"
+  };
+
+  openWebView = uri => () => {
+    this.props.navigation.navigate("WebView", { uri });
+  };
+
   render() {
-    const { language, currency, onPressLanguage, onPressCurrency } = this.props;
+    const {
+      language,
+      nativeCurrency,
+      onPressLanguage,
+      onPressCurrency
+    } = this.props;
     return (
       <Column>
         <SettingGroup>
@@ -94,7 +118,7 @@ class SettingsSection extends React.PureComponent {
               <SettingRowIcon source={CurrencyIcon} />
               <SettingRowLabel>Currency</SettingRowLabel>
               <SettingArrowGroup>
-                <SettingRowValue>{currency || ""}</SettingRowValue>
+                <SettingRowValue>{nativeCurrency || ""}</SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>
@@ -113,17 +137,20 @@ class SettingsSection extends React.PureComponent {
         </SettingGroup>
 
         <SettingGroup>
-          <SettingButton border>
+          <SettingButton onPress={this.openWebView(this.webviews.ABOUT)} border>
             <SettingRow>
               <SettingRowLabel>⚖️ About Balance</SettingRowLabel>
             </SettingRow>
           </SettingButton>
-          <SettingButton border>
+          <SettingButton
+            onPress={this.openWebView(this.webviews.FEEDBACK)}
+            border
+          >
             <SettingRow>
               <SettingRowLabel>❤️ Leave Feedback️</SettingRowLabel>
             </SettingRow>
           </SettingButton>
-          <SettingButton>
+          <SettingButton onPress={this.openWebView(this.webviews.LEGAL)}>
             <SettingRow>
               <SettingRowLabel>📃 Legal</SettingRowLabel>
             </SettingRow>
@@ -134,4 +161,12 @@ class SettingsSection extends React.PureComponent {
   }
 }
 
-export default SettingsSection;
+SettingsSection.propTypes = {
+  nativeCurrency: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired,
+  navigation: PropTypes.object.isRequired,
+  onPressCurrency: PropTypes.func.isRequired,
+  onPressLanguage: PropTypes.func.isRequired
+};
+
+export default withNavigation(SettingsSection);

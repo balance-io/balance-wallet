@@ -5,7 +5,8 @@ import {
 } from "balance-common";
 
 const mapStateToProps = ({ account }) => ({
-  account
+  language: account.language,
+  nativeCurrency: account.nativeCurrency
 });
 
 export default Component =>

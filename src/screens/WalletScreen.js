@@ -26,14 +26,13 @@ import {
   sortAssetsByNativeAmount
 } from "../helpers/assets";
 import {
-  withAccount,
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,
   withRequestsInit
 } from "../hoc";
 import { position } from "../styles";
-import SettingsScreen from "./SettingsScreen";
+import SettingsOverlay from "./SettingsOverlay";
 
 const BalanceRenderItem = renderItemProps => (
   <BalanceCoinRow {...renderItemProps} />
@@ -46,19 +45,19 @@ const filterEmptyAssetSections = sections =>
 
 class WalletScreen extends React.PureComponent {
   state = {
-    settingsVisible: true
+    settingsVisible: false
   };
 
-  onToggleSettings = (visible = !this.state.settingsVisible) =>
-    this.setState({
-      settingsVisible: visible
-    });
+  showSettingsOverlay = () => {
+    this.setState({ settingsVisible: true });
+  };
+
+  hideSettingsOverlay = () => {
+    this.setState({ settingsVisible: false });
+  };
 
   render() {
     const {
-      account,
-      accountChangeLanguage,
-      accountChangeNativeCurrency,
       assets,
       assetsCount,
       assetsTotalUSD,
@@ -105,14 +104,13 @@ class WalletScreen extends React.PureComponent {
       };
     }
 
-    // TODO:
     // allow navigation to any Settings section via navigation.params
-    const settingsSection = navigation.getParam("settingsSection", false);
+    const settingsSection = navigation.getParam("settingsSection", "Language");
 
     return (
       <Page component={FlexItem} style={position.sizeAsObject("100%")}>
         <Header justify="space-between">
-          <HeaderButton onPress={onPressProfile}>
+          <HeaderButton onPress={this.showSettingsOverlay}>
             <Avatar />
           </HeaderButton>
           <ActivityHeaderButton />
@@ -127,14 +125,10 @@ class WalletScreen extends React.PureComponent {
           ])}
           showShitcoins={showShitcoins}
         />
-        <SettingsScreen
-          account={account}
-          accountChangeLanguage={accountChangeLanguage}
-          accountChangeNativeCurrency={accountChangeNativeCurrency}
-          dispatch={dispatch}
-          tab={settingsSection}
+        <SettingsOverlay
+          section={settingsSection}
           visible={this.state.settingsVisible}
-          onPressClose={() => this.onToggleSettings(false)}
+          onPressClose={this.hideSettingsOverlay}
         />
       </Page>
     );
@@ -162,7 +156,6 @@ WalletScreen.propTypes = {
 };
 
 export default compose(
-  withAccount,
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,
@@ -170,10 +163,6 @@ export default compose(
   withSafeTimeout,
   withState("showShitcoins", "toggleShowShitcoins", true),
   withHandlers({
-    onPressProfile: ({ navigation }) => () =>
-      this.setState({ settingsVisible: true }),
-    // onPressProfile: ({ navigation }) => () =>
-    //   navigation.navigate("SettingsStack"),
     onPressWalletConnect: ({ navigation }) => () =>
       navigation.navigate("QRScannerScreen"),
     onRefreshList: ({
