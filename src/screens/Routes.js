@@ -5,35 +5,10 @@ import IntroScreen from "./IntroScreen";
 import LoadingScreen from "./LoadingScreen";
 import QRScannerScreenWithData from "./QRScannerScreenWithData";
 import SendScreen from "./SendScreen";
-// import LanguageScreen from "./LanguageScreen";
-// import CurrencyScreen from "./CurrencyScreen";
-// import SettingsScreenWithData from "./SettingsScreenWithData";
 import TransactionConfirmationScreenWithData from "./TransactionConfirmationScreenWithData";
 import WalletScreen from "./WalletScreen";
-
+import WebViewScreen from "./WebViewScreen";
 import Navigation from "../navigation";
-
-// const SettingsStack = createStackNavigator(
-//   {
-//     SettingsScreen: {
-//       name: "SettingsScreen",
-//       screen: SettingsScreenWithData
-//     },
-//     LanguageScreen: {
-//       name: "LanguageScreen",
-//       screen: LanguageScreen
-//     },
-//     CurrencyScreen: {
-//       name: "CurrencyScreen",
-//       screen: CurrencyScreen
-//     }
-//   },
-//   {
-//     headerMode: "float",
-//     initialRoutename: "SettingsScreen",
-//     mode: "modal"
-//   }
-// );
 
 const SwipeStack = createSwipeNavigator(
   {
@@ -90,7 +65,8 @@ export default createSwitchNavigator(
   {
     App: AppStack,
     Intro: IntroStack,
-    Loading: LoadingScreen
+    Loading: LoadingScreen,
+    WebView: WebViewScreen
   },
   {
     headerMode: "none",
