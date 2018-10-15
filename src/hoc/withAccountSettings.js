@@ -6,8 +6,7 @@ import {
 
 const mapStateToProps = ({ account }) => ({
   language: account.language,
-  nativeCurrency: account.nativeCurrency,
-  accountAddress: account.accountAddress.toLowerCase()
+  nativeCurrency: account.nativeCurrency
 });
 
 export default Component =>

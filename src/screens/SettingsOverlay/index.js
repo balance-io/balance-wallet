@@ -195,12 +195,7 @@ class SettingsOverlay extends React.Component {
         );
 
       case this.sections.BACKUP:
-        return (
-          <BackupSection
-            accountAddress={this.props.accountAddress}
-            onPressBack={this.onPressBack}
-          />
-        );
+        return <BackupSection />;
 
       case this.sections.SETTINGS:
       default:

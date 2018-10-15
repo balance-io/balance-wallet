@@ -1,12 +1,11 @@
 import React from "react";
-import { View, AlertIOS, TouchableHighlight } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import TouchID from "react-native-touch-id";
 import PasscodeAuth from "react-native-passcode-auth";
 
-import { Text, Monospace } from "components/text";
-import { Column, Centered } from "components/layout";
+import { Monospace } from "components/text";
+import { Centered } from "components/layout";
 import { Button } from "components/buttons";
 import { loadSeedPhrase } from "model/wallet";
 
@@ -52,17 +51,13 @@ class BackupSection extends React.Component {
   showSeedPhrase = () => {
     TouchID.isSupported()
       .then(biometryType => {
-        AlertIOS.alert(biometryType);
         if (biometryType === "FaceID" || biometryType === "TouchID") {
           TouchID.authenticate("View seed phrase")
             .then(this.loadSeedPhrase)
             .catch(this.catchAuthError);
-        } else {
-          AlertIOS.alert(`TouchID supported – not FaceID`);
         }
       })
       .catch(error => {
-        AlertIOS.alert(`attempt PassCode auth`);
         PasscodeAuth.authenticate("View seed phrase")
           .then(this.loadSeedPhrase)
           .catch(this.catchAuthError);
