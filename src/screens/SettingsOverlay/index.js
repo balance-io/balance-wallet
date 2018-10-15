@@ -10,6 +10,7 @@ import Icon from "components/icons/Icon";
 import SettingsSection from "./SettingsSection";
 import LanguageSection from "./LanguageSection";
 import CurrencySection from "./CurrencySection";
+import BackupSection from "./BackupSection";
 import { colors, padding } from "styles";
 
 // ======================================================================
@@ -91,6 +92,7 @@ const sectionStyles = {
   top: 50,
   left: 0,
   right: 0,
+  bottom: 0,
   paddingRight: 16,
   paddingLeft: 16
 };
@@ -103,7 +105,8 @@ class SettingsOverlay extends React.Component {
   sections = {
     SETTINGS: "Settings",
     LANGUAGE: "Language",
-    CURRENCY: "Currency"
+    CURRENCY: "Currency",
+    BACKUP: "Backup"
   };
 
   state = {
@@ -191,6 +194,14 @@ class SettingsOverlay extends React.Component {
           />
         );
 
+      case this.sections.BACKUP:
+        return (
+          <BackupSection
+            accountAddress={this.props.accountAddress}
+            onPressBack={this.onPressBack}
+          />
+        );
+
       case this.sections.SETTINGS:
       default:
         return null;
@@ -230,6 +241,7 @@ class SettingsOverlay extends React.Component {
             <SettingsSection
               language={this.props.language}
               nativeCurrency={this.props.nativeCurrency}
+              onPressBackup={this.onPressSection(this.sections.BACKUP)}
               onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
               onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
             />

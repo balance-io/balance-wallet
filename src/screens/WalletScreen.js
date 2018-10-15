@@ -45,7 +45,7 @@ const filterEmptyAssetSections = sections =>
 
 class WalletScreen extends React.PureComponent {
   state = {
-    settingsVisible: false
+    settingsVisible: true
   };
 
   showSettingsOverlay = () => {
@@ -105,7 +105,7 @@ class WalletScreen extends React.PureComponent {
     }
 
     // allow navigation to any Settings section via navigation.params
-    const settingsSection = navigation.getParam("settingsSection", "Language");
+    const settingsSection = navigation.getParam("settingsSection", "Backup");
 
     return (
       <Page component={FlexItem} style={position.sizeAsObject("100%")}>

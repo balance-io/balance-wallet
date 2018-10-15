@@ -96,13 +96,14 @@ class SettingsSection extends React.Component {
     const {
       language,
       nativeCurrency,
+      onPressBackup,
       onPressLanguage,
       onPressCurrency
     } = this.props;
     return (
       <Column>
         <SettingGroup>
-          <SettingButton border onPress={onPressCurrency}>
+          <SettingButton border onPress={onPressBackup}>
             <PrimarySettingRow>
               <SettingRowIcon source={BackupIcon} />
               <SettingRowLabel>Backup</SettingRowLabel>
@@ -165,6 +166,7 @@ SettingsSection.propTypes = {
   nativeCurrency: PropTypes.string.isRequired,
   language: PropTypes.string.isRequired,
   navigation: PropTypes.object.isRequired,
+  onPressBackup: PropTypes.func.isRequired,
   onPressCurrency: PropTypes.func.isRequired,
   onPressLanguage: PropTypes.func.isRequired
 };
