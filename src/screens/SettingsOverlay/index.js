@@ -1,5 +1,10 @@
 import React from "react";
-import { Animated, Dimensions, TouchableOpacity } from "react-native";
+import {
+  Animated,
+  ImageBackground,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -12,6 +17,7 @@ import LanguageSection from "./LanguageSection";
 import CurrencySection from "./CurrencySection";
 import BackupSection from "./BackupSection";
 import { colors, padding } from "styles";
+import overlayBackground from "assets/overlay.png";
 
 // ======================================================================
 // Styles
@@ -20,14 +26,21 @@ import { colors, padding } from "styles";
 const ScreenWidth = Dimensions.get("window").width;
 const OverlayWidth = ScreenWidth - 31;
 
-const Overlay = styled(Column)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 15, 17, 0.4);
-`;
+const overlayStyles = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(15, 15, 17, 0.4)"
+};
+
+const modalStyles = {
+  display: "flex",
+  align: "stretch",
+  flex: 1,
+  flexDirection: "column"
+};
 
 const Content = styled(Column).attrs({
   align: "stretch",
@@ -209,49 +222,68 @@ class SettingsOverlay extends React.Component {
     }
 
     return (
-      <Overlay>
-        <Content>
-          <HeaderRow>
-            <HeaderLeft
-              visible={this.state.section !== this.sections.SETTINGS}
-              onPress={this.onPressBack}
+      <Animated.View
+        style={[
+          overlayStyles,
+          {
+            opacity: this.props.overlayOpacity
+          }
+        ]}
+      >
+        <Animated.View
+          style={[
+            modalStyles,
+            {
+              transform: [
+                { scaleX: this.props.modalScale },
+                { scaleY: this.props.modalScale }
+              ]
+            }
+          ]}
+        >
+          <Content>
+            <HeaderRow>
+              <HeaderLeft
+                visible={this.state.section !== this.sections.SETTINGS}
+                onPress={this.onPressBack}
+              >
+                <HeaderBackButton />
+                <HeaderAction>Settings</HeaderAction>
+              </HeaderLeft>
+              <HeaderTitle>{this.state.section}</HeaderTitle>
+              <HeaderRight>
+                <HeaderAction onPress={this.props.onPressClose}>
+                  Done
+                </HeaderAction>
+              </HeaderRight>
+            </HeaderRow>
+
+            <Animated.View
+              style={[
+                sectionStyles,
+                { transform: [{ translateX: this.state.settingsXValue }] }
+              ]}
             >
-              <HeaderBackButton />
-              <HeaderAction>Settings</HeaderAction>
-            </HeaderLeft>
-            <HeaderTitle>{this.state.section}</HeaderTitle>
-            <HeaderRight>
-              <HeaderAction onPress={this.props.onPressClose}>
-                Done
-              </HeaderAction>
-            </HeaderRight>
-          </HeaderRow>
+              <SettingsSection
+                language={this.props.language}
+                nativeCurrency={this.props.nativeCurrency}
+                onPressBackup={this.onPressSection(this.sections.BACKUP)}
+                onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
+                onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
+              />
+            </Animated.View>
 
-          <Animated.View
-            style={[
-              sectionStyles,
-              { transform: [{ translateX: this.state.settingsXValue }] }
-            ]}
-          >
-            <SettingsSection
-              language={this.props.language}
-              nativeCurrency={this.props.nativeCurrency}
-              onPressBackup={this.onPressSection(this.sections.BACKUP)}
-              onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
-              onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
-            />
-          </Animated.View>
-
-          <Animated.View
-            style={[
-              sectionStyles,
-              { transform: [{ translateX: this.state.sectionXValue }] }
-            ]}
-          >
-            {this.renderActiveSection()}
-          </Animated.View>
-        </Content>
-      </Overlay>
+            <Animated.View
+              style={[
+                sectionStyles,
+                { transform: [{ translateX: this.state.sectionXValue }] }
+              ]}
+            >
+              {this.renderActiveSection()}
+            </Animated.View>
+          </Content>
+        </Animated.View>
+      </Animated.View>
     );
   }
 }

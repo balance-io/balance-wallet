@@ -37,4 +37,6 @@ target 'BalanceWallet' do
   pod 'Firebase/Messaging', '~> 5.3.0'
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
+
+
 end

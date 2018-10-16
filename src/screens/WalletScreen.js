@@ -2,6 +2,7 @@ import { withSafeTimeout } from "@hocs/safe-timers";
 import { get } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
+import { Animated, Easing } from "react-native";
 import { compose, onlyUpdateForKeys, withHandlers, withState } from "recompact";
 import { AssetList } from "../components/asset-list";
 import { UniqueTokenRow } from "../components/unique-token";
@@ -45,15 +46,47 @@ const filterEmptyAssetSections = sections =>
 
 class WalletScreen extends React.PureComponent {
   state = {
-    settingsVisible: true
+    settingsVisible: false,
+    overlayOpacity: new Animated.Value(0),
+    modalScale: new Animated.Value(0.5)
   };
 
   showSettingsOverlay = () => {
-    this.setState({ settingsVisible: true });
+    this.setState({ settingsVisible: true }, () => {
+      Animated.parallel([
+        Animated.timing(this.state.overlayOpacity, {
+          toValue: 1,
+          easing: Easing.ease,
+          duration: 300,
+          useNativeDriver: true
+        }).start(),
+        Animated.timing(this.state.modalScale, {
+          toValue: 1,
+          easing: Easing.ease,
+          duration: 300,
+          useNativeDriver: true
+        }).start()
+      ]);
+    });
   };
 
   hideSettingsOverlay = () => {
-    this.setState({ settingsVisible: false });
+    Animated.parallel([
+      Animated.timing(this.state.overlayOpacity, {
+        toValue: 0,
+        easing: Easing.ease,
+        duration: 300,
+        useNativeDriver: true
+      }).start(),
+      Animated.timing(this.state.modalScale, {
+        toValue: 0.5,
+        easing: Easing.ease,
+        duration: 300,
+        useNativeDriver: true
+      }).start(() => {
+        this.setState({ settingsVisible: false });
+      })
+    ]);
   };
 
   render() {
@@ -105,7 +138,7 @@ class WalletScreen extends React.PureComponent {
     }
 
     // allow navigation to any Settings section via navigation.params
-    const settingsSection = navigation.getParam("settingsSection", "Backup");
+    const settingsSection = navigation.getParam("settingsSection", "Settings");
 
     return (
       <Page component={FlexItem} style={position.sizeAsObject("100%")}>
@@ -126,6 +159,8 @@ class WalletScreen extends React.PureComponent {
           showShitcoins={showShitcoins}
         />
         <SettingsOverlay
+          overlayOpacity={this.state.overlayOpacity}
+          modalScale={this.state.modalScale}
           section={settingsSection}
           visible={this.state.settingsVisible}
           onPressClose={this.hideSettingsOverlay}

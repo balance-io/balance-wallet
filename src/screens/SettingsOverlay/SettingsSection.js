@@ -84,8 +84,8 @@ const SettingRowArrow = styled(Icon).attrs({
 class SettingsSection extends React.Component {
   webviews = {
     ABOUT: "https://balance.io/about",
-    FEEDBACK: "https://balance.io/about",
-    LEGAL: "https://balance.io/about"
+    FEEDBACK: "support@balance.io",
+    LEGAL: "https://github.com/balance-io/balance-wallet/blob/master/LICENSE"
   };
 
   openWebView = uri => () => {
