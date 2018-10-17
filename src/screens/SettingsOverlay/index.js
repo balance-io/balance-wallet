@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Animated,
-  ImageBackground,
+  Easing,
   Dimensions,
   TouchableOpacity,
   View
@@ -51,7 +51,8 @@ const Modal = styled(View)`
   margin-left: 15;
   margin-right: 15;
   margin-bottom: 120;
-  ${padding(16)};
+  padding-top: 16;
+  padding-bottom: 16;
   background: ${colors.white};
   border-radius: 12;
   shadow-color: ${colors.dark};
@@ -59,6 +60,7 @@ const Modal = styled(View)`
   shadow-offset: 0px 10px;
   shadow-radius: 50;
 `;
+// ${padding(16)};
 
 const Content = styled(View)`
   display: flex;
@@ -98,7 +100,7 @@ const HeaderAction = styled(Text).attrs({
 
 const HeaderLeft = styled(TouchableOpacity)`
   position: absolute;
-  left: 0;
+  left: 16;
   display: ${({ visible }) => (visible ? "flex" : "none")};
   flex-direction: row;
   align-items: center;
@@ -106,7 +108,7 @@ const HeaderLeft = styled(TouchableOpacity)`
 
 const HeaderRight = styled(TouchableOpacity)`
   position: absolute;
-  right: 0;
+  right: 16;
 `;
 
 const sectionStyles = {
@@ -114,7 +116,9 @@ const sectionStyles = {
   top: 35,
   left: 0,
   right: 0,
-  bottom: 0
+  bottom: 0,
+  paddingLeft: 16,
+  paddingRight: 16
 };
 
 // ======================================================================
@@ -166,10 +170,14 @@ class SettingsOverlay extends React.Component {
     Animated.parallel([
       Animated.timing(this.state.settingsXValue, {
         toValue: -OverlayWidth,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: 300,
         useNativeDriver: true
       }).start(),
       Animated.timing(this.state.sectionXValue, {
         toValue: 0,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: 300,
         useNativeDriver: true
       }).start()
     ]);
@@ -183,10 +191,14 @@ class SettingsOverlay extends React.Component {
     Animated.parallel([
       Animated.timing(this.state.settingsXValue, {
         toValue: 0,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: 300,
         useNativeDriver: true
       }).start(),
       Animated.timing(this.state.sectionXValue, {
         toValue: OverlayWidth,
+        easing: Easing.bezier(0.4, 0, 0.2, 1),
+        duration: 300,
         useNativeDriver: true
       }).start()
     ]);
