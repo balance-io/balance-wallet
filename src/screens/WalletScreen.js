@@ -2,8 +2,17 @@ import { withSafeTimeout } from "@hocs/safe-timers";
 import { get } from "lodash";
 import PropTypes from "prop-types";
 import React from "react";
-import { Animated, Easing } from "react-native";
+import {
+  Animated,
+  Clipboard,
+  Dimensions,
+  Image,
+  View,
+  TouchableOpacity,
+  Share
+} from "react-native";
 import { compose, onlyUpdateForKeys, withHandlers, withState } from "recompact";
+import styled from "styled-components";
 import { AssetList } from "../components/asset-list";
 import { UniqueTokenRow } from "../components/unique-token";
 import Avatar from "../components/Avatar";
@@ -13,7 +22,7 @@ import {
   Header,
   HeaderButton
 } from "../components/header";
-import { FlexItem, Page } from "../components/layout";
+import { FlexItem, Page, Column, Row } from "../components/layout";
 import {
   ActivityHeaderButton,
   Header,
@@ -32,8 +41,76 @@ import {
   withHideSplashScreen,
   withRequestsInit
 } from "../hoc";
-import { position } from "../styles";
+import { Text, TruncatedAddress } from "components/text";
+import Icon from "components/icons/Icon";
+import { position, colors } from "../styles";
 import SettingsOverlay from "./SettingsOverlay";
+
+const SCREEN_HEIGHT = Dimensions.get("window").height - 120;
+
+// ======================================================================
+// Styles
+// ======================================================================
+
+const HeaderColumn = styled(Column)`
+  align-items: center;
+  justify-content: center;
+  margin-top: 5;
+  margin-bottom: 5;
+`;
+
+const Address = styled(TruncatedAddress).attrs({
+  size: "big",
+  weight: "bold",
+  truncationLength: 4
+})`
+  margin-top: 10;
+  margin-bottom: 5;
+`;
+
+const AvatarImage = styled(Image)`
+  height: 65px;
+  width: 65px;
+  border-radius: 32;
+`;
+
+const AvatarContainer = styled(View)`
+  shadow-color: #3a3a4f;
+  shadow-offset: 0px 6px;
+  shadow-opacity: 0.14;
+  shadow-radius: 10;
+`;
+
+const AvatarHero = ({ source }) => (
+  <AvatarContainer>
+    <AvatarImage source={source} />
+  </AvatarContainer>
+);
+
+const ProfileActionContainer = styled(Row)`
+  align-items: center;
+`;
+const ProfileActionText = styled(Text).attrs({
+  color: colors.appleBlue,
+  size: "medium",
+  weight: "semibold"
+})`
+  margin-left: 5;
+  margin-right: 16;
+`;
+
+const ProfileAction = ({ icon, children, onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <ProfileActionContainer>
+      <Icon name={icon} color={colors.appleBlue} />
+      <ProfileActionText>{children}</ProfileActionText>
+    </ProfileActionContainer>
+  </TouchableOpacity>
+);
+
+// ======================================================================
+// Component
+// ======================================================================
 
 const BalanceRenderItem = renderItemProps => (
   <BalanceCoinRow {...renderItemProps} />
@@ -48,22 +125,22 @@ class WalletScreen extends React.PureComponent {
   state = {
     settingsVisible: false,
     overlayOpacity: new Animated.Value(0),
-    modalScale: new Animated.Value(0.5)
+    modalYPosition: new Animated.Value(SCREEN_HEIGHT)
   };
 
   showSettingsOverlay = () => {
     this.setState({ settingsVisible: true }, () => {
       Animated.parallel([
-        Animated.timing(this.state.overlayOpacity, {
+        Animated.spring(this.state.overlayOpacity, {
           toValue: 1,
-          easing: Easing.ease,
-          duration: 300,
+          tension: 90,
+          friction: 11,
           useNativeDriver: true
         }).start(),
-        Animated.timing(this.state.modalScale, {
-          toValue: 1,
-          easing: Easing.ease,
-          duration: 300,
+        Animated.spring(this.state.modalYPosition, {
+          toValue: 0,
+          tension: 90,
+          friction: 11,
           useNativeDriver: true
         }).start()
       ]);
@@ -72,21 +149,32 @@ class WalletScreen extends React.PureComponent {
 
   hideSettingsOverlay = () => {
     Animated.parallel([
-      Animated.timing(this.state.overlayOpacity, {
+      Animated.spring(this.state.overlayOpacity, {
         toValue: 0,
-        easing: Easing.ease,
-        duration: 300,
+        tension: 120,
+        friction: 12,
         useNativeDriver: true
       }).start(),
-      Animated.timing(this.state.modalScale, {
-        toValue: 0.5,
-        easing: Easing.ease,
-        duration: 300,
+      Animated.spring(this.state.modalYPosition, {
+        toValue: SCREEN_HEIGHT,
+        tension: 120,
+        friction: 12,
         useNativeDriver: true
       }).start(() => {
         this.setState({ settingsVisible: false });
       })
     ]);
+  };
+
+  onPressCopy = () => {
+    Clipboard.setString(this.props.accountAddress);
+  };
+
+  onPressShare = () => {
+    Share.share({
+      message: this.props.accountAddress,
+      title: "My account address"
+    });
   };
 
   render() {
@@ -144,10 +232,30 @@ class WalletScreen extends React.PureComponent {
       <Page component={FlexItem} style={position.sizeAsObject("100%")}>
         <Header justify="space-between">
           <HeaderButton onPress={this.showSettingsOverlay}>
-            <Avatar />
+            <Icon name="gear" />
           </HeaderButton>
           <ActivityHeaderButton />
         </Header>
+
+        <HeaderColumn>
+          <AvatarHero
+            source={{
+              uri:
+                "https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg"
+            }}
+          />
+          <Address address={this.props.accountAddress} />
+
+          <Row>
+            <ProfileAction onPress={this.onPressCopy} icon="copy">
+              Copy Address
+            </ProfileAction>
+            <ProfileAction onPress={this.onPressShare} icon="share">
+              Share
+            </ProfileAction>
+          </Row>
+        </HeaderColumn>
+
         <AssetList
           fetchData={onRefreshList}
           onPressWalletConnect={onPressWalletConnect}
@@ -160,7 +268,7 @@ class WalletScreen extends React.PureComponent {
         />
         <SettingsOverlay
           overlayOpacity={this.state.overlayOpacity}
-          modalScale={this.state.modalScale}
+          modalYPosition={this.state.modalYPosition}
           section={settingsSection}
           visible={this.state.settingsVisible}
           onPressClose={this.hideSettingsOverlay}

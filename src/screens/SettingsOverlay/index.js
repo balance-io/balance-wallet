@@ -3,7 +3,8 @@ import {
   Animated,
   ImageBackground,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -32,7 +33,7 @@ const overlayStyles = {
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: "rgba(15, 15, 17, 0.4)"
+  backgroundColor: "rgba(15, 15, 17, 0.5)"
 };
 
 const modalStyles = {
@@ -42,11 +43,9 @@ const modalStyles = {
   flexDirection: "column"
 };
 
-const Content = styled(Column).attrs({
-  align: "stretch",
-  justify: "start"
-})`
-  position: relative;
+const Modal = styled(View)`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-top: 120;
   margin-left: 15;
@@ -55,6 +54,17 @@ const Content = styled(Column).attrs({
   ${padding(16)};
   background: ${colors.white};
   border-radius: 12;
+  shadow-color: ${colors.dark};
+  shadow-opacity: 0.7;
+  shadow-offset: 0px 10px;
+  shadow-radius: 50;
+`;
+
+const Content = styled(View)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
   overflow: hidden;
 `;
 
@@ -62,7 +72,6 @@ const HeaderRow = styled(Row).attrs({
   align: "center"
 })`
   align-content: space-between;
-  margin-bottom: 30;
 `;
 
 const HeaderTitle = styled(Text).attrs({
@@ -102,12 +111,10 @@ const HeaderRight = styled(TouchableOpacity)`
 
 const sectionStyles = {
   position: "absolute",
-  top: 50,
+  top: 35,
   left: 0,
   right: 0,
-  bottom: 0,
-  paddingRight: 16,
-  paddingLeft: 16
+  bottom: 0
 };
 
 // ======================================================================
@@ -128,22 +135,30 @@ class SettingsOverlay extends React.Component {
     sectionXValue: new Animated.Value(OverlayWidth)
   };
 
-  // Animate to last active section when SettingsOverlay is opened
-  // Example:
-  // `navigator.navigate('WalletScreen', {settingsSection: 'Language'})`
   componentDidUpdate(prevProps) {
     if (prevProps.visible !== this.props.visible) {
-      if (this.state.section !== this.sections.SETTINGS) {
-        this.setState({
-          settingsXValue: new Animated.Value(-OverlayWidth),
-          sectionXValue: new Animated.Value(0)
-        });
-      } else {
-        this.setState({
-          settingsXValue: new Animated.Value(0),
-          sectionXValue: new Animated.Value(OverlayWidth)
-        });
-      }
+      this.setState({
+        section: this.sections.SETTINGS,
+        settingsXValue: new Animated.Value(0),
+        sectionXValue: new Animated.Value(OverlayWidth)
+      });
+
+      // Animate to last active section when SettingsOverlay is opened
+      // Example:
+      // `navigator.navigate('WalletScreen', {settingsSection: 'Language'})`
+      // ----
+      // if (this.state.section !== this.sections.SETTINGS) {
+      //   this.setState({
+      //     settingsXValue: new Animated.Value(-OverlayWidth),
+      //     sectionXValue: new Animated.Value(0)
+      //   });
+      // } else {
+      //   this.setState({
+      //     section: this.sections.SETTINGS,
+      //     settingsXValue: new Animated.Value(0),
+      //     sectionXValue: new Animated.Value(OverlayWidth)
+      //   });
+      // }
     }
   }
 
@@ -223,65 +238,57 @@ class SettingsOverlay extends React.Component {
 
     return (
       <Animated.View
-        style={[
-          overlayStyles,
-          {
-            opacity: this.props.overlayOpacity
-          }
-        ]}
+        style={[overlayStyles, { opacity: this.props.overlayOpacity }]}
       >
         <Animated.View
           style={[
             modalStyles,
-            {
-              transform: [
-                { scaleX: this.props.modalScale },
-                { scaleY: this.props.modalScale }
-              ]
-            }
+            { transform: [{ translateY: this.props.modalYPosition }] }
           ]}
         >
-          <Content>
-            <HeaderRow>
-              <HeaderLeft
-                visible={this.state.section !== this.sections.SETTINGS}
-                onPress={this.onPressBack}
+          <Modal>
+            <Content>
+              <HeaderRow>
+                <HeaderLeft
+                  visible={this.state.section !== this.sections.SETTINGS}
+                  onPress={this.onPressBack}
+                >
+                  <HeaderBackButton />
+                  <HeaderAction>Settings</HeaderAction>
+                </HeaderLeft>
+                <HeaderTitle>{this.state.section}</HeaderTitle>
+                <HeaderRight>
+                  <HeaderAction onPress={this.props.onPressClose}>
+                    Done
+                  </HeaderAction>
+                </HeaderRight>
+              </HeaderRow>
+
+              <Animated.View
+                style={[
+                  sectionStyles,
+                  { transform: [{ translateX: this.state.settingsXValue }] }
+                ]}
               >
-                <HeaderBackButton />
-                <HeaderAction>Settings</HeaderAction>
-              </HeaderLeft>
-              <HeaderTitle>{this.state.section}</HeaderTitle>
-              <HeaderRight>
-                <HeaderAction onPress={this.props.onPressClose}>
-                  Done
-                </HeaderAction>
-              </HeaderRight>
-            </HeaderRow>
+                <SettingsSection
+                  language={this.props.language}
+                  nativeCurrency={this.props.nativeCurrency}
+                  onPressBackup={this.onPressSection(this.sections.BACKUP)}
+                  onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
+                  onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
+                />
+              </Animated.View>
 
-            <Animated.View
-              style={[
-                sectionStyles,
-                { transform: [{ translateX: this.state.settingsXValue }] }
-              ]}
-            >
-              <SettingsSection
-                language={this.props.language}
-                nativeCurrency={this.props.nativeCurrency}
-                onPressBackup={this.onPressSection(this.sections.BACKUP)}
-                onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
-                onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
-              />
-            </Animated.View>
-
-            <Animated.View
-              style={[
-                sectionStyles,
-                { transform: [{ translateX: this.state.sectionXValue }] }
-              ]}
-            >
-              {this.renderActiveSection()}
-            </Animated.View>
-          </Content>
+              <Animated.View
+                style={[
+                  sectionStyles,
+                  { transform: [{ translateX: this.state.sectionXValue }] }
+                ]}
+              >
+                {this.renderActiveSection()}
+              </Animated.View>
+            </Content>
+          </Modal>
         </Animated.View>
       </Animated.View>
     );

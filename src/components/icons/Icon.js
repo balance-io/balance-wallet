@@ -13,8 +13,11 @@ import CheckmarkIcon from "./svg/CheckmarkIcon";
 import CheckmarkCircledIcon from "./svg/CheckmarkCircledIcon";
 import ClockIcon from "./svg/ClockIcon";
 import CloseIcon from "./svg/CloseIcon";
+import CopyIcon from "./svg/CopyIcon";
 import DotIcon from "./svg/DotIcon";
 import ETHIcon from "./svg/ETHIcon";
+import GearIcon from "./svg/GearIcon";
+import ShareIcon from "./svg/ShareIcon";
 import SpinnerIcon from "./svg/SpinnerIcon";
 import ThreeDotsIcon from "./svg/ThreeDotsIcon";
 import WalletConnectIcon from "./svg/WalletConnectIcon";
@@ -38,9 +41,12 @@ Icon.IconTypes = {
   checkmarkCircled: CheckmarkCircledIcon,
   clock: ClockIcon,
   close: CloseIcon,
+  copy: CopyIcon,
   dot: DotIcon,
   eth: ETHIcon,
+  gear: GearIcon,
   spinner: SpinnerIcon,
+  share: ShareIcon,
   threeDots: ThreeDotsIcon,
   walletConnect: WalletConnectIcon,
   warning: WarningIcon
