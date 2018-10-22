@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
-import { View, NetInfo } from "react-native";
+import { Animated, NetInfo } from "react-native";
 import styled from "styled-components";
 
 import Icon from "components/icons/Icon";
 import { Text } from "components/text";
 import { colors, padding } from "styles";
 
-const Badge = styled(View)`
+const Badge = styled(Animated.View)`
   position: absolute;
   align-self: center;
   bottom: 40;
@@ -40,7 +40,9 @@ const BadgeLabel = styled(Text).attrs({
 
 class OfflineBadge extends PureComponent {
   state = {
-    isConnected: true
+    isConnected: true,
+    badgeYPosition: new Animated.Value(100),
+    badgeOpacity: new Animated.Value(0)
   };
 
   componentDidMount() {
@@ -58,16 +60,56 @@ class OfflineBadge extends PureComponent {
   }
 
   handleConnectivityChange = isConnected => {
+    if (isConnected) {
+      this.animateBadgeOut();
+    } else {
+      this.animateBadgeIn();
+    }
     this.setState({ isConnected });
   };
 
-  render() {
-    if (this.state.isConnected) {
-      return null;
-    }
+  animateBadgeIn = () => {
+    Animated.parallel([
+      Animated.spring(this.state.badgeYPosition, {
+        toValue: 0,
+        tension: 90,
+        friction: 11,
+        useNativeDriver: true
+      }).start(),
+      Animated.spring(this.state.badgeOpacity, {
+        toValue: 1,
+        tension: 90,
+        friction: 11,
+        useNativeDriver: true
+      }).start()
+    ]);
+  };
 
+  animateBadgeOut = () => {
+    Animated.parallel([
+      Animated.spring(this.state.badgeYPosition, {
+        toValue: 100,
+        tension: 90,
+        friction: 11,
+        useNativeDriver: true
+      }).start(),
+      Animated.spring(this.state.badgeOpacity, {
+        toValue: 0,
+        tension: 90,
+        friction: 11,
+        useNativeDriver: true
+      }).start()
+    ]);
+  };
+
+  render() {
     return (
-      <Badge>
+      <Badge
+        style={{
+          opacity: this.state.badgeOpacity,
+          transform: [{ translateY: this.state.badgeYPosition }]
+        }}
+      >
         <BadgeIcon name="offline" />
         <BadgeLabel>Offline</BadgeLabel>
       </Badge>
