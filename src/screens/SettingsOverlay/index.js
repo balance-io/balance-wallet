@@ -288,6 +288,7 @@ class SettingsOverlay extends React.Component {
                   onPressBackup={this.onPressSection(this.sections.BACKUP)}
                   onPressLanguage={this.onPressSection(this.sections.LANGUAGE)}
                   onPressCurrency={this.onPressSection(this.sections.CURRENCY)}
+                  onPressSecurity={this.onPressSection(this.sections.CURRENCY)}
                 />
               </Animated.View>
 

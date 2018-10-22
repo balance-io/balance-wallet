@@ -13,6 +13,7 @@ import { colors, padding } from "styles";
 import BackupIcon from "assets/backup-icon.png";
 import CurrencyIcon from "assets/currency-icon.png";
 import LanguageIcon from "assets/language-icon.png";
+import SecurityIcon from "assets/security-icon.png";
 
 // ======================================================================
 // Styles
@@ -99,7 +100,8 @@ class SettingsSection extends React.Component {
       nativeCurrency,
       onPressBackup,
       onPressLanguage,
-      onPressCurrency
+      onPressCurrency,
+      onPressSecurity
     } = this.props;
     return (
       <Column>
@@ -126,12 +128,22 @@ class SettingsSection extends React.Component {
             </PrimarySettingRow>
           </SettingButton>
 
-          <SettingButton onPress={onPressLanguage}>
+          <SettingButton border onPress={onPressLanguage}>
             <PrimarySettingRow>
               <SettingRowIcon source={LanguageIcon} />
               <SettingRowLabel>Language</SettingRowLabel>
               <SettingArrowGroup>
                 <SettingRowValue>{LANGUAGES[language] || ""}</SettingRowValue>
+                <SettingRowArrow />
+              </SettingArrowGroup>
+            </PrimarySettingRow>
+          </SettingButton>
+
+          <SettingButton onPress={onPressSecurity}>
+            <PrimarySettingRow>
+              <SettingRowIcon source={SecurityIcon} />
+              <SettingRowLabel>Security</SettingRowLabel>
+              <SettingArrowGroup>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>
