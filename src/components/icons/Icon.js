@@ -9,6 +9,7 @@ import BalanceLogoIcon from './svg/BalanceLogoIcon';
 import BTCIcon from './svg/BTCIcon';
 import CameraIcon from './svg/CameraIcon';
 import CaretIcon from './svg/CaretIcon';
+import CaretThinIcon from './svg/CaretThinIcon';
 import CheckmarkIcon from './svg/CheckmarkIcon';
 import CheckmarkCircledIcon from './svg/CheckmarkCircledIcon';
 import ClockIcon from './svg/ClockIcon';
@@ -38,6 +39,7 @@ Icon.IconTypes = {
   btc: BTCIcon,
   camera: CameraIcon,
   caret: CaretIcon,
+  caretThin: CaretThinIcon,
   checkmark: CheckmarkIcon,
   checkmarkCircled: CheckmarkCircledIcon,
   clock: ClockIcon,

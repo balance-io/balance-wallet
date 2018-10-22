@@ -12,5 +12,5 @@ export default compose(
     style: Array.isArray(style)
       ? compact(style).reduce(reduceStylesToObject, {})
       : style,
-  })),
+  }))
 )(Svg);

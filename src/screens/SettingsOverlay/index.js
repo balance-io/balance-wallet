@@ -46,11 +46,11 @@ const Modal = styled(View)`
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin-top: 120;
+  margin-top: 115;
   margin-left: 15;
   margin-right: 15;
-  margin-bottom: 120;
-  padding-top: 16;
+  margin-bottom: 115;
+  padding-top: 12;
   padding-bottom: 16;
   background: ${colors.white};
   border-radius: 12;
@@ -118,7 +118,7 @@ const HeaderRight = styled(TouchableOpacity)`
 
 const sectionStyles = {
   position: 'absolute',
-  top: 35,
+  top: 39,
   left: 0,
   right: 0,
   bottom: 0,

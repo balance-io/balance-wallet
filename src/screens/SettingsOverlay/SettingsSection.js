@@ -20,7 +20,7 @@ import SecurityIcon from 'assets/security-icon.png';
 // ======================================================================
 
 const SettingGroup = styled(Column)`
-  margin-bottom: 20;
+  margin-bottom: 26;
 `;
 
 const SettingRow = styled(Row).attrs({
@@ -41,19 +41,19 @@ const SettingButton = styled(TouchableOpacity)`
 `;
 
 const PrimarySettingRow = styled(SettingRow)`
-  ${padding(12, 0)};
+  ${padding(10, 0)};
 `;
 
 const SettingRowIcon = styled(Image)`
-  width: 42;
-  height: 42;
+  width: 44;
+  height: 44;
   margin-left: -6;
-  margin-right: 4;
-  margin-bottom: -8;
+  margin-right: 3;
+  margin-bottom: -9;
 `;
 
 const SettingRowLabel = styled(Text).attrs({
-  size: 'large',
+  size: 'h5',
 })``;
 
 const SettingArrowGroup = styled(Row).attrs({
@@ -65,17 +65,36 @@ const SettingArrowGroup = styled(Row).attrs({
 `;
 
 const SettingRowValue = styled(Text).attrs({
-  size: 'large',
+  size: 'h5',
   color: colors.blueGreyDark,
-})``;
+})`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 6;
+`;
 
 const SettingRowArrow = styled(Icon).attrs({
-  name: 'caret',
+  name: 'caretThin',
   color: colors.blueGreyDark,
-  width: 20,
-  height: 15,
+  // width: 16,
+  // height: 12,
+  // width: 20,
+  // height: 15,
+})``;
+
+const BackupRowIcon = styled(Icon).attrs({
+  name: 'checkmarkCircled',
+  color: colors.blueGreyDark,
 })`
-  margin-left: 2;
+  margin-bottom: -5;
+`;
+
+const SettingRowEmoji = styled(Text).attrs({
+  size: 'h5',
+})`
+  margin-right: 8;
 `;
 
 // ======================================================================
@@ -111,7 +130,9 @@ class SettingsSection extends React.Component {
               <SettingRowIcon source={BackupIcon} />
               <SettingRowLabel>Backup</SettingRowLabel>
               <SettingArrowGroup>
-                <Icon name="checkmarkCircled" color={colors.blueGreyDark} />
+                <SettingRowValue>
+                  <BackupRowIcon />
+                </SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>
@@ -153,7 +174,8 @@ class SettingsSection extends React.Component {
         <SettingGroup>
           <SettingButton onPress={this.openWebView(this.webviews.ABOUT)} border>
             <SettingRow>
-              <SettingRowLabel>⚖️ About Balance</SettingRowLabel>
+              <SettingRowEmoji>⚖</SettingRowEmoji>
+              <SettingRowLabel>About Balance</SettingRowLabel>
             </SettingRow>
           </SettingButton>
           <SettingButton
@@ -161,12 +183,14 @@ class SettingsSection extends React.Component {
             border
           >
             <SettingRow>
-              <SettingRowLabel>❤️ Leave Feedback️</SettingRowLabel>
+              <SettingRowEmoji>❤️</SettingRowEmoji>
+              <SettingRowLabel>Leave Feedback️</SettingRowLabel>
             </SettingRow>
           </SettingButton>
           <SettingButton onPress={this.openWebView(this.webviews.LEGAL)}>
             <SettingRow>
-              <SettingRowLabel>📃 Legal</SettingRowLabel>
+              <SettingRowEmoji>📃</SettingRowEmoji>
+              <SettingRowLabel>Legal</SettingRowLabel>
             </SettingRow>
           </SettingButton>
         </SettingGroup>
