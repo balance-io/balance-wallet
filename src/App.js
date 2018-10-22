@@ -7,7 +7,7 @@ import {
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { AlertIOS, AppRegistry, AppState } from "react-native";
+import { AlertIOS, AppRegistry, View } from "react-native";
 import CodePush from "react-native-code-push";
 import firebase from "react-native-firebase";
 import { NavigationActions } from "react-navigation";
@@ -15,6 +15,7 @@ import { connect, Provider } from "react-redux";
 import { compose, withProps } from "recompact";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
+import styled from "styled-components";
 import {
   walletConnectGetAllTransactions,
   walletConnectGetTransaction,
@@ -33,11 +34,16 @@ import walletconnect, {
 } from "./reducers/walletconnect";
 import Routes from "./screens/Routes";
 import Navigation from "./navigation";
+import OfflineBadge from "components/OfflineBadge";
 
 const store = createStore(
   combineReducers({ account, transactionsToApprove, walletconnect }),
   applyMiddleware(thunk)
 );
+
+const Container = styled(View)`
+  flex: 1;
+`;
 
 class App extends Component {
   state = {
@@ -58,7 +64,6 @@ class App extends Component {
   navigatorRef = null;
 
   componentDidMount() {
-    AppState.addEventListener("change", this.handleAppStateChange);
     firebase
       .messaging()
       .getToken()
@@ -81,38 +86,38 @@ class App extends Component {
         commonStorage.saveLocal("balanceWalletFcmToken", { data: fcmToken });
       });
 
-    this.notificationListener = firebase.notifications().onNotification(notification => {
-      console.log('on notification received while app in foreground');
-      const navState = get(this.navigatorRef, 'state.nav');
-      const route = Navigation.getActiveRouteName(navState);
-      const { callId, sessionId } = notification.data;
-      if (route === 'ConfirmTransaction') {
-        this.fetchAndAddTransaction(callId, sessionId)
-          .then(transaction => {
+    this.notificationListener = firebase
+      .notifications()
+      .onNotification(notification => {
+        console.log("on notification received while app in foreground");
+        const navState = get(this.navigatorRef, "state.nav");
+        const route = Navigation.getActiveRouteName(navState);
+        const { callId, sessionId } = notification.data;
+        if (route === "ConfirmTransaction") {
+          this.fetchAndAddTransaction(callId, sessionId).then(transaction => {
             const localNotification = new firebase.notifications.Notification()
               .setTitle(notification.title)
               .setBody(notification.body)
               .setData(notification.data);
             firebase.notifications().displayNotification(localNotification);
           });
-      } else {
-        this.onPushNotificationOpened(callId, sessionId);
-      }
-    });
+        } else {
+          this.onPushNotificationOpened(callId, sessionId);
+        }
+      });
 
-    this.notificationOpenedListener = firebase.notifications().onNotificationOpened(notificationOpen => {
-      console.log('on notification manually opened');
-      const { callId, sessionId } = notificationOpen.notification.data;
-      this.onPushNotificationOpened(callId, sessionId);
-    });
+    this.notificationOpenedListener = firebase
+      .notifications()
+      .onNotificationOpened(notificationOpen => {
+        console.log("on notification manually opened");
+        const { callId, sessionId } = notificationOpen.notification.data;
+        this.onPushNotificationOpened(callId, sessionId);
+      });
 
     this.props.accountInitializeState();
 
     walletInit()
       .then(walletAddress => {
-        if (!walletAddress) {
-          return;
-        }
         console.log("wallet address is", walletAddress);
         this.props.accountUpdateAccountAddress(walletAddress, "BALANCEWALLET");
         this.props.transactionsToApproveInit();
@@ -131,10 +136,25 @@ class App extends Component {
           .catch(error => {
             console.log("Unable to init all WalletConnect sessions");
           });
+        firebase
+          .notifications()
+          .getInitialNotification()
+          .then(notificationOpen => {
+            console.log("on initial notification");
+            if (notificationOpen) {
+              console.log("on initial notification opened - while app closed");
+              const {
+                transactionId,
+                sessionId
+              } = notificationOpen.notification.data;
+              this.onPushNotificationOpened(transactionId, sessionId);
+            }
+          });
         /*
       */
       })
       .catch(error => {
+        console.log("failed to init wallet");
         AlertIOS.alert("Error: Failed to initialize wallet.");
       });
   }
@@ -172,8 +192,7 @@ class App extends Component {
     Navigation.handleAction(this.navigatorRef, action);
   };
 
-  fetchAllTransactionsFromWalletConnectSessions = async () => {
-    const allConnectors = this.props.getValidWalletConnectors();
+  fetchAllTransactionsFromWalletConnectSessions = async allConnectors => {
     if (!isEmpty(allConnectors)) {
       const allTransactions = await walletConnectGetAllTransactions(
         allConnectors
@@ -189,14 +208,7 @@ class App extends Component {
     if (existingTransaction) {
       this.handleOpenConfirmTransactionModal(existingTransaction);
     } else {
-<<<<<<< HEAD
       const transaction = await this.fetchAndAddTransaction(callId, sessionId);
-=======
-      const transaction = await this.fetchAndAddTransaction(
-        transactionId,
-        sessionId
-      );
->>>>>>> Fix walletscreen loading state
       if (transaction) {
         this.handleOpenConfirmTransactionModal(transaction);
       } else {
@@ -207,33 +219,27 @@ class App extends Component {
 
   fetchAndAddTransaction = async (callId, sessionId) => {
     const walletConnector = this.props.walletConnectors[sessionId];
-<<<<<<< HEAD
-    const transactionDetails = await walletConnectGetTransaction(callId, walletConnector);
-    if (!transactionDetails) return null;
-
-    const { callData, dappName } = transactionDetails;
-    return this.props.addTransactionToApprove(sessionId, callId, callData, dappName);
-  }
-=======
     const transactionDetails = await walletConnectGetTransaction(
-      transactionId,
+      callId,
       walletConnector
     );
     if (!transactionDetails) return null;
 
-    const { transactionPayload, dappName } = transactionDetails;
+    const { callData, dappName } = transactionDetails;
     return this.props.addTransactionToApprove(
       sessionId,
-      transactionId,
-      transactionPayload,
+      callId,
+      callData,
       dappName
     );
   };
->>>>>>> Fix walletscreen loading state
 
   render = () => (
     <Provider store={store}>
-      <Routes ref={this.handleNavigatorRef} />
+      <Container>
+        <OfflineBadge />
+        <Routes ref={this.handleNavigatorRef} />
+      </Container>
     </Provider>
   );
 }

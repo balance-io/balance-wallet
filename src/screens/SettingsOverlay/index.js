@@ -18,7 +18,6 @@ import LanguageSection from "./LanguageSection";
 import CurrencySection from "./CurrencySection";
 import BackupSection from "./BackupSection";
 import { colors, padding } from "styles";
-import overlayBackground from "assets/overlay.png";
 
 // ======================================================================
 // Styles

@@ -17,6 +17,7 @@ import CopyIcon from "./svg/CopyIcon";
 import DotIcon from "./svg/DotIcon";
 import ETHIcon from "./svg/ETHIcon";
 import GearIcon from "./svg/GearIcon";
+import OfflineIcon from "./svg/OfflineIcon";
 import ShareIcon from "./svg/ShareIcon";
 import SpinnerIcon from "./svg/SpinnerIcon";
 import ThreeDotsIcon from "./svg/ThreeDotsIcon";
@@ -45,6 +46,7 @@ Icon.IconTypes = {
   dot: DotIcon,
   eth: ETHIcon,
   gear: GearIcon,
+  offline: OfflineIcon,
   spinner: SpinnerIcon,
   share: ShareIcon,
   threeDots: ThreeDotsIcon,
