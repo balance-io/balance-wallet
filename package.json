@@ -49,6 +49,7 @@
     "react-native-circular-progress": "^1.0.1",
     "react-native-code-push": "^5.4.1",
     "react-native-crypto": "^2.1.2",
+    "react-native-dialog": "^5.4.0",
     "react-native-firebase": "^4.3.8",
     "react-native-gesture-handler": "^1.0.7",
     "react-native-haptic-feedback": "^1.2.0",

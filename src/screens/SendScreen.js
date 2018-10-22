@@ -132,6 +132,7 @@ class SendScreen extends Component {
     sendClearFields: PropTypes.func,
     sendMaxBalance: PropTypes.func,
     sendUpdateAssetAmount: PropTypes.func,
+    sendUpdateCustomGasPrice: PropTypes.func,
     sendUpdateGasPrice: PropTypes.func,
     sendUpdateNativeAmount: PropTypes.func,
     sendUpdateRecipient: PropTypes.func,
@@ -144,6 +145,7 @@ class SendScreen extends Component {
     sendClearFields() {},
     sendMaxBalance() {},
     sendUpdateAssetAmount() {},
+    sendUpdateCustomGasPrice() {},
     sendUpdateGasPrice() {},
     sendUpdateNativeAmount() {},
     sendUpdateRecipient() {},
@@ -155,6 +157,7 @@ class SendScreen extends Component {
 
     this.state = {
       sendLongPressProgress: new Animated.Value(0),
+      customGasDialogVisible: false,
     };
   }
 
@@ -238,6 +241,20 @@ class SendScreen extends Component {
     }
   };
 
+  showCustomGasDialog = () => {
+    this.setState({ customGasDialogVisible: true });
+  };
+
+  handleCancelCustomGasDialog = () => {
+    this.setState({ customGasDialogVisible: false });
+  };
+
+  handleUpdateCustomGas = () => {
+    // TODO: update _send with update gas price
+    this.props.sendUpdateCustomGasPrice();
+    this.setState({ customGasDialogVisible: false });
+  };
+
   onPressTransactionSpeed = () => {
     const { gasPrices, sendUpdateGasPrice } = this.props;
 
@@ -247,12 +264,15 @@ class SendScreen extends Component {
     }));
 
     options.unshift({ label: 'Cancel' });
+    options.push({ label: 'Custom' });
 
     showActionSheetWithOptions({
       options: options.map(option => option.label),
       cancelButtonIndex: 0,
     }, (buttonIndex) => {
-      if (buttonIndex > 0) {
+      if (buttonIndex === 4) {
+        this.showCustomGasDialog();
+      } else if (buttonIndex > 0) {
         sendUpdateGasPrice(options[buttonIndex].value);
       }
     });
@@ -396,8 +416,14 @@ class SendScreen extends Component {
 
   render() {
     const { recipient, isValidAddress } = this.props;
+    const { customGasDialogVisible } = this.state;
 
     return (
+      <CustomGasInput
+          visible={customGasDialogVisible}
+          onCancel={this.handleCancelCustomGasDialog}
+          handleUpdate={this.handleUpdateCustomGas}
+      />
       <KeyboardAvoidingView behavior="padding">
         <Container showBottomInset>
           <HandleIcon />
