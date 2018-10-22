@@ -87,8 +87,14 @@ const HeaderBackButton = styled(Icon).attrs({
   name: 'caret',
   direction: 'left',
   color: colors.appleBlue,
+})``;
+
+const HeaderBackText = styled(Text).attrs({
+  size: 'large',
+  weight: 'semibold',
+  color: 'appleBlue',
 })`
-  margin-right: 5;
+  margin-left: 5;
 `;
 
 const HeaderAction = styled(Text).attrs({
@@ -265,7 +271,7 @@ class SettingsOverlay extends React.Component {
                   onPress={this.onPressBack}
                 >
                   <HeaderBackButton />
-                  <HeaderAction>Settings</HeaderAction>
+                  <HeaderBackText>Settings</HeaderBackText>
                 </HeaderLeft>
                 <HeaderTitle>{this.state.section}</HeaderTitle>
                 <HeaderRight>

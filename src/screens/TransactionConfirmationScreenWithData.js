@@ -72,30 +72,9 @@ class TransactionConfirmationScreenWithData extends Component {
         null
       );
       this.closeTransactionScreen();
-      const { transactionDetails } = this.props.navigation.state.params;
-      const walletConnector = this.props.walletConnectors[
-        transactionDetails.sessionId
-      ];
-      await walletConnectSendTransactionHash(
-        walletConnector,
-        transactionDetails.transactionId,
-        false,
-        null
-      );
     } catch (error) {
       this.closeTransactionScreen();
       AlertIOS.alert(lang.t('wallet.transaction.alert.cancelled_transaction'));
-    }
-  };
-
-  handleCancelTransaction = async () => {
-    try {
-      await this.sendFailedTransactionStatus();
-      const { transactionDetails } = this.props.navigation.state.params;
-      this.props.removeTransaction(transactionDetails.transactionId);
-    } catch (error) {
-      this.closeTransactionScreen();
-      AlertIOS.alert('Failed to send rejected transaction status');
     }
   };
 

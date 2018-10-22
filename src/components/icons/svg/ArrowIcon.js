@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import styled from 'styled-components';
 import { Path } from 'svgs';
 import { withRotationForDirection } from '../../../hoc';
-import { colors } from '../../../styles';
+import { colors, calcDirectionToDegrees } from '../../../styles';
 import Svg from '../Svg';
 
 const SvgContainer = styled(Svg)`
@@ -15,7 +16,7 @@ const ArrowIcon = ({ color, direction, height, width, ...props }) => (
       d="M5.614 4.186v1.92a.349.349 0 0 0 .552.278L9.554 3.56a.344.344 0 0 0 0-.562L6.166.174a.349.349 0 0 0-.552.278v1.922H1.41a.77.77 0 0 0-.77.77v.272c0 .425.345.77.77.77h4.204z"
       fill={color}
     />
-  </Svg>
+  </SvgContainer>
 );
 
 ArrowIcon.propTypes = {

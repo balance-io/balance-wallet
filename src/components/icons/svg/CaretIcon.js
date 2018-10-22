@@ -6,12 +6,14 @@ import styled from 'styled-components/primitives';
 import { calcDirectionToDegrees, colors } from '../../../styles';
 import { directionPropType } from '../../../utils';
 import SvgElement from '../Svg';
+import { withRotationForDirection } from 'hoc';
 
-const Svg = styled(omitProps('direction')(SvgElement))`
-  transform: rotate(${calcDirectionToDegrees}deg);
+const Svg = styled(SvgElement)`
+${'' /* const Svg = styled(omitProps('direction')(SvgElement))` */}
+  transform: rotate(${props => calcDirectionToDegrees(props.direction)}deg);
 `;
 
-const CaretIcon = ({ color, direction, ...props }) => (
+const CaretIcon = ({ color, direction, style, ...props }) => (
   <Svg
     {...props}
     direction={direction}

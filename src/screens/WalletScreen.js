@@ -24,12 +24,6 @@ import {
 } from '../components/header';
 import { FlexItem, Page, Column, Row } from '../components/layout';
 import {
-  ActivityHeaderButton,
-  Header,
-  HeaderButton
-} from "../components/header";
-import { FlexItem, Page } from "../components/layout";
-import {
   areAssetsEqualToInitialAccountAssetsState,
   buildUniqueTokenList,
   groupAssetsByMarketValue,

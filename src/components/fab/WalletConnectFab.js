@@ -23,7 +23,7 @@ const WalletConnectFab = ({ disabled, onPress, ...props }) => (
             radius={size}
           />
         )}
-        <CameraIcon color={colors.white} name="camera" />
+        <Icon color={colors.white} name="camera" />
       </Fragment>
     )}
   </FloatingActionButton>

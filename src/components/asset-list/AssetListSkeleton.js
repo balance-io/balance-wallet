@@ -5,11 +5,12 @@ import React from 'react';
 import { withNavigation } from 'react-navigation';
 import { compose, omitProps, withHandlers } from 'recompact';
 import styled from 'styled-components/primitives';
-import { colors, position } from '../../styles';
+import { colors, margin, position } from '../../styles';
 import { Button } from '../buttons';
 import { Centered, Column } from '../layout';
 import AssetListHeader from './AssetListHeader';
 import AssetListItemSkeleton from './AssetListItemSkeleton';
+import Icon from 'components/icons/Icon';
 
 const ButtonContainer = styled(Centered)`
   bottom: 28;

@@ -7,7 +7,7 @@ import {
 import { get, isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { AlertIOS, AppRegistry, View } from 'react-native';
+import { AlertIOS, AppRegistry, AppState, View } from 'react-native';
 import CodePush from 'react-native-code-push';
 import firebase from 'react-native-firebase';
 import { NavigationActions } from 'react-navigation';

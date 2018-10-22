@@ -9,6 +9,9 @@ export {
 export { default as withRequests } from './withRequests';
 export { default as withRequestsInit } from './withRequestsInit';
 export {
+  default as withRotationForDirection,
+} from './withRotationForDirection';
+export {
   default as withSafeAreaViewInsetValues,
 } from './withSafeAreaViewInsetValues';
 export {

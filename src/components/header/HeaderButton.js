@@ -9,22 +9,9 @@ const Container = styled(Flex)`
   ${padding(10)};
 `;
 
-<<<<<<< HEAD
-const HeaderButton = ({
-  children,
-  onPress,
-  transformOrigin,
-  ...props
-}) => (
+const HeaderButton = ({ children, onPress, transformOrigin, ...props }) => (
   <ButtonPressAnimation onPress={onPress} transformOrigin={transformOrigin}>
-    <Container {...props}>
-      {children}
-    </Container>
-=======
-const HeaderButton = ({ children, onPress, ...props }) => (
-  <ButtonPressAnimation onPress={onPress}>
     <Container {...props}>{children}</Container>
->>>>>>> prettier config
   </ButtonPressAnimation>
 );
 
