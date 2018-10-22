@@ -87,11 +87,12 @@ const HeaderBackButton = styled(Icon).attrs({
   name: 'caret',
   direction: 'left',
   color: colors.appleBlue,
+  height: 16,
 })``;
 
 const HeaderBackText = styled(Text).attrs({
   size: 'large',
-  weight: 'semibold',
+  weight: 'medium',
   color: 'appleBlue',
 })`
   margin-left: 5;
@@ -99,7 +100,7 @@ const HeaderBackText = styled(Text).attrs({
 
 const HeaderAction = styled(Text).attrs({
   size: 'large',
-  weight: 'semibold',
+  weight: 'medium',
   color: 'appleBlue',
 })``;
 
