@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Path } from "svgs";
-import { colors } from "../../../styles";
-import Svg from "../Svg";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Path } from 'svgs';
+import { colors } from '../../../styles';
+import Svg from '../Svg';
 
 const ETHIcon = ({ color, ...props }) => (
   <Svg height="23" width="24" viewBox="0 0 23 24" {...props}>
@@ -15,11 +15,11 @@ const ETHIcon = ({ color, ...props }) => (
 );
 
 ETHIcon.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 ETHIcon.defaultProps = {
-  color: colors.black
+  color: colors.black,
 };
 
 export default ETHIcon;

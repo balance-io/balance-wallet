@@ -8,11 +8,14 @@ import BottomRowText from './BottomRowText';
 import CoinName from './CoinName';
 import CoinRow from './CoinRow';
 
-const formatPercentageString = percentString => (
+const formatPercentageString = percentString =>
   percentString
-    ? percentString.split('-').join('- ').split('%').join(' %')
-    : '-'
-);
+    ? percentString
+        .split('-')
+        .join('- ')
+        .split('%')
+        .join(' %')
+    : '-';
 
 const BalanceCoinRow = ({ item, ...props }) => (
   <CoinRow
@@ -21,7 +24,8 @@ const BalanceCoinRow = ({ item, ...props }) => (
     bottomRowRender={({ balance, symbol, native }) => {
       const percentChange = get(native, 'change.display');
       const percentageChangeDisplay = formatPercentageString(percentChange);
-      const isPositive = (percentChange && (percentageChangeDisplay.charAt(0) !== '-'));
+      const isPositive =
+        percentChange && percentageChangeDisplay.charAt(0) !== '-';
 
       return (
         <Fragment>
@@ -50,11 +54,19 @@ BalanceCoinRow.propTypes = {
   item: PropTypes.object,
 };
 
-const isNewValueForPath = (a, b, path) => (get(a, path) !== get(b, path));
+const isNewValueForPath = (a, b, path) => get(a, path) !== get(b, path);
 
 export default shouldUpdate((props, nextProps) => {
-  const isNewNativePrice = isNewValueForPath(props, nextProps, 'item.native.price.display');
-  const isNewTokenBalance = isNewValueForPath(props, nextProps, 'item.balance.amount');
+  const isNewNativePrice = isNewValueForPath(
+    props,
+    nextProps,
+    'item.native.price.display'
+  );
+  const isNewTokenBalance = isNewValueForPath(
+    props,
+    nextProps,
+    'item.balance.amount'
+  );
 
   return isNewNativePrice || isNewTokenBalance;
 })(BalanceCoinRow);

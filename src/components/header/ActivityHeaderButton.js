@@ -9,19 +9,21 @@ import Icon from '../icons/Icon';
 import { Centered } from '../layout';
 import HeaderButton from './HeaderButton';
 
-const ActivityHeaderButton = ({ onPress, pendingRequestCount }) => (
-  <HeaderButton onPress={onPress} transformOrigin="right">
-    <Centered>
-      <Icon color={colors.dark} name="clock" />
-      {pendingRequestCount > 0 && (
-        <Badge
-          delay={2500}
-          value={pendingRequestCount}
-        />
-      )}
-    </Centered>
-  </HeaderButton>
-);
+const ActivityHeaderButton = ({
+  onPress,
+  pendingRequestCount,
+  transactionsCount,
+}) =>
+  transactionsCount ? (
+    <HeaderButton onPress={onPress}>
+      <Centered>
+        <Icon color={colors.dark} name="clock" />
+        {pendingRequestCount > 0 && (
+          <Badge delay={2500} value={pendingRequestCount} />
+        )}
+      </Centered>
+    </HeaderButton>
+  ) : null;
 
 ActivityHeaderButton.propTypes = {
   onPress: PropTypes.func,
@@ -32,7 +34,7 @@ export default compose(
   withNavigation,
   withRequests,
   withHandlers({
-    onPress: ({ navigation, onPress }) => (event) => {
+    onPress: ({ navigation, onPress }) => event => {
       if (onPress) {
         return onPress(event);
       }
@@ -40,5 +42,5 @@ export default compose(
       return navigation.navigate('ActivityScreen');
     },
   }),
-  onlyUpdateForPropTypes,
+  onlyUpdateForPropTypes
 )(ActivityHeaderButton);

@@ -14,10 +14,7 @@ const fallbackTextStyles = css`
 `;
 
 const CoinIconFallback = fallbackProps => (
-  <FallbackIcon
-    {...fallbackProps}
-    textStyles={fallbackTextStyles}
-  />
+  <FallbackIcon {...fallbackProps} textStyles={fallbackTextStyles} />
 );
 
 const enhance = onlyUpdateForKeys(['symbol']);

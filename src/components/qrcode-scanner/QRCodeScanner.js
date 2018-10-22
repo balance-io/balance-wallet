@@ -33,13 +33,14 @@ const Container = styled(Centered).attrs({ direction: 'column' })`
 `;
 
 const Crosshair = styled.Image`
-  ${position.size(Dimensions.get('window').width * (293 / 375))}
-  margin-bottom: 1;
+  ${position.size(
+    Dimensions.get('window').width * (293 / 375)
+  )} margin-bottom: 1;
   resize-mode: contain;
 `;
 
 const CrosshairContainer = styled(Centered)`
-  ${position.cover}
+  ${position.cover};
 `;
 
 class QRCodeScanner extends PureComponent {
@@ -49,18 +50,18 @@ class QRCodeScanner extends PureComponent {
     onSuccess: PropTypes.func,
     scannerRef: PropTypes.func,
     setSafeTimeout: PropTypes.func,
-  }
+  };
 
   state = {
     error: null,
     isAuthorized: false,
     isInitialized: false,
-  }
+  };
 
   componentDidMount = () => {
     this.handleIsAuthorized();
     this.props.setSafeTimeout(this.handleInitializationError, 5000);
-  }
+  };
 
   componentDidUpdate = () => {
     const { enableScanning } = this.props;
@@ -76,48 +77,51 @@ class QRCodeScanner extends PureComponent {
         this.handleDisableScanner();
       }
     });
-  }
+  };
 
   handleDisableScanner = () => {
     if (isFunction(this.scannerRef.disable)) {
       console.log('📠🚫 Disabling QR Code Scanner');
       this.scannerRef.disable();
     }
-  }
+  };
 
   handleEnableScanner = () => {
     if (isFunction(this.scannerRef.enable)) {
       console.log('📠✅ Enabling QR Code Scanner');
       this.scannerRef.enable();
     }
-  }
+  };
 
   handleCameraReady = () => {
     console.log('📷 ✅ CAMERA READY');
     this.handleDidInitialize();
     if (this.props.onCameraReady) this.props.onCameraReady();
-  }
+  };
 
-  handleDidInitialize = () => this.setState({ isInitialized: true })
+  handleDidInitialize = () => this.setState({ isInitialized: true });
 
-  handleError = error => this.setState({ error })
+  handleError = error => this.setState({ error });
 
   handleIsAuthorized = () =>
-    Permissions.request(CAMERA_PERMISSION)
-      .then(response => this.setState({ isAuthorized: response === PERMISSION_AUTHORIZED }))
+    Permissions.request(CAMERA_PERMISSION).then(response =>
+      this.setState({ isAuthorized: response === PERMISSION_AUTHORIZED })
+    );
 
   handleInitializationError = () => {
     if (!this.state.isInitialized) {
       this.handleError('initializing');
     }
-  }
+  };
 
-  handleScannerRef = (ref) => { this.scannerRef = ref; }
+  handleScannerRef = ref => {
+    this.scannerRef = ref;
+  };
 
   handleMountError = () => {
     console.log('📷 🚨 CAMERA MOUNT ERROR');
     this.handleError('mounting');
-  }
+  };
 
   render = () => {
     const { onSuccess } = this.props;
@@ -145,10 +149,7 @@ class QRCodeScanner extends PureComponent {
           topViewStyle={styles.disableSection}
         />
         {showErrorMessage && (
-          <ErrorText
-            color={colors.red}
-            error={`Error ${error} camera`}
-          />
+          <ErrorText color={colors.red} error={`Error ${error} camera`} />
         )}
         {showCrosshair && (
           <CrosshairContainer>
@@ -157,7 +158,7 @@ class QRCodeScanner extends PureComponent {
         )}
       </Container>
     );
-  }
+  };
 }
 
 export default withSafeTimeout(QRCodeScanner);

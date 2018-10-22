@@ -1,12 +1,12 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
   accountChangeLanguage,
-  accountChangeNativeCurrency
-} from "balance-common";
+  accountChangeNativeCurrency,
+} from 'balance-common';
 
 const mapStateToProps = ({ account }) => ({
   language: account.language,
-  nativeCurrency: account.nativeCurrency
+  nativeCurrency: account.nativeCurrency,
 });
 
 export default Component =>
@@ -14,6 +14,6 @@ export default Component =>
     mapStateToProps,
     {
       accountChangeLanguage,
-      accountChangeNativeCurrency
+      accountChangeNativeCurrency,
     }
   )(Component);

@@ -6,11 +6,15 @@ import { ActivityList } from '../components/activity-list';
 import { Header, HeaderButton } from '../components/header';
 import Icon from '../components/icons/Icon';
 import { Column } from '../components/layout';
-import { withAccountAddress, withAccountTransactions, withRequests } from '../hoc';
+import {
+  withAccountAddress,
+  withAccountTransactions,
+  withRequests,
+} from '../hoc';
 import { colors, position } from '../styles';
 
 const CloseButtonIcon = styled(Icon)`
-  ${position.maxSize(19)}
+  ${position.maxSize(19)};
 `;
 
 const Container = styled(Column)`
@@ -31,21 +35,19 @@ const ActivityScreen = ({
   <Container>
     <Header align="end">
       <HeaderButton align="end" onPress={onPressBack}>
-        <CloseButtonIcon
-          color={colors.brightBlue}
-          name="close"
-        />
+        <CloseButtonIcon color={colors.brightBlue} name="close" />
       </HeaderButton>
     </Header>
-    {(accountAddress && !fetchingTransactions) && (
-      <ActivityList
-        accountAddress={accountAddress}
-        hasPendingTransaction={hasPendingTransaction}
-        requests={requests}
-        transactions={transactions}
-        transactionsCount={transactionsCount}
-      />
-    )}
+    {accountAddress &&
+      !fetchingTransactions && (
+        <ActivityList
+          accountAddress={accountAddress}
+          hasPendingTransaction={hasPendingTransaction}
+          requests={requests}
+          transactions={transactions}
+          transactionsCount={transactionsCount}
+        />
+      )}
   </Container>
 );
 
@@ -66,5 +68,5 @@ export default compose(
   withHandlers({
     onPressBack: ({ navigation }) => () => navigation.goBack(),
   }),
-  onlyUpdateForKeys(['hasPendingTransaction', 'requests', 'transactionsCount']),
+  onlyUpdateForKeys(['hasPendingTransaction', 'requests', 'transactionsCount'])
 )(ActivityScreen);

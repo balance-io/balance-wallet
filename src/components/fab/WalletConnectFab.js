@@ -9,7 +9,7 @@ import Icon from '../icons/Icon';
 import FloatingActionButton from './FloatingActionButton';
 
 const GradientBackground = styled(RadialGradient)`
-  ${position.cover}
+  ${position.cover};
 `;
 
 const WalletConnectFab = ({ disabled, onPress, ...props }) => (
@@ -18,16 +18,12 @@ const WalletConnectFab = ({ disabled, onPress, ...props }) => (
       <Fragment>
         {!disabled && (
           <GradientBackground
-            center={[0, (size / 2)]}
+            center={[0, size / 2]}
             colors={[colors.primaryBlue, '#006FFF']}
             radius={size}
           />
         )}
-        <Icon
-          color={colors.white}
-          name="camera"
-          style={{ marginBottom: 2 }}
-        />
+        <CameraIcon color={colors.white} name="camera" />
       </Fragment>
     )}
   </FloatingActionButton>
@@ -41,12 +37,12 @@ WalletConnectFab.propTypes = {
 export default compose(
   withNavigation,
   withHandlers({
-    onPress: ({ navigation, onPress }) => (event) => {
+    onPress: ({ navigation, onPress }) => event => {
       if (onPress) {
         return onPress(event);
       }
 
       return navigation.navigate('QRScannerScreen');
     },
-  }),
+  })
 )(WalletConnectFab);

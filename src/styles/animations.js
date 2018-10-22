@@ -6,8 +6,8 @@ const keyframes = {
     to: { scale: 1, translateY: 0 },
   },
   button: {
-    from: { scale: 1 },
-    to: { scale: 0.80 },
+    from: { scale: 1, translateY: 0 },
+    to: { scale: 0.8, translateY: 1 },
   },
 };
 

@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Path } from "svgs";
-import { colors } from "../../../styles";
-import Svg from "../Svg";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Path } from 'svgs';
+import { colors } from '../../../styles';
+import Svg from '../Svg';
 
 const OfflineIcon = ({ color, ...props }) => (
   <Svg width="19" height="15" viewBox="0 0 15 19" {...props}>
@@ -15,11 +15,11 @@ const OfflineIcon = ({ color, ...props }) => (
 );
 
 OfflineIcon.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 OfflineIcon.defaultProps = {
-  color: colors.black
+  color: colors.black,
 };
 
 export default OfflineIcon;

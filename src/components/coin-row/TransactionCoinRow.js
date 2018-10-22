@@ -31,7 +31,7 @@ const bottomRowRender = ({ name, native, status }) => {
     <Fragment>
       <CoinName>{name}</CoinName>
       <BalanceText color={balanceTextColor}>
-        {(nativeDisplay && isStatusSent) ? '- ' : ''}
+        {nativeDisplay && isStatusSent ? '- ' : ''}
         {nativeDisplay || '$0.00'}
       </BalanceText>
     </Fragment>
@@ -66,5 +66,5 @@ export default compose(
     pending,
     ...props,
   })),
-  onlyUpdateForKeys(['hash', 'pending']),
+  onlyUpdateForKeys(['hash', 'pending'])
 )(TransactionCoinRow);

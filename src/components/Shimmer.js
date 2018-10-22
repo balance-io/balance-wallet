@@ -9,13 +9,13 @@ const ShimmerElement = styled(ShimmerPlaceHolder)`
   background-color: ${colors.transparent};
 `;
 
-const generateColorShimmerTheme = (color, opacity) => ([
+const generateColorShimmerTheme = (color, opacity) => [
   colors.alpha(color, opacity * 0.166),
   colors.alpha(color, opacity * 0.333),
   colors.alpha(color, opacity),
   colors.alpha(color, opacity * 0.333),
   colors.alpha(color, opacity * 0.166),
-]);
+];
 
 const Shimmer = ({
   autoRun,

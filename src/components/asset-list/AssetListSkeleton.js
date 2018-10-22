@@ -18,29 +18,23 @@ const ButtonContainer = styled(Centered)`
 `;
 
 const Container = styled(Column)`
-  ${position.size('100%')}
+  ${position.size('100%')};
 `;
 
-const AssetListSkeleton = ({ onPressAddFunds, skeletonCount, ...props }) => (
-  <Container {...props}>
-    <AssetListHeader
-      section={{
-        title: lang.t('account.tab_balances'),
-        totalValue: '$0.00',
-      }}
-    />
+const SkeletonElement = styled(Icon).attrs({ name: 'assetListItemSkeleton' })`
+  ${({ index }) => margin(index === 0 ? 15 : 12.5, 19, 12.5, 15)}
+  opacity: ${({ index }) => 1 - 0.2 * index};
+`;
+
+const AssetListSkeleton = ({ onPressAddFunds, skeletonCount }) => (
+  <Container>
+    <AssetListHeader section={{ title: 'Balances', totalValue: '$0.00' }} />
     <Column>
       {times(skeletonCount, index => (
-        <AssetListItemSkeleton
-          index={index}
-          key={`SkeletonElement${index}`}
-        />
+        <SkeletonElement index={index} key={`SkeletonElement${index}`} />
       ))}
       <ButtonContainer>
-        <Button
-          bgColor={colors.primaryBlue}
-          onPress={onPressAddFunds}
-        >
+        <Button bgColor={colors.primaryBlue} onPress={onPressAddFunds}>
           Add Funds
         </Button>
       </ButtonContainer>
@@ -59,6 +53,9 @@ AssetListSkeleton.defaultProps = {
 
 export default compose(
   withNavigation,
-  withHandlers({ onPressAddFunds: ({ navigation }) => () => navigation.push('SettingsScreen') }),
-  omitProps('navigation'),
+  withHandlers({
+    onPressAddFunds: ({ navigation }) => () =>
+      navigation.navigate('SettingsScreen'),
+  }),
+  omitProps('navigation')
 )(AssetListSkeleton);

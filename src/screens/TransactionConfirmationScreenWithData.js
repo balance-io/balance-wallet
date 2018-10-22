@@ -1,24 +1,24 @@
-import { get } from "lodash";
-import React, { Component } from "react";
-import { AlertIOS, StatusBar, Vibration } from "react-native";
-import lang from "i18n-js";
-import { connect } from "react-redux";
-import { compose, withHandlers, onlyUpdateForKeys } from "recompact";
-import PropTypes from "prop-types";
-import { withTransactionConfirmationScreen } from "../hoc";
-import { sendTransaction } from "../model/wallet";
-import { walletConnectSendTransactionHash } from "../model/walletconnect";
-import { getTransactionToApprove } from "../reducers/transactionsToApprove";
-import TransactionConfirmationScreen from "./TransactionConfirmationScreen";
+import { get } from 'lodash';
+import React, { Component } from 'react';
+import { AlertIOS, StatusBar, Vibration } from 'react-native';
+import lang from 'i18n-js';
+import { connect } from 'react-redux';
+import { compose, withHandlers, onlyUpdateForKeys } from 'recompact';
+import PropTypes from 'prop-types';
+import { withTransactionConfirmationScreen } from '../hoc';
+import { sendTransaction } from '../model/wallet';
+import { walletConnectSendTransactionHash } from '../model/walletconnect';
+import { getTransactionToApprove } from '../reducers/transactionsToApprove';
+import TransactionConfirmationScreen from './TransactionConfirmationScreen';
 
 class TransactionConfirmationScreenWithData extends Component {
   static propTypes = {
     getTransactionToApprove: PropTypes.func,
-    navigation: PropTypes.any
+    navigation: PropTypes.any,
   };
 
   componentDidMount() {
-    StatusBar.setBarStyle("light-content", true);
+    StatusBar.setBarStyle('light-content', true);
     this.showNewTransaction();
     Vibration.vibrate();
   }
@@ -28,10 +28,9 @@ class TransactionConfirmationScreenWithData extends Component {
       const { transactionDetails } = this.props.navigation.state.params;
       const txPayload = transactionDetails.callData;
       const transactionReceipt = await sendTransaction(
-        txPayload,
-        lang.t("wallet.transaction.confirm")
+        transactionDetails.transactionPayload.data,
+        'Confirm transaction'
       );
-
       if (transactionReceipt && transactionReceipt.hash) {
         try {
           await walletConnectSendTransactionHash(
@@ -44,24 +43,34 @@ class TransactionConfirmationScreenWithData extends Component {
         } catch (error) {
           // TODO error handling when txn hash failed to send; store somewhere?
           this.closeTransactionScreen();
-          AlertIOS.alert("Failed to send transaction status");
+          AlertIOS.alert('Failed to send transaction status');
         }
       } else {
         try {
           this.handleCancelTransaction();
         } catch (error) {
           this.closeTransactionScreen();
-          AlertIOS.alert("Failed to send failed transaction status");
+          AlertIOS.alert('Failed to send failed transaction status');
         }
       }
     } catch (error) {
       this.handleCancelTransaction();
-      AlertIOS.alert("Authentication Failed");
+      AlertIOS.alert('Authentication Failed');
     }
   };
 
   handleCancelTransaction = async () => {
     try {
+      const { transactionDetails } = this.props.navigation.state.params;
+      const walletConnector = this.props.walletConnectors[
+        transactionDetails.sessionId
+      ];
+      await walletConnectSendTransactionHash(
+        walletConnector,
+        transactionDetails.transactionId,
+        false,
+        null
+      );
       this.closeTransactionScreen();
       const { transactionDetails } = this.props.navigation.state.params;
       const walletConnector = this.props.walletConnectors[
@@ -75,7 +84,7 @@ class TransactionConfirmationScreenWithData extends Component {
       );
     } catch (error) {
       this.closeTransactionScreen();
-      AlertIOS.alert(lang.t("wallet.transaction.alert.cancelled_transaction"));
+      AlertIOS.alert(lang.t('wallet.transaction.alert.cancelled_transaction'));
     }
   };
 
@@ -86,12 +95,12 @@ class TransactionConfirmationScreenWithData extends Component {
       this.props.removeTransaction(transactionDetails.transactionId);
     } catch (error) {
       this.closeTransactionScreen();
-      AlertIOS.alert("Failed to send rejected transaction status");
+      AlertIOS.alert('Failed to send rejected transaction status');
     }
   };
 
   closeTransactionScreen = () => {
-    StatusBar.setBarStyle("dark-content", true);
+    StatusBar.setBarStyle('dark-content', true);
     this.props.navigation.goBack();
   };
 
@@ -103,17 +112,17 @@ class TransactionConfirmationScreenWithData extends Component {
   render = () => {
     const { transactionDetails } = this.props.navigation.state.params;
     const {
-      transactionDisplayDetails: { asset, nativeAmount, to, value }
+      transactionDisplayDetails: { asset, nativeAmount, to, value },
     } = transactionDetails;
     return (
       <TransactionConfirmationScreen
         asset={{
           address: to,
-          amount: value || "0.00",
-          dappName: transactionDetails.dappName || "",
-          name: asset.name || "No data",
+          amount: value || '0.00',
+          dappName: transactionDetails.dappName || '',
+          name: asset.name || 'No data',
           nativeAmount: nativeAmount,
-          symbol: asset.symbol || "N/A"
+          symbol: asset.symbol || 'N/A',
         }}
         onCancelTransaction={this.handleCancelTransaction}
         onConfirmTransaction={this.handleConfirmTransaction}

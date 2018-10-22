@@ -19,35 +19,36 @@ const Content = styled(Column)`
   flex: 1;
   height: ${CoinIcon.size};
   margin-left: ${CoinRowPaddingVertical};
-  ${({ contentStyles }) => contentStyles}
+  ${({ contentStyles }) => contentStyles};
 `;
 
-const CoinRow = pure(({
-  bottomRowRender,
-  children,
-  coinIconRender,
-  containerStyles,
-  contentStyles,
-  symbol,
-  topRowRender,
-  ...props
-}) => (
-  <Container align="center" styles={containerStyles}>
-    {createElement(coinIconRender, { symbol, ...props })}
-    <Content justify="space-between" styles={contentStyles}>
-      <Row align="center" justify="space-between">
-        {topRowRender({ symbol, ...props })}
-      </Row>
-      <Row align="center" justify="space-between">
-        {bottomRowRender({ symbol, ...props })}
-      </Row>
-    </Content>
-    {(typeof children === 'function')
-      ? children({ symbol, ...props })
-      : children
-    }
-  </Container>
-));
+const CoinRow = pure(
+  ({
+    bottomRowRender,
+    children,
+    coinIconRender,
+    containerStyles,
+    contentStyles,
+    symbol,
+    topRowRender,
+    ...props
+  }) => (
+    <Container align="center" styles={containerStyles}>
+      {createElement(coinIconRender, { symbol, ...props })}
+      <Content justify="space-between" styles={contentStyles}>
+        <Row align="center" justify="space-between">
+          {topRowRender({ symbol, ...props })}
+        </Row>
+        <Row align="center" justify="space-between">
+          {bottomRowRender({ symbol, ...props })}
+        </Row>
+      </Content>
+      {typeof children === 'function'
+        ? children({ symbol, ...props })
+        : children}
+    </Container>
+  )
+);
 
 CoinRow.propTypes = {
   bottomRowRender: PropTypes.func,
@@ -63,6 +64,6 @@ CoinRow.defaultProps = {
   coinIconRender: CoinIcon,
 };
 
-CoinRow.height = CoinIcon.size + (CoinRowPaddingVertical * 2);
+CoinRow.height = CoinIcon.size + CoinRowPaddingVertical * 2;
 
 export default CoinRow;

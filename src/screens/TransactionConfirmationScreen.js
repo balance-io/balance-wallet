@@ -24,8 +24,7 @@ const Address = styled(TruncatedAddress).attrs({ size: 'lmedium' })`
 `;
 
 const AddressRow = styled(Column)`
-  ${padding(19, 19, 18)}
-  flex-shrink: 0;
+  ${padding(19, 19, 18)} flex-shrink: 0;
 `;
 
 const Amount = styled(Monospace).attrs({ size: 'smedium' })`
@@ -37,8 +36,7 @@ const AmountRow = styled(Row).attrs({
   align: 'center',
   justify: 'space-between',
 })`
-  ${padding(21, 19)}
-  flex: 1;
+  ${padding(21, 19)} flex: 1;
 `;
 
 const AmountRowLeft = styled(Column)`
@@ -59,7 +57,7 @@ const BottomSheet = styled(Column).attrs({ justify: 'space-between' })`
   ${borders.buildRadius('top', 15)}
   background-color: ${colors.white};
   flex: 0;
-  min-height: ${({ bottomInset }) => (bottomInset + 236)};
+  min-height: ${({ bottomInset }) => bottomInset + 236};
   padding-bottom: ${({ bottomInset }) => bottomInset};
   width: 100%;
 `;
@@ -91,8 +89,7 @@ const NativeAmount = styled(Monospace).attrs({
 `;
 
 const SendButtonContainer = styled.View`
-  ${padding(7, 15, 14)}
-  flex-shrink: 0;
+  ${padding(7, 15, 14)} flex-shrink: 0;
 `;
 
 const TokenAmount = styled(TruncatedText).attrs({ component: Amount })`
@@ -115,13 +112,11 @@ const TransactionType = styled(Text).attrs({ size: 'h5' })`
 `;
 
 const VendorLogo = styled.Image`
-  ${position.size('100%')}
-  resize-mode: contain;
+  ${position.size('100%')} resize-mode: contain;
 `;
 
 const VenderLogoContainer = styled(Centered)`
-  ${position.size(60)}
-  margin-bottom: 24;
+  ${position.size(60)} margin-bottom: 24;
 `;
 
 const VendorName = styled(Text).attrs({
@@ -133,14 +128,7 @@ const VendorName = styled(Text).attrs({
 `;
 
 const TransactionConfirmationScreen = ({
-  asset: {
-    address,
-    amount,
-    dappName,
-    name,
-    nativeAmount,
-    symbol,
-  },
+  asset: { address, amount, dappName, name, nativeAmount, symbol },
   onCancelTransaction,
   onConfirmTransaction,
   safeAreaInset,
@@ -165,8 +153,8 @@ const TransactionConfirmationScreen = ({
     </Masthead>
     <BottomSheet bottomInset={safeAreaInset.bottom}>
       <AddressRow>
-        <Smallcaps>{lang.t('wallet.action.to')}</Smallcaps>
-        <Address address={address} truncationLength={15}/>
+        <Smallcaps>To</Smallcaps>
+        <Address address={address} truncationLength={15} />
       </AddressRow>
       <Divider />
       <AmountRow align="center" justify="space-between">
@@ -177,7 +165,10 @@ const TransactionConfirmationScreen = ({
           </Row>
           <TokenAmountRow>
             <TokenAmount>{amount}</TokenAmount>
-            <TokenSymbol><Nbsp />{symbol}</TokenSymbol>
+            <TokenSymbol>
+              <Nbsp />
+              {symbol}
+            </TokenSymbol>
           </TokenAmountRow>
         </AmountRowLeft>
         <NativeAmount>{nativeAmount}</NativeAmount>

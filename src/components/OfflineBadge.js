@@ -1,10 +1,10 @@
-import React, { PureComponent } from "react";
-import { Animated, NetInfo } from "react-native";
-import styled from "styled-components";
+import React, { PureComponent } from 'react';
+import { Animated, NetInfo } from 'react-native';
+import styled from 'styled-components';
 
-import Icon from "components/icons/Icon";
-import { Text } from "components/text";
-import { colors, padding } from "styles";
+import Icon from 'components/icons/Icon';
+import { Text } from 'components/text';
+import { colors, padding } from 'styles';
 
 const Badge = styled(Animated.View)`
   position: absolute;
@@ -25,15 +25,15 @@ const Badge = styled(Animated.View)`
 `;
 
 const BadgeIcon = styled(Icon).attrs({
-  color: colors.white
+  color: colors.white,
 })`
   margin-bottom: -3px;
 `;
 
 const BadgeLabel = styled(Text).attrs({
-  size: "smedium",
-  weight: "semibold",
-  color: colors.white
+  size: 'smedium',
+  weight: 'semibold',
+  color: colors.white,
 })`
   margin-left: 5px;
 `;
@@ -42,19 +42,19 @@ class OfflineBadge extends PureComponent {
   state = {
     isConnected: true,
     badgeYPosition: new Animated.Value(100),
-    badgeOpacity: new Animated.Value(0)
+    badgeOpacity: new Animated.Value(0),
   };
 
   componentDidMount() {
     NetInfo.isConnected.addEventListener(
-      "connectionChange",
+      'connectionChange',
       this.handleConnectivityChange
     );
   }
 
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
-      "connectionChange",
+      'connectionChange',
       this.handleConnectivityChange
     );
   }
@@ -74,14 +74,14 @@ class OfflineBadge extends PureComponent {
         toValue: 0,
         tension: 90,
         friction: 11,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(),
       Animated.spring(this.state.badgeOpacity, {
         toValue: 1,
         tension: 90,
         friction: 11,
-        useNativeDriver: true
-      }).start()
+        useNativeDriver: true,
+      }).start(),
     ]);
   };
 
@@ -91,14 +91,14 @@ class OfflineBadge extends PureComponent {
         toValue: 100,
         tension: 90,
         friction: 11,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(),
       Animated.spring(this.state.badgeOpacity, {
         toValue: 0,
         tension: 90,
         friction: 11,
-        useNativeDriver: true
-      }).start()
+        useNativeDriver: true,
+      }).start(),
     ]);
   };
 
@@ -107,7 +107,7 @@ class OfflineBadge extends PureComponent {
       <Badge
         style={{
           opacity: this.state.badgeOpacity,
-          transform: [{ translateY: this.state.badgeYPosition }]
+          transform: [{ translateY: this.state.badgeYPosition }],
         }}
       >
         <BadgeIcon name="offline" />

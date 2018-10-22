@@ -11,7 +11,9 @@ const StyledContainer = styled.View`
   padding: 00px;
 `;
 
-const Container = ({ children, ...props }) => <StyledContainer {...props}>{children}</StyledContainer>;
+const Container = ({ children, ...props }) => (
+  <StyledContainer {...props}>{children}</StyledContainer>
+);
 
 Container.propTypes = {
   children: PropTypes.node.isRequired,

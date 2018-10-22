@@ -24,55 +24,49 @@ const InnerBorder = styled.View`
   border-width: 0.5;
 `;
 
-const buildFabShadow = disabled => (disabled ? [] : [
-  shadow.buildString(0, 1, 18, colors.alpha(colors.purple, 0.12)),
-  shadow.buildString(0, 3, 5, colors.alpha(colors.purple, 0.2)),
-  shadow.buildString(0, 6, 10, colors.alpha(colors.purple, 0.14)),
-]);
+const buildFabShadow = disabled =>
+  disabled
+    ? []
+    : [
+        shadow.buildString(0, 1, 18, colors.alpha(colors.purple, 0.12)),
+        shadow.buildString(0, 3, 5, colors.alpha(colors.purple, 0.2)),
+        shadow.buildString(0, 6, 10, colors.alpha(colors.purple, 0.14)),
+      ];
 
 const enhance = withHandlers({
-  onPress: ({ onPress }) => (event) => {
+  onPress: ({ onPress }) => event => {
     ReactNativeHapticFeedback.trigger('impactLight');
     if (onPress) onPress(event);
   },
-  onPressIn: ({ onPressIn }) => (event) => {
+  onPressIn: ({ onPressIn }) => event => {
     ReactNativeHapticFeedback.trigger('impactLight');
     if (onPressIn) onPressIn(event);
   },
 });
 
-const FloatingActionButton = enhance(({
-  children,
-  disabled,
-  onPress,
-  onPressIn,
-  onPressOut,
-  size,
-  ...props
-}) => (
-  <ButtonPressAnimation
-    disabled={disabled}
-    onPress={onPress}
-    onPressIn={onPressIn}
-    onPressOut={onPressOut}
-  >
-    <ShadowStack
-      {...position.sizeAsObject(size)}
-      borderRadius={FloatingActionButtonBorderRadius}
-      shadows={buildFabShadow(disabled)}
+const FloatingActionButton = enhance(
+  ({ children, disabled, onPress, onPressIn, onPressOut, size, ...props }) => (
+    <ButtonPressAnimation
+      disabled={disabled}
+      onPress={onPress}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
     >
-      <Container {...props} disabled={disabled}>
-        <Fragment>
-          {(typeof children === 'function')
-            ? children({ size })
-            : children
-          }
-          {!disabled && <InnerBorder />}
-        </Fragment>
-      </Container>
-    </ShadowStack>
-  </ButtonPressAnimation>
-));
+      <ShadowStack
+        {...position.sizeAsObject(size)}
+        borderRadius={FloatingActionButtonBorderRadius}
+        shadows={buildFabShadow(disabled)}
+      >
+        <Container {...props} disabled={disabled}>
+          <Fragment>
+            {typeof children === 'function' ? children({ size }) : children}
+            {!disabled && <InnerBorder />}
+          </Fragment>
+        </Container>
+      </ShadowStack>
+    </ButtonPressAnimation>
+  )
+);
 
 FloatingActionButton.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),

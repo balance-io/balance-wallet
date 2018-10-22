@@ -27,7 +27,7 @@ const SectionList = ({
   ...props
 }) => (
   <List
-    refreshControl={(
+    refreshControl={
       enablePullToRefresh ? (
         <RefreshControl
           onRefresh={onRefresh}
@@ -35,7 +35,7 @@ const SectionList = ({
           tintColor={colors.alpha(colors.blueGreyLight, 0.666)}
         />
       ) : null
-    )}
+    }
     renderItem={renderItem}
     renderSectionFooter={renderSectionFooter}
     scrollIndicatorInsets={{
@@ -74,5 +74,5 @@ export default compose(
       fetchData().then(() => setIsRefreshing(false));
     },
   }),
-  omitProps('fetchData', 'setIsRefreshing'),
+  omitProps('fetchData', 'setIsRefreshing')
 )(SectionList);

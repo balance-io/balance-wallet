@@ -1,9 +1,9 @@
-import { get, map } from "lodash";
-import PropTypes from "prop-types";
-import React, { createElement, PureComponent } from "react";
-import { createNavigator, StackRouter } from "react-navigation";
-import { FlatList, StatusBar, View } from "react-native";
-import { deviceUtils } from "../utils";
+import { get, map } from 'lodash';
+import PropTypes from 'prop-types';
+import React, { createElement, PureComponent } from 'react';
+import { createNavigator, StackRouter } from 'react-navigation';
+import { FlatList, StatusBar, View } from 'react-native';
+import { deviceUtils } from '../utils';
 
 const EMPTY_ARRAY = [];
 
@@ -22,13 +22,13 @@ export default function createSwipeNavigator(screens, options) {
       descriptors: PropTypes.object,
       navigation: PropTypes.object,
       navigationConfig: PropTypes.object,
-      screenProps: PropTypes.object
+      screenProps: PropTypes.object,
     };
 
     state = {
       currentIndex: 0,
       flatListScreens: initialScreens,
-      scrollEnabled: true
+      scrollEnabled: true,
     };
 
     constructor(props) {
@@ -57,7 +57,7 @@ export default function createSwipeNavigator(screens, options) {
     getCurrentRoute = () => {
       const { navigation } = this.props;
 
-      const routes = get(navigation, "state.routes", []);
+      const routes = get(navigation, 'state.routes', []);
 
       return routes[routes.length - 1] || {};
     };
@@ -69,7 +69,7 @@ export default function createSwipeNavigator(screens, options) {
     getPreviousRoute = () => {
       const { navigation } = this.props;
 
-      const routes = get(navigation, "state.routes", []);
+      const routes = get(navigation, 'state.routes', []);
 
       return routes[routes.length - 2] || {};
     };
@@ -147,7 +147,7 @@ export default function createSwipeNavigator(screens, options) {
     onScrollEndDrag = ({ nativeEvent }) => {
       const { navigation } = this.props;
 
-      const currentOffsetX = get(nativeEvent, "contentOffset.x", 0);
+      const currentOffsetX = get(nativeEvent, 'contentOffset.x', 0);
       const currentScreenIndex = Math.floor(
         currentOffsetX / deviceUtils.dimensions.width
       );
@@ -170,10 +170,10 @@ export default function createSwipeNavigator(screens, options) {
     onScroll = ({ nativeEvent }) => {
       const layoutMeasurementWidth = get(
         nativeEvent,
-        "layoutMeasurement.width",
+        'layoutMeasurement.width',
         0
       );
-      const currentOffsetX = get(nativeEvent, "contentOffset.x", 0);
+      const currentOffsetX = get(nativeEvent, 'contentOffset.x', 0);
 
       this.setState(({ currentIndex }) => {
         const startOffsetX = currentIndex * deviceUtils.dimensions.width;
@@ -208,7 +208,7 @@ export default function createSwipeNavigator(screens, options) {
     scrollToIndex = (index, animated) => {
       if (
         this.flatListRef &&
-        typeof this.flatListRef.scrollToIndex === "function"
+        typeof this.flatListRef.scrollToIndex === 'function'
       ) {
         this.flatListRef.scrollToIndex({ animated, index, viewOffset: 0 });
       }
@@ -234,9 +234,9 @@ export default function createSwipeNavigator(screens, options) {
             navigation: {
               ...navigation,
               goBack: this.goBack,
-              navigate: this.navigate
+              navigate: this.navigate,
             },
-            toggleSwiping: this.toggleSwiping
+            toggleSwiping: this.toggleSwiping,
           })}
         </View>
       );
@@ -245,7 +245,7 @@ export default function createSwipeNavigator(screens, options) {
     render() {
       const { currentIndex, flatListScreens, scrollEnabled } = this.state;
 
-      const currentScreenName = routeOrder[currentIndex] || "";
+      const currentScreenName = routeOrder[currentIndex] || '';
       const currentScreen = screens[currentScreenName] || {};
 
       return (

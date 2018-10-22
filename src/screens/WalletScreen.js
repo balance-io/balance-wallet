@@ -1,7 +1,7 @@
-import { withSafeTimeout } from "@hocs/safe-timers";
-import { get } from "lodash";
-import PropTypes from "prop-types";
-import React from "react";
+import { withSafeTimeout } from '@hocs/safe-timers';
+import { get } from 'lodash';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {
   Animated,
   Clipboard,
@@ -9,20 +9,20 @@ import {
   Image,
   View,
   TouchableOpacity,
-  Share
-} from "react-native";
-import { compose, onlyUpdateForKeys, withHandlers, withState } from "recompact";
-import styled from "styled-components";
-import { AssetList } from "../components/asset-list";
-import { UniqueTokenRow } from "../components/unique-token";
-import Avatar from "../components/Avatar";
-import { BalanceCoinRow } from "../components/coin-row";
+  Share,
+} from 'react-native';
+import { compose, onlyUpdateForKeys, withHandlers, withState } from 'recompact';
+import styled from 'styled-components';
+import { AssetList } from '../components/asset-list';
+import { UniqueTokenRow } from '../components/unique-token';
+import Avatar from '../components/Avatar';
+import { BalanceCoinRow } from '../components/coin-row';
 import {
   ActivityHeaderButton,
   Header,
-  HeaderButton
-} from "../components/header";
-import { FlexItem, Page, Column, Row } from "../components/layout";
+  HeaderButton,
+} from '../components/header';
+import { FlexItem, Page, Column, Row } from '../components/layout';
 import {
   ActivityHeaderButton,
   Header,
@@ -33,20 +33,20 @@ import {
   areAssetsEqualToInitialAccountAssetsState,
   buildUniqueTokenList,
   groupAssetsByMarketValue,
-  sortAssetsByNativeAmount
-} from "../helpers/assets";
+  sortAssetsByNativeAmount,
+} from '../helpers/assets';
 import {
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,
-  withRequestsInit
-} from "../hoc";
-import { Text, TruncatedAddress } from "components/text";
-import Icon from "components/icons/Icon";
-import { position, colors } from "../styles";
-import SettingsOverlay from "./SettingsOverlay";
+  withRequestsInit,
+} from '../hoc';
+import { Text, TruncatedAddress } from 'components/text';
+import Icon from 'components/icons/Icon';
+import { position, colors } from '../styles';
+import SettingsOverlay from './SettingsOverlay';
 
-const SCREEN_HEIGHT = Dimensions.get("window").height - 120;
+const SCREEN_HEIGHT = Dimensions.get('window').height - 120;
 
 // ======================================================================
 // Styles
@@ -60,9 +60,9 @@ const HeaderColumn = styled(Column)`
 `;
 
 const Address = styled(TruncatedAddress).attrs({
-  size: "big",
-  weight: "bold",
-  truncationLength: 4
+  size: 'big',
+  weight: 'bold',
+  truncationLength: 4,
 })`
   margin-top: 10;
   margin-bottom: 5;
@@ -92,8 +92,8 @@ const ProfileActionContainer = styled(Row)`
 `;
 const ProfileActionText = styled(Text).attrs({
   color: colors.appleBlue,
-  size: "medium",
-  weight: "semibold"
+  size: 'medium',
+  weight: 'semibold',
 })`
   margin-left: 5;
   margin-right: 16;
@@ -125,7 +125,7 @@ class WalletScreen extends React.PureComponent {
   state = {
     settingsVisible: false,
     overlayOpacity: new Animated.Value(0),
-    modalYPosition: new Animated.Value(SCREEN_HEIGHT)
+    modalYPosition: new Animated.Value(SCREEN_HEIGHT),
   };
 
   showSettingsOverlay = () => {
@@ -135,14 +135,14 @@ class WalletScreen extends React.PureComponent {
           toValue: 1,
           tension: 90,
           friction: 11,
-          useNativeDriver: true
+          useNativeDriver: true,
         }).start(),
         Animated.spring(this.state.modalYPosition, {
           toValue: 0,
           tension: 90,
           friction: 11,
-          useNativeDriver: true
-        }).start()
+          useNativeDriver: true,
+        }).start(),
       ]);
     });
     this.props.toggleSwiping(false);
@@ -154,16 +154,16 @@ class WalletScreen extends React.PureComponent {
         toValue: 0,
         tension: 120,
         friction: 12,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(),
       Animated.spring(this.state.modalYPosition, {
         toValue: SCREEN_HEIGHT,
         tension: 120,
         friction: 12,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(() => {
         this.setState({ settingsVisible: false });
-      })
+      }),
     ]);
     this.props.toggleSwiping(true);
   };
@@ -175,7 +175,7 @@ class WalletScreen extends React.PureComponent {
   onPressShare = () => {
     Share.share({
       message: this.props.accountAddress,
-      title: "My account address"
+      title: 'My account address',
     });
   };
 
@@ -193,45 +193,45 @@ class WalletScreen extends React.PureComponent {
       onRefreshList,
       onToggleShowShitcoins,
       showShitcoins,
-      uniqueTokens
+      uniqueTokens,
     } = this.props;
 
     const sections = {
       balances: {
         data: sortAssetsByNativeAmount(assets, showShitcoins),
         renderItem: BalanceRenderItem,
-        title: "Balances",
-        totalItems: get(assetsTotalUSD, "amount") ? assetsCount : 0,
-        totalValue: get(assetsTotalUSD, "display", "")
+        title: 'Balances',
+        totalItems: get(assetsTotalUSD, 'amount') ? assetsCount : 0,
+        totalValue: get(assetsTotalUSD, 'display', ''),
       },
       collectibles: {
         data: buildUniqueTokenList(uniqueTokens),
         renderItem: UniqueTokenRenderItem,
-        title: "Collectibles",
+        title: 'Collectibles',
         totalItems: uniqueTokens.length,
-        totalValue: ""
-      }
+        totalValue: '',
+      },
     };
 
     const assetsByMarketValue = groupAssetsByMarketValue(assets);
-    const totalShitcoins = get(assetsByMarketValue, "noValue", []).length;
+    const totalShitcoins = get(assetsByMarketValue, 'noValue', []).length;
     if (totalShitcoins) {
       sections.balances.contextMenuOptions = {
         cancelButtonIndex: 1,
         destructiveButtonIndex: showShitcoins ? 0 : 99, // 99 is an arbitrarily high number used to disable the 'destructiveButton' option
         onPress: onToggleShowShitcoins,
         options: [
-          `${showShitcoins ? "Hide" : "Show"} assets with no price data`,
-          "Cancel"
-        ]
+          `${showShitcoins ? 'Hide' : 'Show'} assets with no price data`,
+          'Cancel',
+        ],
       };
     }
 
     // allow navigation to any Settings section via navigation.params
-    const settingsSection = navigation.getParam("settingsSection", "Settings");
+    const settingsSection = navigation.getParam('settingsSection', 'Settings');
 
     return (
-      <Page component={FlexItem} style={position.sizeAsObject("100%")}>
+      <Page component={FlexItem} style={position.sizeAsObject('100%')}>
         <Header justify="space-between">
           <HeaderButton onPress={this.showSettingsOverlay}>
             <Icon name="gear" />
@@ -243,7 +243,7 @@ class WalletScreen extends React.PureComponent {
           <AvatarHero
             source={{
               uri:
-                "https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg"
+                'https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg',
             }}
           />
           <Address address={this.props.accountAddress} />
@@ -264,7 +264,7 @@ class WalletScreen extends React.PureComponent {
           onSectionsLoaded={onHideSplashScreen}
           sections={filterEmptyAssetSections([
             sections.balances,
-            sections.collectibles
+            sections.collectibles,
           ])}
           showShitcoins={showShitcoins}
         />
@@ -285,7 +285,7 @@ WalletScreen.propTypes = {
   assetsCount: PropTypes.number,
   assetsTotalUSD: PropTypes.shape({
     amount: PropTypes.string,
-    display: PropTypes.string
+    display: PropTypes.string,
   }),
   didLoadAssetList: PropTypes.bool,
   fetching: PropTypes.bool.isRequired,
@@ -297,7 +297,7 @@ WalletScreen.propTypes = {
   onSectionsLoaded: PropTypes.func,
   onToggleShowShitcoins: PropTypes.func,
   showShitcoins: PropTypes.bool,
-  uniqueTokens: PropTypes.array.isRequired
+  uniqueTokens: PropTypes.array.isRequired,
 };
 
 export default compose(
@@ -306,17 +306,17 @@ export default compose(
   withHideSplashScreen,
   withRequestsInit,
   withSafeTimeout,
-  withState("showShitcoins", "toggleShowShitcoins", true),
+  withState('showShitcoins', 'toggleShowShitcoins', true),
   withHandlers({
     onPressWalletConnect: ({ navigation }) => () =>
-      navigation.navigate("QRScannerScreen"),
+      navigation.navigate('QRScannerScreen'),
     onRefreshList: ({
       accountAddress,
       accountUpdateAccountAddress,
       setSafeTimeout,
-      transactionsToApproveInit
+      transactionsToApproveInit,
     }) => () => {
-      accountUpdateAccountAddress(accountAddress, "BALANCEWALLET");
+      accountUpdateAccountAddress(accountAddress, 'BALANCEWALLET');
       transactionsToApproveInit();
       // hack: use timeout so that it looks like loading is happening
       // accountUpdateAccountAddress does not return a promise
@@ -324,12 +324,12 @@ export default compose(
     },
     onToggleShowShitcoins: ({
       showShitcoins,
-      toggleShowShitcoins
+      toggleShowShitcoins,
     }) => index => {
       if (index === 0) {
         toggleShowShitcoins(!showShitcoins);
       }
-    }
+    },
   }),
-  onlyUpdateForKeys(["isScreenActive", ...Object.keys(WalletScreen.propTypes)])
+  onlyUpdateForKeys(['isScreenActive', ...Object.keys(WalletScreen.propTypes)])
 )(WalletScreen);

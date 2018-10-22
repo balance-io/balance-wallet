@@ -1,21 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Dimensions } from "react-native";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Dimensions } from 'react-native';
+import styled from 'styled-components';
 
-import { OptionList, OptionListItem } from "components/list";
-import { Text } from "components/text";
-import { LANGUAGES, NUM_LANGUAGES } from "utils/constants";
+import { OptionList, OptionListItem } from 'components/list';
+import { Text } from 'components/text';
+import { LANGUAGES, NUM_LANGUAGES } from 'utils/constants';
 
 // ======================================================================
 // Styles
 // ======================================================================
 
 const LanguageList = styled(OptionList)`
-  height: ${Dimensions.get("window").height - 300};
+  height: ${Dimensions.get('window').height - 300};
 `;
 const OptionLabel = styled(Text).attrs({
-  size: "large"
+  size: 'large',
 })`
   padding-right: 5;
 `;
@@ -26,12 +26,12 @@ const OptionLabel = styled(Text).attrs({
 
 class LanguageSection extends React.Component {
   state = {
-    selected: this.props.language || "en"
+    selected: this.props.language || 'en',
   };
 
   selectLanguage = language => () => {
     this.setState({
-      selected: language
+      selected: language,
     });
     this.props.onSelectLanguage(language);
   };
@@ -70,7 +70,7 @@ class LanguageSection extends React.Component {
 
 LanguageSection.propTypes = {
   language: PropTypes.string.isRequired,
-  onSelectLanguage: PropTypes.func.isRequired
+  onSelectLanguage: PropTypes.func.isRequired,
 };
 
 export default LanguageSection;

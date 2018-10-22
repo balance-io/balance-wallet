@@ -1,19 +1,19 @@
-import React from "react";
-import { Linking, TouchableOpacity, Image } from "react-native";
-import { withNavigation } from "react-navigation";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import { Linking, TouchableOpacity, Image } from 'react-native';
+import { withNavigation } from 'react-navigation';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { Column, Row } from "components/layout";
-import { Text } from "components/text";
-import Icon from "components/icons/Icon";
-import { LANGUAGES } from "utils/constants";
-import { colors, padding } from "styles";
+import { Column, Row } from 'components/layout';
+import { Text } from 'components/text';
+import Icon from 'components/icons/Icon';
+import { LANGUAGES } from 'utils/constants';
+import { colors, padding } from 'styles';
 
-import BackupIcon from "assets/backup-icon.png";
-import CurrencyIcon from "assets/currency-icon.png";
-import LanguageIcon from "assets/language-icon.png";
-import SecurityIcon from "assets/security-icon.png";
+import BackupIcon from 'assets/backup-icon.png';
+import CurrencyIcon from 'assets/currency-icon.png';
+import LanguageIcon from 'assets/language-icon.png';
+import SecurityIcon from 'assets/security-icon.png';
 
 // ======================================================================
 // Styles
@@ -24,8 +24,8 @@ const SettingGroup = styled(Column)`
 `;
 
 const SettingRow = styled(Row).attrs({
-  align: "center",
-  justify: "start"
+  align: 'center',
+  justify: 'start',
 })`
   align-self: stretch;
   ${padding(14, 0)};
@@ -53,27 +53,27 @@ const SettingRowIcon = styled(Image)`
 `;
 
 const SettingRowLabel = styled(Text).attrs({
-  size: "large"
+  size: 'large',
 })``;
 
 const SettingArrowGroup = styled(Row).attrs({
-  align: "center",
-  justify: "center"
+  align: 'center',
+  justify: 'center',
 })`
   margin-left: auto;
   opacity: 0.6;
 `;
 
 const SettingRowValue = styled(Text).attrs({
-  size: "large",
-  color: colors.blueGreyDark
+  size: 'large',
+  color: colors.blueGreyDark,
 })``;
 
 const SettingRowArrow = styled(Icon).attrs({
-  name: "caret",
+  name: 'caret',
   color: colors.blueGreyDark,
   width: 20,
-  height: 15
+  height: 15,
 })`
   margin-left: 2;
 `;
@@ -84,9 +84,9 @@ const SettingRowArrow = styled(Icon).attrs({
 
 class SettingsSection extends React.Component {
   webviews = {
-    ABOUT: "https://balance.io/about",
-    FEEDBACK: "support@balance.io",
-    LEGAL: "https://github.com/balance-io/balance-wallet/blob/master/LICENSE"
+    ABOUT: 'https://balance.io/about',
+    FEEDBACK: 'support@balance.io',
+    LEGAL: 'https://github.com/balance-io/balance-wallet/blob/master/LICENSE',
   };
 
   openWebView = uri => () => {
@@ -101,7 +101,7 @@ class SettingsSection extends React.Component {
       onPressBackup,
       onPressLanguage,
       onPressCurrency,
-      onPressSecurity
+      onPressSecurity,
     } = this.props;
     return (
       <Column>
@@ -122,7 +122,7 @@ class SettingsSection extends React.Component {
               <SettingRowIcon source={CurrencyIcon} />
               <SettingRowLabel>Currency</SettingRowLabel>
               <SettingArrowGroup>
-                <SettingRowValue>{nativeCurrency || ""}</SettingRowValue>
+                <SettingRowValue>{nativeCurrency || ''}</SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>
@@ -133,7 +133,7 @@ class SettingsSection extends React.Component {
               <SettingRowIcon source={LanguageIcon} />
               <SettingRowLabel>Language</SettingRowLabel>
               <SettingArrowGroup>
-                <SettingRowValue>{LANGUAGES[language] || ""}</SettingRowValue>
+                <SettingRowValue>{LANGUAGES[language] || ''}</SettingRowValue>
                 <SettingRowArrow />
               </SettingArrowGroup>
             </PrimarySettingRow>
@@ -181,7 +181,7 @@ SettingsSection.propTypes = {
   navigation: PropTypes.object.isRequired,
   onPressBackup: PropTypes.func.isRequired,
   onPressCurrency: PropTypes.func.isRequired,
-  onPressLanguage: PropTypes.func.isRequired
+  onPressLanguage: PropTypes.func.isRequired,
 };
 
 export default withNavigation(SettingsSection);

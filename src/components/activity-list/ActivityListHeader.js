@@ -4,5 +4,5 @@ import { ListHeader } from '../list';
 export default compose(
   pickProps(Object.keys(ListHeader.propTypes)),
   withProps({ shouldRasterizeIOS: true }),
-  onlyUpdateForKeys(['title']),
+  onlyUpdateForKeys(['title'])
 )(ListHeader);

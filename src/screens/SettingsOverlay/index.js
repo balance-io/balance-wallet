@@ -1,45 +1,45 @@
-import React from "react";
+import React from 'react';
 import {
   Animated,
   Easing,
   Dimensions,
   TouchableOpacity,
-  View
-} from "react-native";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+  View,
+} from 'react-native';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { withAccountSettings } from "hoc";
-import { Column, Row } from "components/layout";
-import { Text } from "components/text";
-import Icon from "components/icons/Icon";
-import SettingsSection from "./SettingsSection";
-import LanguageSection from "./LanguageSection";
-import CurrencySection from "./CurrencySection";
-import BackupSection from "./BackupSection";
-import { colors, padding } from "styles";
+import { withAccountSettings } from 'hoc';
+import { Column, Row } from 'components/layout';
+import { Text } from 'components/text';
+import Icon from 'components/icons/Icon';
+import SettingsSection from './SettingsSection';
+import LanguageSection from './LanguageSection';
+import CurrencySection from './CurrencySection';
+import BackupSection from './BackupSection';
+import { colors, padding } from 'styles';
 
 // ======================================================================
 // Styles
 // ======================================================================
 
-const ScreenWidth = Dimensions.get("window").width;
+const ScreenWidth = Dimensions.get('window').width;
 const OverlayWidth = ScreenWidth - 31;
 
 const overlayStyles = {
-  position: "absolute",
+  position: 'absolute',
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: "rgba(15, 15, 17, 0.5)"
+  backgroundColor: 'rgba(15, 15, 17, 0.5)',
 };
 
 const modalStyles = {
-  display: "flex",
-  align: "stretch",
+  display: 'flex',
+  align: 'stretch',
   flex: 1,
-  flexDirection: "column"
+  flexDirection: 'column',
 };
 
 const Modal = styled(View)`
@@ -70,37 +70,37 @@ const Content = styled(View)`
 `;
 
 const HeaderRow = styled(Row).attrs({
-  align: "center"
+  align: 'center',
 })`
   align-content: space-between;
 `;
 
 const HeaderTitle = styled(Text).attrs({
-  size: "large",
-  weight: "bold"
+  size: 'large',
+  weight: 'bold',
 })`
   margin-left: auto;
   margin-right: auto;
 `;
 
 const HeaderBackButton = styled(Icon).attrs({
-  name: "caret",
-  direction: "left",
-  color: colors.appleBlue
+  name: 'caret',
+  direction: 'left',
+  color: colors.appleBlue,
 })`
   margin-right: 5;
 `;
 
 const HeaderAction = styled(Text).attrs({
-  size: "large",
-  weight: "semibold",
-  color: "appleBlue"
+  size: 'large',
+  weight: 'semibold',
+  color: 'appleBlue',
 })``;
 
 const HeaderLeft = styled(TouchableOpacity)`
   position: absolute;
   left: 16;
-  display: ${({ visible }) => (visible ? "flex" : "none")};
+  display: ${({ visible }) => (visible ? 'flex' : 'none')};
   flex-direction: row;
   align-items: center;
 `;
@@ -111,13 +111,13 @@ const HeaderRight = styled(TouchableOpacity)`
 `;
 
 const sectionStyles = {
-  position: "absolute",
+  position: 'absolute',
   top: 35,
   left: 0,
   right: 0,
   bottom: 0,
   paddingLeft: 16,
-  paddingRight: 16
+  paddingRight: 16,
 };
 
 // ======================================================================
@@ -126,16 +126,16 @@ const sectionStyles = {
 
 class SettingsOverlay extends React.Component {
   sections = {
-    SETTINGS: "Settings",
-    LANGUAGE: "Language",
-    CURRENCY: "Currency",
-    BACKUP: "Backup"
+    SETTINGS: 'Settings',
+    LANGUAGE: 'Language',
+    CURRENCY: 'Currency',
+    BACKUP: 'Backup',
   };
 
   state = {
     section: this.props.section || this.sections.SETTINGS,
     settingsXValue: new Animated.Value(0),
-    sectionXValue: new Animated.Value(OverlayWidth)
+    sectionXValue: new Animated.Value(OverlayWidth),
   };
 
   componentDidUpdate(prevProps) {
@@ -143,7 +143,7 @@ class SettingsOverlay extends React.Component {
       this.setState({
         section: this.sections.SETTINGS,
         settingsXValue: new Animated.Value(0),
-        sectionXValue: new Animated.Value(OverlayWidth)
+        sectionXValue: new Animated.Value(OverlayWidth),
       });
 
       // Animate to last active section when SettingsOverlay is opened
@@ -171,18 +171,18 @@ class SettingsOverlay extends React.Component {
         toValue: -OverlayWidth,
         easing: Easing.bezier(0.4, 0, 0.2, 1),
         duration: 300,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(),
       Animated.timing(this.state.sectionXValue, {
         toValue: 0,
         easing: Easing.bezier(0.4, 0, 0.2, 1),
         duration: 300,
-        useNativeDriver: true
-      }).start()
+        useNativeDriver: true,
+      }).start(),
     ]);
 
     this.setState({
-      section
+      section,
     });
   };
 
@@ -192,18 +192,18 @@ class SettingsOverlay extends React.Component {
         toValue: 0,
         easing: Easing.bezier(0.4, 0, 0.2, 1),
         duration: 300,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(),
       Animated.timing(this.state.sectionXValue, {
         toValue: OverlayWidth,
         easing: Easing.bezier(0.4, 0, 0.2, 1),
         duration: 300,
-        useNativeDriver: true
-      }).start()
+        useNativeDriver: true,
+      }).start(),
     ]);
 
     this.setState({
-      section: this.sections.SETTINGS
+      section: this.sections.SETTINGS,
     });
   };
 
@@ -254,7 +254,7 @@ class SettingsOverlay extends React.Component {
         <Animated.View
           style={[
             modalStyles,
-            { transform: [{ translateY: this.props.modalYPosition }] }
+            { transform: [{ translateY: this.props.modalYPosition }] },
           ]}
         >
           <Modal>
@@ -278,7 +278,7 @@ class SettingsOverlay extends React.Component {
               <Animated.View
                 style={[
                   sectionStyles,
-                  { transform: [{ translateX: this.state.settingsXValue }] }
+                  { transform: [{ translateX: this.state.settingsXValue }] },
                 ]}
               >
                 <SettingsSection
@@ -294,7 +294,7 @@ class SettingsOverlay extends React.Component {
               <Animated.View
                 style={[
                   sectionStyles,
-                  { transform: [{ translateX: this.state.sectionXValue }] }
+                  { transform: [{ translateX: this.state.sectionXValue }] },
                 ]}
               >
                 {this.renderActiveSection()}
@@ -311,7 +311,7 @@ SettingsOverlay.propTypes = {
   language: PropTypes.string.isRequired,
   nativeCurrency: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
-  onPressClose: PropTypes.func.isRequired
+  onPressClose: PropTypes.func.isRequired,
 };
 
 export default withAccountSettings(SettingsOverlay);

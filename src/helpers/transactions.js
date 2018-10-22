@@ -41,8 +41,12 @@ export const getTransactionStatus = ({
   return undefined;
 };
 
-const groupTransactionByDate = (transactions) => {
-  const sortedChronologically = sortList(transactions, 'timestamp.ms', Date.now()).reverse();
+const groupTransactionByDate = transactions => {
+  const sortedChronologically = sortList(
+    transactions,
+    'timestamp.ms',
+    Date.now()
+  ).reverse();
 
   return groupBy(sortedChronologically, ({ pending, timestamp: time }) => {
     if (pending) return 'Pending';
@@ -63,12 +67,7 @@ const groupTransactionByDate = (transactions) => {
 };
 
 const normalizeTransactions = ({ accountAddress, transactions }) =>
-  transactions.map(({
-    asset,
-    native,
-    value,
-    ...tx
-  }) => ({
+  transactions.map(({ asset, native, value, ...tx }) => ({
     ...tx,
     balance: value,
     name: get(asset, 'name'),
@@ -77,7 +76,8 @@ const normalizeTransactions = ({ accountAddress, transactions }) =>
     symbol: get(asset, 'symbol'),
   }));
 
-const renderItemElement = renderItem => renderItemProps => createElement(renderItem, renderItemProps);
+const renderItemElement = renderItem => renderItemProps =>
+  createElement(renderItem, renderItemProps);
 
 export const buildTransactionsSections = ({
   accountAddress,
@@ -86,26 +86,30 @@ export const buildTransactionsSections = ({
   transactionRenderItem,
   transactions,
 }) => {
-  const normalizedTransactions = normalizeTransactions({ accountAddress, transactions });
+  const normalizedTransactions = normalizeTransactions({
+    accountAddress,
+    transactions,
+  });
   const transactionsByDate = groupTransactionByDate(normalizedTransactions);
 
-  const sectionedTransactions = Object.keys(transactionsByDate).map(section => ({
-    data: transactionsByDate[section],
-    renderItem: renderItemElement(transactionRenderItem),
-    title: section,
-  }));
+  const sectionedTransactions = Object.keys(transactionsByDate).map(
+    section => ({
+      data: transactionsByDate[section],
+      renderItem: renderItemElement(transactionRenderItem),
+      title: section,
+    })
+  );
 
   let requestsToApprove = [];
   if (!isEmpty(requests)) {
-    requestsToApprove = [{
-      data: requests,
-      renderItem: renderItemElement(requestRenderItem),
-      title: 'Requests',
-    }];
+    requestsToApprove = [
+      {
+        data: requests,
+        renderItem: renderItemElement(requestRenderItem),
+        title: 'Requests',
+      },
+    ];
   }
 
-  return [
-    ...requestsToApprove,
-    ...sectionedTransactions,
-  ];
+  return [...requestsToApprove, ...sectionedTransactions];
 };

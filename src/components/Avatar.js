@@ -16,17 +16,11 @@ const Container = styled(Centered)`
 const Avatar = ({ size, source }) => (
   <ShadowStack
     {...borders.buildCircleAsObject(size)}
-    shadows={[
-      shadow.buildString(0, 1.5, 2.5),
-      shadow.buildString(0, 3, 5),
-    ]}
+    shadows={[shadow.buildString(0, 1.5, 2.5), shadow.buildString(0, 3, 5)]}
   >
     <Container size={size}>
       {source ? (
-        <Image
-          source={{ uri: source }}
-          style={position.sizeAsObject(size)}
-        />
+        <Image source={{ uri: source }} style={position.sizeAsObject(size)} />
       ) : (
         <Icon name="avatar" />
       )}

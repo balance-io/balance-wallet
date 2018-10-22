@@ -1,15 +1,15 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { compose, mapProps, onlyUpdateForKeys } from "recompact";
-import { buildTransactionsSections } from "../../helpers/transactions";
-import { CoinRow, TransactionCoinRow, RequestCoinRow } from "../coin-row";
-import { SectionList } from "../list";
-import ActivityListHeader from "./ActivityListHeader";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { compose, mapProps, onlyUpdateForKeys } from 'recompact';
+import { buildTransactionsSections } from '../../helpers/transactions';
+import { CoinRow, TransactionCoinRow, RequestCoinRow } from '../coin-row';
+import { SectionList } from '../list';
+import ActivityListHeader from './ActivityListHeader';
 
 const getItemLayout = (data, index) => ({
   index,
   length: CoinRow.height,
-  offset: CoinRow.height * index
+  offset: CoinRow.height * index,
 });
 
 const keyExtractor = ({ hash, transactionId }) => hash || transactionId;
@@ -20,7 +20,7 @@ const renderSectionHeader = ({ section }) => (
 const ActivityList = ({
   hasPendingTransaction,
   pendingTransactionsCount,
-  sections
+  sections,
 }) => (
   <SectionList
     contentContainerStyle={{ paddingBottom: 40 }}
@@ -41,9 +41,9 @@ ActivityList.propTypes = {
     PropTypes.shape({
       data: PropTypes.array,
       renderItem: PropTypes.func,
-      title: PropTypes.string.isRequired
+      title: PropTypes.string.isRequired,
     })
-  )
+  ),
 };
 
 export default compose(
@@ -55,24 +55,24 @@ export default compose(
       requestRenderItem: RequestCoinRow,
       requests,
       transactionRenderItem: TransactionCoinRow,
-      transactions
+      transactions,
     });
 
     const pendingTransactionsSection = sections[requests.length ? 1 : 0];
-    if (pendingTransactionsSection.title === "Pending") {
+    if (pendingTransactionsSection.title === 'Pending') {
       pendingTransactionsCount = pendingTransactionsSection.data.length;
     }
 
     return {
       ...props,
       pendingTransactionsCount,
-      sections
+      sections,
     };
   }),
   onlyUpdateForKeys([
-    "hasPendingTransaction",
-    "pendingTransactionsCount",
-    "sections",
-    "transactionsCount"
+    'hasPendingTransaction',
+    'pendingTransactionsCount',
+    'sections',
+    'transactionsCount',
   ])
 )(ActivityList);

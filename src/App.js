@@ -2,39 +2,39 @@ import {
   account,
   accountInitializeState,
   accountUpdateAccountAddress,
-  commonStorage
-} from "balance-common";
-import { get, isEmpty } from "lodash";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { AlertIOS, AppRegistry, View } from "react-native";
-import CodePush from "react-native-code-push";
-import firebase from "react-native-firebase";
-import { NavigationActions } from "react-navigation";
-import { connect, Provider } from "react-redux";
-import { compose, withProps } from "recompact";
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import thunk from "redux-thunk";
-import styled from "styled-components";
+  commonStorage,
+} from 'balance-common';
+import { get, isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { AlertIOS, AppRegistry, View } from 'react-native';
+import CodePush from 'react-native-code-push';
+import firebase from 'react-native-firebase';
+import { NavigationActions } from 'react-navigation';
+import { connect, Provider } from 'react-redux';
+import { compose, withProps } from 'recompact';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import styled from 'styled-components';
 import {
   walletConnectGetAllTransactions,
   walletConnectGetTransaction,
-  walletConnectInitAllConnectors
-} from "./model/walletconnect";
-import { walletInit } from "./model/wallet";
+  walletConnectInitAllConnectors,
+} from './model/walletconnect';
+import { walletInit } from './model/wallet';
 import transactionsToApprove, {
   addTransactionToApprove,
   addTransactionsToApprove,
   transactionIfExists,
-  transactionsToApproveInit
-} from "./reducers/transactionsToApprove";
+  transactionsToApproveInit,
+} from './reducers/transactionsToApprove';
 import walletconnect, {
   getValidWalletConnectors,
-  setWalletConnectors
-} from "./reducers/walletconnect";
-import Routes from "./screens/Routes";
-import Navigation from "./navigation";
-import OfflineBadge from "components/OfflineBadge";
+  setWalletConnectors,
+} from './reducers/walletconnect';
+import Routes from './screens/Routes';
+import Navigation from './navigation';
+import OfflineBadge from 'components/OfflineBadge';
 
 const store = createStore(
   combineReducers({ account, transactionsToApprove, walletconnect }),
@@ -47,7 +47,7 @@ const Container = styled(View)`
 
 class App extends Component {
   state = {
-    appState: AppState.currentState
+    appState: AppState.currentState,
   };
 
   static propTypes = {
@@ -58,7 +58,7 @@ class App extends Component {
     getValidWalletConnectors: PropTypes.func,
     setWalletConnectors: PropTypes.func,
     transactionIfExists: PropTypes.func,
-    transactionsToApproveInit: PropTypes.func
+    transactionsToApproveInit: PropTypes.func,
   };
 
   navigatorRef = null;
@@ -69,31 +69,31 @@ class App extends Component {
       .getToken()
       .then(fcmToken => {
         if (fcmToken) {
-          console.log("received fcmToken", fcmToken);
-          commonStorage.saveLocal("balanceWalletFcmToken", { data: fcmToken });
+          console.log('received fcmToken', fcmToken);
+          commonStorage.saveLocal('balanceWalletFcmToken', { data: fcmToken });
         } else {
-          console.log("no fcm token yet");
+          console.log('no fcm token yet');
         }
       })
       .catch(error => {
-        console.log("error getting fcm token");
+        console.log('error getting fcm token');
       });
 
     this.onTokenRefreshListener = firebase
       .messaging()
       .onTokenRefresh(fcmToken => {
-        console.log("received refreshed fcm token", fcmToken);
-        commonStorage.saveLocal("balanceWalletFcmToken", { data: fcmToken });
+        console.log('received refreshed fcm token', fcmToken);
+        commonStorage.saveLocal('balanceWalletFcmToken', { data: fcmToken });
       });
 
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        console.log("on notification received while app in foreground");
-        const navState = get(this.navigatorRef, "state.nav");
+        console.log('on notification received while app in foreground');
+        const navState = get(this.navigatorRef, 'state.nav');
         const route = Navigation.getActiveRouteName(navState);
         const { callId, sessionId } = notification.data;
-        if (route === "ConfirmTransaction") {
+        if (route === 'ConfirmTransaction') {
           this.fetchAndAddTransaction(callId, sessionId).then(transaction => {
             const localNotification = new firebase.notifications.Notification()
               .setTitle(notification.title)
@@ -109,7 +109,7 @@ class App extends Component {
     this.notificationOpenedListener = firebase
       .notifications()
       .onNotificationOpened(notificationOpen => {
-        console.log("on notification manually opened");
+        console.log('on notification manually opened');
         const { callId, sessionId } = notificationOpen.notification.data;
         this.onPushNotificationOpened(callId, sessionId);
       });
@@ -118,8 +118,8 @@ class App extends Component {
 
     walletInit()
       .then(walletAddress => {
-        console.log("wallet address is", walletAddress);
-        this.props.accountUpdateAccountAddress(walletAddress, "BALANCEWALLET");
+        console.log('wallet address is', walletAddress);
+        this.props.accountUpdateAccountAddress(walletAddress, 'BALANCEWALLET');
         this.props.transactionsToApproveInit();
         walletConnectInitAllConnectors()
           .then(allConnectors => {
@@ -134,18 +134,18 @@ class App extends Component {
               });
           })
           .catch(error => {
-            console.log("Unable to init all WalletConnect sessions");
+            console.log('Unable to init all WalletConnect sessions');
           });
         firebase
           .notifications()
           .getInitialNotification()
           .then(notificationOpen => {
-            console.log("on initial notification");
+            console.log('on initial notification');
             if (notificationOpen) {
-              console.log("on initial notification opened - while app closed");
+              console.log('on initial notification opened - while app closed');
               const {
                 transactionId,
-                sessionId
+                sessionId,
               } = notificationOpen.notification.data;
               this.onPushNotificationOpened(transactionId, sessionId);
             }
@@ -154,15 +154,15 @@ class App extends Component {
       */
       })
       .catch(error => {
-        console.log("failed to init wallet");
-        AlertIOS.alert("Error: Failed to initialize wallet.");
+        console.log('failed to init wallet');
+        AlertIOS.alert('Error: Failed to initialize wallet.');
       });
   }
 
   handleAppStateChange = async nextAppState => {
     if (
       this.state.appState.match(/inactive|background/) &&
-      nextAppState === "active"
+      nextAppState === 'active'
     ) {
       this.fetchAllTransactionsFromWalletConnectSessions();
     }
@@ -170,7 +170,7 @@ class App extends Component {
   };
 
   componentWillUnmount() {
-    AppState.removeEventListener("change", this.handleAppStateChange);
+    AppState.removeEventListener('change', this.handleAppStateChange);
     this.notificationDisplayedListener();
     this.notificationListener();
     this.notificationOpenedListender();
@@ -185,8 +185,8 @@ class App extends Component {
     if (!this.navigatorRef) return;
 
     const action = NavigationActions.navigate({
-      routeName: "ConfirmTransaction",
-      params: { transactionDetails }
+      routeName: 'ConfirmTransaction',
+      params: { transactionDetails },
     });
 
     Navigation.handleAction(this.navigatorRef, action);
@@ -212,7 +212,7 @@ class App extends Component {
       if (transaction) {
         this.handleOpenConfirmTransactionModal(transaction);
       } else {
-        AlertIOS.alert("The requested transaction could not be found.");
+        AlertIOS.alert('The requested transaction could not be found.');
       }
     }
   };
@@ -256,14 +256,14 @@ const AppWithRedux = compose(
       getValidWalletConnectors,
       setWalletConnectors,
       transactionIfExists,
-      transactionsToApproveInit
+      transactionsToApproveInit,
     }
   )
 )(App);
 
 const AppWithCodePush = CodePush({
   checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
-  installMode: CodePush.InstallMode.ON_NEXT_RESUME
+  installMode: CodePush.InstallMode.ON_NEXT_RESUME,
 })(AppWithRedux);
 
-AppRegistry.registerComponent("BalanceWallet", () => AppWithCodePush);
+AppRegistry.registerComponent('BalanceWallet', () => AppWithCodePush);

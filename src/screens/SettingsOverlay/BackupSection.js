@@ -1,20 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import TouchID from "react-native-touch-id";
-import PasscodeAuth from "react-native-passcode-auth";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import TouchID from 'react-native-touch-id';
+import PasscodeAuth from 'react-native-passcode-auth';
 
-import { Monospace } from "components/text";
-import { Centered } from "components/layout";
-import { Button } from "components/buttons";
-import { loadSeedPhrase } from "model/wallet";
+import { Monospace } from 'components/text';
+import { Centered } from 'components/layout';
+import { Button } from 'components/buttons';
+import { loadSeedPhrase } from 'model/wallet';
 
 // ======================================================================
 // Styles
 // ======================================================================
 
 const Content = styled(Centered).attrs({
-  align: "stretch"
+  align: 'stretch',
 })`
   flex: 1;
   flex-direction: column;
@@ -28,8 +28,8 @@ const PhraseButton = styled(Button)`
 `;
 
 const SeedPhrase = styled(Monospace).attrs({
-  size: "h5",
-  weight: "medium"
+  size: 'h5',
+  weight: 'medium',
 })`
   line-height: 28;
   max-width: 288;
@@ -45,20 +45,20 @@ const SeedPhrase = styled(Monospace).attrs({
 
 class BackupSection extends React.Component {
   state = {
-    seedPhrase: null
+    seedPhrase: null,
   };
 
   showSeedPhrase = () => {
     TouchID.isSupported()
       .then(biometryType => {
-        if (biometryType === "FaceID" || biometryType === "TouchID") {
-          TouchID.authenticate("View seed phrase")
+        if (biometryType === 'FaceID' || biometryType === 'TouchID') {
+          TouchID.authenticate('View seed phrase')
             .then(this.loadSeedPhrase)
             .catch(this.catchAuthError);
         }
       })
       .catch(error => {
-        PasscodeAuth.authenticate("View seed phrase")
+        PasscodeAuth.authenticate('View seed phrase')
           .then(this.loadSeedPhrase)
           .catch(this.catchAuthError);
       });

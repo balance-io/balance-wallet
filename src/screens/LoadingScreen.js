@@ -11,12 +11,11 @@ import { loadAddress } from '../model/wallet';
 import { colors, fonts, padding, position } from '../styles';
 
 const Container = styled(Column).attrs({ justify: 'center' })`
-  ${position.cover}
-  ${padding(0, 0, 60, 0)}
+  ${position.cover} ${padding(0, 0, 60, 0)};
 `;
 
 const ErrorContainer = styled(Column)`
-  ${padding(0, 50, 0, 30)}
+  ${padding(0, 50, 0, 30)};
 `;
 
 const ErrorMessage = styled(Monospace).attrs({ color: 'red' })`
@@ -35,22 +34,23 @@ class LoadingScreen extends Component {
   static propTypes = {
     navigation: PropTypes.object,
     setSafeTimeout: PropTypes.func,
-  }
+  };
 
-  state = { isError: false }
+  state = { isError: false };
 
   componentDidMount = async () => {
     // After 5 seconds, show error message if user has not been redirected
     this.props.setSafeTimeout(this.handleError, 5000);
     await loadAddress().then(this.handleNavigation);
-  }
+  };
 
-  handleError = () => this.setState({ isError: true })
+  handleError = () => this.setState({ isError: true });
 
   // If this is a brand new instance of the Balance Wallet app show the 'IntroScreen',
   // otherwise display the main 'App' route. Afterwards this view will be
   // unmounted and thrown away.
-  handleNavigation = async address => this.props.navigation.navigate(address ? 'App' : 'Intro')
+  handleNavigation = async address =>
+    this.props.navigation.navigate(address ? 'App' : 'Intro');
 
   render = () => (
     <Container align={this.state.isError ? 'start' : 'center'}>
@@ -58,16 +58,21 @@ class LoadingScreen extends Component {
       {this.state.isError ? (
         <ErrorContainer>
           <ErrorText color={colors.red} error="Error" />
-          <ErrorMessage>{lang.t('wallet.loading.error')}</ErrorMessage>
+          <ErrorMessage>
+            There has been an error loading the wallet. Please kill the app and
+            retry.
+          </ErrorMessage>
         </ErrorContainer>
       ) : (
         <Fragment>
           <Icon color={LoadingColor} name="balanceLogo" />
-          <LoadingText color={LoadingColor}>{lang.t('wallet.loading.message')}</LoadingText>
+          <LoadingText color={LoadingColor}>
+            {lang.t('wallet.loading.message')}
+          </LoadingText>
         </Fragment>
       )}
     </Container>
-  )
+  );
 }
 
 export default withSafeTimeout(LoadingScreen);

@@ -12,27 +12,29 @@ class CopyTooltip extends PureComponent {
     navigation: PropTypes.object,
     textToCopy: PropTypes.string,
     tooltipText: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     activeOpacity: 0.666,
     tooltipText: 'Copy',
-  }
+  };
 
-  tooltip = null
+  tooltip = null;
 
   componentDidUpdate = () => {
     if (this.props.navigation.state.isTransitioning) {
       this.handleHideTooltip();
     }
-  }
+  };
 
-  componentWillUnmount = () => this.handleHideTooltip()
+  componentWillUnmount = () => this.handleHideTooltip();
 
-  handleCopy = () => Clipboard.setString(this.props.textToCopy)
-  handleHideTooltip = () => this.tooltip.hideMenu()
-  handlePressIn = () => this.tooltip.showMenu()
-  handleRef = (ref) => { this.tooltip = ref; }
+  handleCopy = () => Clipboard.setString(this.props.textToCopy);
+  handleHideTooltip = () => this.tooltip.hideMenu();
+  handlePressIn = () => this.tooltip.showMenu();
+  handleRef = ref => {
+    this.tooltip = ref;
+  };
 
   render = () => (
     <ToolTip
@@ -43,7 +45,7 @@ class CopyTooltip extends PureComponent {
       ref={this.handleRef}
       underlayColor={colors.transparent}
     />
-  )
+  );
 }
 
 export default compose(

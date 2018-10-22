@@ -1,23 +1,23 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react';
+import { Dimensions } from 'react-native';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { OptionList, OptionListItem } from "components/list";
-import { Text } from "components/text";
-import Icon from "components/icons/Icon";
-import { CURRENCIES, NUM_CURRENCIES } from "utils/constants";
+import { OptionList, OptionListItem } from 'components/list';
+import { Text } from 'components/text';
+import Icon from 'components/icons/Icon';
+import { CURRENCIES, NUM_CURRENCIES } from 'utils/constants';
 
 // ======================================================================
 // Styles
 // ======================================================================
 
 const CurrencyList = styled(OptionList)`
-  height: ${Dimensions.get("window").height - 300};
+  height: ${Dimensions.get('window').height - 300};
 `;
 
 const OptionLabel = styled(Text).attrs({
-  size: "large"
+  size: 'large',
 })`
   display: flex;
   align-items: center;
@@ -36,12 +36,12 @@ const CurrencyIcon = styled(Icon)`
 
 class CurrencySection extends React.Component {
   state = {
-    selected: this.props.nativeCurrency || "USD"
+    selected: this.props.nativeCurrency || 'USD',
   };
 
   selectCurrency = nativeCurrency => () => {
     this.setState({
-      selected: nativeCurrency
+      selected: nativeCurrency,
     });
     this.props.onSelectCurrency(nativeCurrency);
   };
@@ -58,10 +58,10 @@ class CurrencySection extends React.Component {
 
   renderCurrencyIcon = nativeCurrency => {
     switch (nativeCurrency) {
-      case "BTC":
+      case 'BTC':
         return <CurrencyIcon name="btc" color="#FF9900" />;
 
-      case "ETH":
+      case 'ETH':
         return <CurrencyIcon name="eth" color="#1E2022" />;
 
       default:
@@ -94,7 +94,7 @@ class CurrencySection extends React.Component {
 
 CurrencySection.propTypes = {
   nativeCurrency: PropTypes.string.isRequired,
-  onSelectCurrency: PropTypes.func.isRequired
+  onSelectCurrency: PropTypes.func.isRequired,
 };
 
 export default CurrencySection;

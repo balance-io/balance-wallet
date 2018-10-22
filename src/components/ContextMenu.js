@@ -8,17 +8,18 @@ import Icon from './icons/Icon';
 import { Centered } from './layout';
 
 const ContextMenuButton = styled(Centered)`
-  ${padding(0, 10)}
-  height: 100%;
+  ${padding(0, 10)} height: 100%;
 `;
 
 export default class ContextMenu extends Component {
   static propTypes = {
     title: PropTypes.string,
-  }
+  };
 
-  handleActionSheetRef = (ref) => { this.ActionSheet = ref; }
-  showActionSheet = () => this.ActionSheet.show()
+  handleActionSheetRef = ref => {
+    this.ActionSheet = ref;
+  };
+  showActionSheet = () => this.ActionSheet.show();
 
   render = () => (
     <Fragment>
@@ -27,10 +28,7 @@ export default class ContextMenu extends Component {
           <Icon name="threeDots" />
         </ContextMenuButton>
       </ButtonPressAnimation>
-      <ActionSheet
-        {...this.props}
-        ref={this.handleActionSheetRef}
-      />
+      <ActionSheet {...this.props} ref={this.handleActionSheetRef} />
     </Fragment>
-  )
+  );
 }

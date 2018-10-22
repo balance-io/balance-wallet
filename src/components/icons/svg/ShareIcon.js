@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Path } from "svgs";
-import { colors } from "../../../styles";
-import Svg from "../Svg";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Path } from 'svgs';
+import { colors } from '../../../styles';
+import Svg from '../Svg';
 
 const ShareIcon = ({ color, ...props }) => (
   <Svg height="18" width="12" viewBox="0 0 12 18" {...props}>
@@ -15,11 +15,11 @@ const ShareIcon = ({ color, ...props }) => (
 );
 
 ShareIcon.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 ShareIcon.defaultProps = {
-  color: colors.black
+  color: colors.black,
 };
 
 export default ShareIcon;

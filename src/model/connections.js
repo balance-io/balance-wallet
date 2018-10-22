@@ -4,7 +4,12 @@ import * as keychain from './keychain';
  * Public
  */
 
-export async function createConnection(bridgeDomain, sessionId, sessionKey, iv) {
+export async function createConnection(
+  bridgeDomain,
+  sessionId,
+  sessionKey,
+  iv
+) {
   const connection = {
     bridgeDomain,
     sessionId,

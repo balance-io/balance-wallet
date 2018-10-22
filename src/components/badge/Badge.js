@@ -13,26 +13,22 @@ const AnimatedView = animated(View);
 const Container = styled(Centered)`
   height: ${({ size }) => size};
   position: absolute;
-  right: ${({ offset }) => (offset * -1)};
-  top: ${({ offset }) => (offset * -1)};
+  right: ${({ offset }) => offset * -1};
+  top: ${({ offset }) => offset * -1};
 `;
 
 const MultiDigitValue = css`
   ${padding(2, 5.5, 3)}
-  transform: translateX(${({ offset }) => (Math.floor(offset / 2))}px);
+  transform: translateX(${({ offset }) => Math.floor(offset / 2)}px);
 `;
 
 const SingleDigitValue = css`
-  ${({ size }) => borders.buildCircle(size)}
-  ${padding(2, 0, 3)}
+  ${({ size }) => borders.buildCircle(size)} ${padding(2, 0, 3)};
 `;
 
 const Circle = styled(Centered)`
-  ${({ valueLength }) => (
-    (valueLength === 1)
-      ? SingleDigitValue
-      : MultiDigitValue
-  )}
+  ${({ valueLength }) =>
+    valueLength === 1 ? SingleDigitValue : MultiDigitValue}
   background-color: ${colors.primaryBlue};
   border-radius: 15;
 `;
@@ -86,6 +82,6 @@ export default compose(
   onlyUpdateForKeys(['value']),
   withProps(({ value }) => ({ valueLength: value.toString().length })),
   withProps(({ maxLength, value, valueLength }) => ({
-    value: (valueLength > maxLength) ? `${'9'.repeat(maxLength)}+` : value,
-  })),
+    value: valueLength > maxLength ? `${'9'.repeat(maxLength)}+` : value,
+  }))
 )(Badge);

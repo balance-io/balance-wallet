@@ -20,16 +20,12 @@ const Header = styled(Row).attrs({
   width: 100%;
 `;
 
-const ListHeader = pure(({
-  children,
-  contextMenuOptions,
-  title,
-}) => (
+const ListHeader = pure(({ children, contextMenuOptions, title }) => (
   <React.Fragment>
     <Header>
       <Row align="center">
         <H1>{title}</H1>
-        {contextMenuOptions && (<ContextMenu {...contextMenuOptions} />)}
+        {contextMenuOptions && <ContextMenu {...contextMenuOptions} />}
       </Row>
       {children}
     </Header>

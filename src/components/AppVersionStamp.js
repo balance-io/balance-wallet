@@ -7,13 +7,15 @@ const Container = styled(Monospace).attrs({
   size: 'h5',
   weight: 'medium',
 })`
-  color: ${({ color }) => (color || colors.grey)};
+  color: ${({ color }) => color || colors.grey};
   flex-shrink: 0;
   line-height: 28;
   margin-bottom: 21;
   text-align: center;
 `;
 
-const AppVersionStamp = props => <Container {...props}>Balance v1.0.1</Container>;
+const AppVersionStamp = props => (
+  <Container {...props}>Balance v0.1.0</Container>
+);
 
 export default AppVersionStamp;

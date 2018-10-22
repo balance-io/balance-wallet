@@ -6,9 +6,10 @@ import { ButtonPressAnimation } from '../buttons';
 import { Flex } from '../layout';
 
 const Container = styled(Flex)`
-  ${padding(10)}
+  ${padding(10)};
 `;
 
+<<<<<<< HEAD
 const HeaderButton = ({
   children,
   onPress,
@@ -19,6 +20,11 @@ const HeaderButton = ({
     <Container {...props}>
       {children}
     </Container>
+=======
+const HeaderButton = ({ children, onPress, ...props }) => (
+  <ButtonPressAnimation onPress={onPress}>
+    <Container {...props}>{children}</Container>
+>>>>>>> prettier config
   </ButtonPressAnimation>
 );
 

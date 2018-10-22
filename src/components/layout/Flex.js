@@ -5,16 +5,15 @@ import { View } from 'react-primitives';
 import { componentFromProp } from 'recompact';
 import styled from 'styled-components/primitives';
 
-export const getFlexStyleKeysFromShorthand = style => (
-  (style === 'end' || style === 'start')
-    ? `flex-${style}`
-    : style
-);
+export const getFlexStyleKeysFromShorthand = style =>
+  style === 'end' || style === 'start' ? `flex-${style}` : style;
 
 const DefaultFlexView = props => <View {...props} />;
 
 const FlexPropBlacklist = ['align', 'direction', 'flex', 'justify', 'wrap'];
-const FlexElement = omitProps(...FlexPropBlacklist)(componentFromProp('component'));
+const FlexElement = omitProps(...FlexPropBlacklist)(
+  componentFromProp('component')
+);
 
 const Flex = styled(FlexElement)`
   ${({ flex }) => (flex ? `flex: ${flex};` : null)}
@@ -29,9 +28,20 @@ Flex.displayName = 'Flex';
 Flex.propTypes = {
   align: PropTypes.oneOf(['baseline', 'center', 'end', 'start', 'stretch']),
   component: PropTypes.func,
-  direction: PropTypes.oneOf(['column', 'column-reverse', 'row', 'row-reverse']),
+  direction: PropTypes.oneOf([
+    'column',
+    'column-reverse',
+    'row',
+    'row-reverse',
+  ]),
   flex: PropTypes.number,
-  justify: PropTypes.oneOf(['center', 'end', 'space-around', 'space-between', 'start']),
+  justify: PropTypes.oneOf([
+    'center',
+    'end',
+    'space-around',
+    'space-between',
+    'start',
+  ]),
   wrap: PropTypes.bool,
 };
 

@@ -5,10 +5,7 @@ const EMPTY_ARRAY = [];
 
 const mapStateToProps = ({
   account: {
-    accountInfo: {
-      assets,
-      total,
-    },
+    accountInfo: { assets, total },
     fetching,
     fetchingUniqueTokens,
     uniqueTokens,
@@ -22,4 +19,8 @@ const mapStateToProps = ({
   uniqueTokens,
 });
 
-export default Component => connect(mapStateToProps, { accountUpdateAccountAddress })(Component);
+export default Component =>
+  connect(
+    mapStateToProps,
+    { accountUpdateAccountAddress }
+  )(Component);

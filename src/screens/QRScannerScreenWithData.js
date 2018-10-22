@@ -1,17 +1,17 @@
-import PropTypes from "prop-types";
-import React, { PureComponent } from "react";
-import { Alert } from "react-native";
-import firebase from "react-native-firebase";
-import { compose } from "recompact";
-import { withAccountAddress, withWalletConnectors } from "../hoc";
-import { walletConnectInit } from "../model/walletconnect";
-import QRScannerScreen from "./QRScannerScreen";
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import { Alert } from 'react-native';
+import firebase from 'react-native-firebase';
+import { compose } from 'recompact';
+import { withAccountAddress, withWalletConnectors } from '../hoc';
+import { walletConnectInit } from '../model/walletconnect';
+import QRScannerScreen from './QRScannerScreen';
 
 class QRScannerScreenWithData extends PureComponent {
   static propTypes = {
     accountAddress: PropTypes.string,
     isScreenActive: PropTypes.bool,
-    navigation: PropTypes.object
+    navigation: PropTypes.object,
   };
 
   handlePressBackButton = () => this.props.navigation.goBack();
@@ -29,10 +29,10 @@ class QRScannerScreenWithData extends PureComponent {
           data.sharedKey,
           data.dappName
         );
-        navigation.navigate("WalletScreen");
+        navigation.navigate('WalletScreen');
       } catch (error) {
-        AlertIOS.alert(lang.t("wallet.wallet_connect.error"), error);
-        console.log("error initializing wallet connect", error);
+        AlertIOS.alert(lang.t('wallet.wallet_connect.error'), error);
+        console.log('error initializing wallet connect', error);
       }
     }
   };

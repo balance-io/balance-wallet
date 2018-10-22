@@ -9,17 +9,13 @@ import { padding } from '../../styles';
 const HeaderHeight = 54;
 
 const Container = styled(Row).attrs({ align: 'end' })`
-  ${({ statusBarHeight }) => padding(statusBarHeight, 9, 1)}
-  flex-shrink: 0;
-  height: ${({ statusBarHeight }) => (HeaderHeight + statusBarHeight)};
+  ${({ statusBarHeight }) => padding(statusBarHeight, 9, 1)} flex-shrink: 0;
+  height: ${({ statusBarHeight }) => HeaderHeight + statusBarHeight};
   width: 100%;
 `;
 
 const Header = ({ statusBarHeight, ...props }) => (
-  <Container
-    {...props}
-    statusBarHeight={statusBarHeight}
-  />
+  <Container {...props} statusBarHeight={statusBarHeight} />
 );
 
 Header.propTypes = {
@@ -37,5 +33,5 @@ export default compose(
   hoistStatics,
   withProps(({ statusBarSafeMode }) => ({
     statusBarHeight: getStatusBarHeight(statusBarSafeMode),
-  })),
+  }))
 )(Header);

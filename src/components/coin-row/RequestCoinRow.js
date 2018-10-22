@@ -30,10 +30,12 @@ const RequestCoinRowButton = ({ navigation, transactionDetails }) => (
   <Button
     bgColor={colors.primaryBlue}
     containerStyles={buttonContainerStyles}
-    onPress={() => navigation.navigate({
-      routeName: 'ConfirmTransaction',
-      params: { transactionDetails }
-    })}
+    onPress={() =>
+      navigation.navigate({
+        routeName: 'ConfirmTransaction',
+        params: { transactionDetails },
+      })
+    }
     size="small"
     textProps={{ size: 'smedium' }}
   >
@@ -51,7 +53,9 @@ const RequestCoinRow = ({
   <CoinRow
     {...item}
     {...props}
-    bottomRowRender={({ transactionDisplayDetails }) => <CoinName>{get(transactionDisplayDetails, 'asset.name')}</CoinName>}
+    bottomRowRender={({ transactionDisplayDetails }) => (
+      <CoinName>{get(transactionDisplayDetails, 'asset.name')}</CoinName>
+    )}
     coinIconRender={RequestCoinIcon}
     expirationColor={expirationColor}
     topRowRender={() => (
@@ -60,23 +64,24 @@ const RequestCoinRow = ({
       </Text>
     )}
   >
-    <RequestCoinRowButton navigation={navigation} transactionDetails={item}/>
+    <RequestCoinRowButton navigation={navigation} transactionDetails={item} />
   </CoinRow>
 );
 
 export default compose(
   withNavigation,
-  withProps(({ item: { transactionDisplayDetails: { timestampInMs } }}) => {
+  withProps(({ item: { transactionDisplayDetails: { timestampInMs } } }) => {
     const createdAt = new Date(timestampInMs);
     const expiresAt = addHours(createdAt, 1);
     const percentElapsed = getPercentageOfTimeElapsed(createdAt, expiresAt);
 
     return {
       createdAt,
-      expirationColor: (percentElapsed > 25) ? colors.primaryBlue : colors.orangeMedium,
+      expirationColor:
+        percentElapsed > 25 ? colors.primaryBlue : colors.orangeMedium,
       expiresAt,
       percentElapsed,
     };
   }),
-  onlyUpdateForKeys(['expirationColor', 'percentElapsed']),
+  onlyUpdateForKeys(['expirationColor', 'percentElapsed'])
 )(RequestCoinRow);

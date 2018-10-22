@@ -22,11 +22,7 @@ const InnerBorder = styled.View`
 `;
 
 const UniqueTokenCard = ({
-  item: {
-    background,
-    imagePreviewUrl,
-    ...item
-  },
+  item: { background, imagePreviewUrl, ...item },
   size,
   ...props
 }) => {

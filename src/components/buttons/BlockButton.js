@@ -18,13 +18,12 @@ const containerStyles = css`
 `;
 
 const Container = styled(Centered)`
-  ${containerStyles}
-  ${padding(17, 0, 21)}
+  ${containerStyles} ${padding(17, 0, 21)}
   overflow: hidden;
 `;
 
 const GradientBackground = styled(RadialGradient)`
-  ${position.cover}
+  ${position.cover};
 `;
 
 const InnerBorder = styled.View`
@@ -49,25 +48,17 @@ const Shadow = styled.View`
   ${shadow.build(0, 3, 5, colors.alpha(colors.purple, 0.2))}
 `;
 
-const BlockButton = ({
-  children,
-  height,
-  onLayout,
-  width,
-  ...props
-}) => (
+const BlockButton = ({ children, height, onLayout, width, ...props }) => (
   <ButtonPressAnimation {...props}>
     <Shadow>
       <Container onLayout={onLayout}>
         <GradientBackground
-          center={[0, (height / 2)]}
+          center={[0, height / 2]}
           colors={[colors.primaryBlue, '#006FFF']}
           radius={width}
         />
         <InnerBorder />
-        <Label>
-          {children}
-        </Label>
+        <Label>{children}</Label>
       </Container>
     </Shadow>
   </ButtonPressAnimation>
@@ -80,4 +71,6 @@ BlockButton.propTypes = {
   width: PropTypes.number,
 };
 
-export default withViewLayoutProps(({ width, height }) => ({ width, height }))(BlockButton);
+export default withViewLayoutProps(({ width, height }) => ({ width, height }))(
+  BlockButton
+);

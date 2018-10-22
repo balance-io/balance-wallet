@@ -10,7 +10,10 @@ import Icon from '../components/icons/Icon';
 import { Column, Row } from '../components/layout';
 import { Monospace } from '../components/text';
 import { colors, fonts, padding } from '../styles';
-import { withHideSplashScreenOnMount, withSafeAreaViewInsetValues } from '../hoc';
+import {
+  withHideSplashScreenOnMount,
+  withSafeAreaViewInsetValues,
+} from '../hoc';
 
 const AlphaWarning = styled(Row).attrs({ align: 'center' })`
   margin-top: 37;
@@ -84,23 +87,16 @@ const IntroScreen = ({ onCreateWallet, safeAreaInset }) => (
         <WarningIcon />
         <AlphaWarningText>{lang.t('wallet.intro.warning')}</AlphaWarningText>
       </AlphaWarning>
-      <InstructionsText>
-        {lang.t('wallet.intro.instructions')}
-      </InstructionsText>
+      <InstructionsText>{lang.t('wallet.intro.instructions')}</InstructionsText>
       <Row>
         <ButtonPressAnimation onPress={onCreateWallet}>
           <CreateWalletButton>
-            <CreateWalletButtonText>
-              {lang.t('wallet.intro.create_wallet')}
-            </CreateWalletButtonText>
+            <CreateWalletButtonText>Create a Wallet</CreateWalletButtonText>
           </CreateWalletButton>
         </ButtonPressAnimation>
       </Row>
     </Content>
-    <IntroAppVersion
-      bottomInset={safeAreaInset.bottom}
-      color="#2A2B30"
-    />
+    <IntroAppVersion bottomInset={safeAreaInset.bottom} color="#2A2B30" />
   </Container>
 );
 
@@ -114,6 +110,7 @@ export default compose(
   withHideSplashScreenOnMount,
   withSafeAreaViewInsetValues,
   withHandlers({
-    onCreateWallet: ({ navigation }) => () => navigation.navigate('WalletScreen'),
-  }),
+    onCreateWallet: ({ navigation }) => () =>
+      navigation.navigate('WalletScreen'),
+  })
 )(IntroScreen);

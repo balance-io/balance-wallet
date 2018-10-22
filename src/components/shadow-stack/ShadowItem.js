@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components/primitives';
 
 const Container = styled.View`
-  background-color: ${({ shadowColor }) => (shadowColor || '#ffffff')};
+  background-color: ${({ shadowColor }) => shadowColor || '#ffffff'};
   border-radius: ${({ borderRadius }) => borderRadius};
   bottom: 0;
   box-shadow: ${({ shadow }) => shadow};
@@ -13,7 +13,11 @@ const Container = styled.View`
   top: 0;
 `;
 
-const getColorFromShadowString = (shadow = '') => shadow.split(' ').slice(3).join('');
+const getColorFromShadowString = (shadow = '') =>
+  shadow
+    .split(' ')
+    .slice(3)
+    .join('');
 
 const ShadowItem = ({ shadow, ...props }) => (
   <Container

@@ -10,11 +10,11 @@ import UniqueTokenCard from './UniqueTokenCard';
 
 const CardMargin = 15;
 const RowPadding = 19;
-const CardSize = (deviceUtils.dimensions.width - (RowPadding * 2) - CardMargin) / 2;
+const CardSize =
+  (deviceUtils.dimensions.width - RowPadding * 2 - CardMargin) / 2;
 
 const Container = styled(Row)`
-  ${padding(0, RowPadding)}
-  width: 100%;
+  ${padding(0, RowPadding)} width: 100%;
 `;
 
 const renderItems = (uniqueToken, itemIndex) => (
@@ -22,7 +22,7 @@ const renderItems = (uniqueToken, itemIndex) => (
     item={uniqueToken}
     key={uniqueToken.id}
     size={CardSize}
-    style={{ marginLeft: (itemIndex >= 1) ? CardMargin : 0 }}
+    style={{ marginLeft: itemIndex >= 1 ? CardMargin : 0 }}
   />
 );
 
@@ -49,8 +49,8 @@ export default compose(
   mapProps(({ item, ...props }) => ({ items: compact(item), ...props })),
   withProps(({ index, items, section: { data } }) => ({
     isFirstRow: index === 0,
-    isLastRow: index === (data.length - 1),
+    isLastRow: index === data.length - 1,
     itemsCount: items.length,
   })),
-  onlyUpdateForKeys(['items', 'itemsCount', 'isLastRow']),
+  onlyUpdateForKeys(['items', 'itemsCount', 'isLastRow'])
 )(UniqueTokenRow);

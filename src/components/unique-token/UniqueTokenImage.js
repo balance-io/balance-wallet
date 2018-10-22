@@ -20,8 +20,7 @@ const FallbackTextColorVariants = {
 };
 
 const Container = styled(Centered)`
-  ${padding(19, 10)}
-  ${position.cover}
+  ${padding(19, 10)} ${position.cover};
 `;
 
 const FallbackText = styled(Monospace).attrs({ size: 'smedium' })`
@@ -42,7 +41,7 @@ const UniqueTokenImage = ({
   ...props
 }) => (
   <Container>
-    {(imageUrl && !error) ? (
+    {imageUrl && !error ? (
       <Image
         onError={onError}
         onLoad={onLoad}
@@ -52,9 +51,7 @@ const UniqueTokenImage = ({
         style={position.sizeAsObject('100%')}
       />
     ) : (
-      <FallbackText color={fallbackTextColor}>
-        {name}
-      </FallbackText>
+      <FallbackText color={fallbackTextColor}>{name}</FallbackText>
     )}
     {isLoading && <Shimmer {...position.sizeAsObject(size)} />}
   </Container>
@@ -73,14 +70,16 @@ UniqueTokenImage.propTypes = {
   size: PropTypes.number,
 };
 
-const buildUniqueTokenName = ({ contractName, id, name }) => (name || `${contractName} #${id}`);
-const getFallbackTextColor = bg => colors.getTextColorForBackground(bg, FallbackTextColorVariants);
+const buildUniqueTokenName = ({ contractName, id, name }) =>
+  name || `${contractName} #${id}`;
+const getFallbackTextColor = bg =>
+  colors.getTextColorForBackground(bg, FallbackTextColorVariants);
 
 export default compose(
   withState('error', 'handleErrorState', null),
   withState('isLoading', 'handleLoadingState', false),
   withHandlers({
-    onError: ({ handleErrorState, handleLoadingState }) => (error) => {
+    onError: ({ handleErrorState, handleLoadingState }) => error => {
       handleErrorState(error);
       handleLoadingState(false);
     },
@@ -91,5 +90,5 @@ export default compose(
     fallbackTextColor: getFallbackTextColor(backgroundColor),
     name: buildUniqueTokenName(item),
   })),
-  onlyUpdateForKeys(['error', 'imageUrl', 'isLoading']),
+  onlyUpdateForKeys(['error', 'imageUrl', 'isLoading'])
 )(UniqueTokenImage);

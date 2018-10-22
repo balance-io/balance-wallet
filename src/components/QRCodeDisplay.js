@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
-import React from "react";
-import QRCode from "react-native-qrcode-svg";
-import styled from "styled-components/primitives";
-import { Centered } from "../components/layout";
-import { colors, padding, position, shadow } from "../styles";
+import PropTypes from 'prop-types';
+import React from 'react';
+import QRCode from 'react-native-qrcode-svg';
+import styled from 'styled-components/primitives';
+import { Centered } from '../components/layout';
+import { colors, padding, position, shadow } from '../styles';
 
 const QRCodeContainer = styled(Centered)``;
 // ${({ gutter }) => padding(gutter)}
@@ -23,11 +23,11 @@ const QRCodeDisplay = ({ size, value }) => (
 
 QRCodeDisplay.propTypes = {
   size: PropTypes.number,
-  value: PropTypes.string
+  value: PropTypes.string,
 };
 
 QRCodeDisplay.defaultProps = {
-  size: 150
+  size: 150,
 };
 
 export default pure(QRCodeDisplay);

@@ -13,7 +13,9 @@ const StyledCard = styled.View`
   shadow-opacity: 0.1;
 `;
 
-const Card = ({ children, ...props }) => <StyledCard {...props}>{children}</StyledCard>;
+const Card = ({ children, ...props }) => (
+  <StyledCard {...props}>{children}</StyledCard>
+);
 
 Card.propTypes = {
   children: PropTypes.node.isRequired,

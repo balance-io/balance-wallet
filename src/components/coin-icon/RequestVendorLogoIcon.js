@@ -15,8 +15,7 @@ const VendorLogoContainer = styled(Centered)`
 `;
 
 const VendorLogoImage = styled.Image`
-  ${({ size }) => position.size(size)}
-  resize-mode: contain;
+  ${({ size }) => position.size(size)} resize-mode: contain;
 `;
 
 const RequestVendorLogoIcon = ({ imageUrl, size }) => (

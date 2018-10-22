@@ -39,7 +39,7 @@ const TransactionStatusProps = {
 };
 
 const StatusIcon = styled(Icon)`
-  ${position.maxSize(10)}
+  ${position.maxSize(10)};
 `;
 
 const StatusLabel = styled(Text).attrs({ weight: 'semibold' })`
@@ -49,7 +49,9 @@ const StatusLabel = styled(Text).attrs({ weight: 'semibold' })`
 const TransactionStatusBadge = ({ status }) => (
   <Row align="center">
     {status && <StatusIcon {...TransactionStatusProps[status]} />}
-    <StatusLabel color={get(TransactionStatusProps, `[${status}].color`, colors.red)}>
+    <StatusLabel
+      color={get(TransactionStatusProps, `[${status}].color`, colors.red)}
+    >
       {upperFirst(status || 'Error')}
     </StatusLabel>
   </Row>

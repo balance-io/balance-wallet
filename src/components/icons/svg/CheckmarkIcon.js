@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Path } from "svgs";
-import { colors } from "../../../styles";
-import Svg from "../Svg";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { Path } from 'svgs';
+import { colors } from '../../../styles';
+import Svg from '../Svg';
 
 const CheckmarkIcon = ({ color, ...props }) => (
   <Svg height="11" width="10" viewBox="0 0 11 10" {...props}>
@@ -15,11 +15,11 @@ const CheckmarkIcon = ({ color, ...props }) => (
 );
 
 CheckmarkIcon.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 CheckmarkIcon.defaultProps = {
-  color: colors.black
+  color: colors.black,
 };
 
 export default CheckmarkIcon;
