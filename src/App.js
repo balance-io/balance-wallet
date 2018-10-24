@@ -116,47 +116,47 @@ class App extends Component {
 
     this.props.accountInitializeState();
 
-    // walletInit()
-    //   .then(walletAddress => {
-    //     console.log('wallet address is', walletAddress);
-    //     this.props.accountUpdateAccountAddress(walletAddress, 'BALANCEWALLET');
-    //     this.props.transactionsToApproveInit();
-    //     walletConnectInitAllConnectors()
-    //       .then(allConnectors => {
-    //         this.props.setWalletConnectors(allConnectors);
-    //         firebase
-    //           .notifications()
-    //           .getInitialNotification()
-    //           .then(notificationOpen => {
-    //             if (!notificationOpen) {
-    //               this.fetchAllTransactionsFromWalletConnectSessions();
-    //             }
-    //           });
-    //       })
-    //       .catch(error => {
-    //         console.log('Unable to init all WalletConnect sessions');
-    //       });
-    //     firebase
-    //       .notifications()
-    //       .getInitialNotification()
-    //       .then(notificationOpen => {
-    //         console.log('on initial notification');
-    //         if (notificationOpen) {
-    //           console.log('on initial notification opened - while app closed');
-    //           const {
-    //             transactionId,
-    //             sessionId,
-    //           } = notificationOpen.notification.data;
-    //           this.onPushNotificationOpened(transactionId, sessionId);
-    //         }
-    //       });
-    //     /*
-    //   */
-    //   })
-    //   .catch(error => {
-    //     console.log('failed to init wallet');
-    //     AlertIOS.alert('Error: Failed to initialize wallet.');
-    //   });
+    walletInit()
+      .then(walletAddress => {
+        console.log('wallet address is', walletAddress);
+        this.props.accountUpdateAccountAddress(walletAddress, 'BALANCEWALLET');
+        this.props.transactionsToApproveInit();
+        walletConnectInitAllConnectors()
+          .then(allConnectors => {
+            this.props.setWalletConnectors(allConnectors);
+            firebase
+              .notifications()
+              .getInitialNotification()
+              .then(notificationOpen => {
+                if (!notificationOpen) {
+                  this.fetchAllTransactionsFromWalletConnectSessions();
+                }
+              });
+          })
+          .catch(error => {
+            console.log('Unable to init all WalletConnect sessions');
+          });
+        firebase
+          .notifications()
+          .getInitialNotification()
+          .then(notificationOpen => {
+            console.log('on initial notification');
+            if (notificationOpen) {
+              console.log('on initial notification opened - while app closed');
+              const {
+                transactionId,
+                sessionId,
+              } = notificationOpen.notification.data;
+              this.onPushNotificationOpened(transactionId, sessionId);
+            }
+          });
+        /*
+      */
+      })
+      .catch(error => {
+        console.log('failed to init wallet');
+        AlertIOS.alert('Error: Failed to initialize wallet.');
+      });
   }
 
   handleAppStateChange = async nextAppState => {

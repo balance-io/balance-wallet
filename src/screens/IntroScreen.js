@@ -18,16 +18,16 @@ import { connect } from 'react-redux';
 import { compose } from 'recompact';
 import styled from 'styled-components';
 
-import { Text, Monospace } from 'components/text';
-import Icon from 'components/icons/Icon';
-import { Column, Row } from 'components/layout';
-import { colors, fonts, padding } from 'styles';
-import { walletInit } from 'model/wallet';
+import { Text, Monospace } from '../components/text';
+import Icon from '../components/icons/Icon';
+import { Column, Row } from '../components/layout';
+import { colors, fonts, padding } from '../styles';
+import { walletInit } from '../model/wallet';
 import {
   walletConnectGetAllTransactions,
   walletConnectInitAllConnectors,
-} from 'model/walletconnect';
-import { transactionsToApproveInit } from 'reducers/transactionsToApprove';
+} from '../model/walletconnect';
+import { transactionsToApproveInit } from '../reducers/transactionsToApprove';
 
 const Container = styled(Column).attrs({
   align: 'center',
