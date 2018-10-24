@@ -1,116 +1,276 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { StatusBar } from 'react-native';
-import lang from 'i18n-js';
-import { compose, withHandlers } from 'recompact';
-import styled from 'styled-components/primitives';
-import AppVersionStamp from '../components/AppVersionStamp';
-import { ButtonPressAnimation } from '../components/buttons';
-import Icon from '../components/icons/Icon';
-import { Column, Row } from '../components/layout';
-import { Monospace } from '../components/text';
-import { colors, fonts, padding } from '../styles';
 import {
-  withHideSplashScreenOnMount,
-  withSafeAreaViewInsetValues,
-} from '../hoc';
+  account,
+  accountInitializeState,
+  accountUpdateAccountAddress,
+  commonStorage,
+} from 'balance-common';
+import PropTypes from 'prop-types';
+import { withNavigation } from 'react-navigation';
+import firebase from 'react-native-firebase';
+import React from 'react';
+import {
+  Clipboard,
+  KeyboardAvoidingView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import { connect } from 'react-redux';
+import { compose } from 'recompact';
+import styled from 'styled-components';
 
-const AlphaWarning = styled(Row).attrs({ align: 'center' })`
-  margin-top: 37;
-  margin-bottom: 7;
+import { Text, Monospace } from 'components/text';
+import Icon from 'components/icons/Icon';
+import { Column, Row } from 'components/layout';
+import { colors, fonts, padding } from 'styles';
+import { walletInit } from 'model/wallet';
+import {
+  walletConnectGetAllTransactions,
+  walletConnectInitAllConnectors,
+} from 'model/walletconnect';
+import { transactionsToApproveInit } from 'reducers/transactionsToApprove';
+
+const Container = styled(Column).attrs({
+  align: 'center',
+})`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  ${padding(16)};
+  margin-top: 15;
+  background: ${colors.white};
+  border-top-left-radius: 12;
+  border-top-right-radius: 12;
 `;
 
-const AlphaWarningText = styled(Monospace).attrs({
-  color: 'orangeLight',
-  size: 'lmedium',
+const Body = styled(Column).attrs({
+  align: 'center',
+})`
+  margin-right: 50;
+  margin-left: 50;
+  margin-top: auto;
+  margin-bottom: auto;
+`;
+
+const Input = styled(TextInput).attrs({
+  placeholderTextColor: '#C4C6CB',
+  multiline: true,
+})`
+  font-family: ${fonts.family['SFMono']};
+  font-weight: ${fonts.weight.semibold};
+  font-size: ${fonts.size.large};
+  margin-bottom: 20;
+  text-align: center;
+  line-height: 25;
+`;
+
+const HelpText = styled(Text).attrs({
+  size: 'medium',
   weight: 'medium',
 })`
-  line-height: ${fonts.lineHeight.loose};
+  text-align: center;
 `;
 
-const Container = styled(Column).attrs({ align: 'start', justify: 'center' })`
-  ${padding(0, 30)}
-  background-color: ${colors.black};
-  height: 100%;
-`;
-
-const Content = styled(Column)`
-  margin-bottom: 10;
-`;
-
-const CreateWalletButton = styled.View`
-  ${padding(14, 18, 17)}
-  background-color: ${colors.teal};
-  border-radius: 14;
-  margin-top: 47;
-`;
-
-const CreateWalletButtonText = styled(Monospace).attrs({
-  color: 'black',
-  size: 'h5',
-  weight: 'semibold',
+const Footer = styled(KeyboardAvoidingView).attrs({
+  behavior: 'padding',
+  keyboardVerticalOffset: 95,
 })`
-  line-height: 20;
+  display: flex;
+  align-self: stretch;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 15;
 `;
 
-const InstructionsText = styled(Monospace).attrs({
-  color: 'white',
-  size: 'lmedium',
+const HelpButton = styled(TouchableOpacity)`
+  padding-left: 8;
+  padding-right: 8;
+  padding-top: 6;
+  padding-bottom: 6;
+  border: 1px solid #f6f7f7;
+  border-radius: 15px;
+`;
+
+const ImportButton = styled(TouchableOpacity)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 8;
+  padding-right: 8;
+  padding-top: 6;
+  padding-bottom: 6;
+  background: ${props => (props.disabled ? '#D2D3D7' : colors.appleBlue)};
+  border-radius: 15px;
+  shadow-color: ${colors.dark};
+  shadow-offset: 0px 6px;
+  shadow-opacity: 0.14;
+  shadow-radius: 10;
+`;
+
+const ImportIcon = styled(Icon).attrs({
+  name: 'arrowCircled',
+  color: colors.white,
+  direction: 'right',
+  style: { paddingRight: '5' },
+})``;
+
+const ImportText = styled(Text).attrs({
+  size: 'medium',
+  weight: 'bold',
 })`
-  color: ${colors.alpha(colors.white, 0.46)};
-  line-height: ${fonts.lineHeight.loose};
-  width: 315;
+  color: ${colors.white};
+  padding-left: ${({ padding }) => (padding ? 5 : 0)};
 `;
 
-const IntroAppVersion = styled(AppVersionStamp)`
-  bottom: ${({ bottomInset }) => bottomInset};
-  left: 0;
-  position: absolute;
-  right: 0;
-`;
+class IntroScreen extends React.Component {
+  state = {
+    seedPhrase: '',
+  };
 
-const WarningIcon = styled(Icon).attrs({
-  color: colors.orangeLight,
-  name: 'warning',
-})`
-  margin-right: ${fonts.size.micro};
-`;
+  onImportSeedPhrase = () => {
+    walletInit(this.state.seedPhrase)
+      .then(walletAddress => {
+        console.log('wallet address is', walletAddress);
+        this.setState({ seedPhrase: walletAddress });
+        // this.props.accountUpdateAccountAddress(walletAddress, 'BALANCEWALLET');
+        // this.props.transactionsToApproveInit();
+        //   walletConnectInitAllConnectors()
+        //     .then(allConnectors => {
+        //       this.props.setWalletConnectors(allConnectors);
+        //       firebase
+        //         .notifications()
+        //         .getInitialNotification()
+        //         .then(notificationOpen => {
+        //           if (!notificationOpen) {
+        //             this.fetchAllTransactionsFromWalletConnectSessions();
+        //           }
+        //         });
+        //     })
+        //     .catch(error => {
+        //       console.log('Unable to init all WalletConnect sessions');
+        //     });
+        //   firebase
+        //     .notifications()
+        //     .getInitialNotification()
+        //     .then(notificationOpen => {
+        //       console.log('on initial notification');
+        //       if (notificationOpen) {
+        //         console.log('on initial notification opened - while app closed');
+        //         const {
+        //           transactionId,
+        //           sessionId,
+        //         } = notificationOpen.notification.data;
+        //         this.onPushNotificationOpened(transactionId, sessionId);
+        //       }
+        //     });
+        //   /*
+        // */
+      })
+      .catch(error => {
+        console.log('failed to init wallet');
+        AlertIOS.alert('Error: Failed to initialize wallet.');
+      });
+  };
 
-const IntroScreen = ({ onCreateWallet, safeAreaInset }) => (
-  <Container>
-    <StatusBar barStyle="light-content" />
-    <Content>
-      <Monospace color="white" size="big" weight="semibold">
-        {lang.t('wallet.intro.welcome')}
-      </Monospace>
-      <AlphaWarning>
-        <WarningIcon />
-        <AlphaWarningText>{lang.t('wallet.intro.warning')}</AlphaWarningText>
-      </AlphaWarning>
-      <InstructionsText>{lang.t('wallet.intro.instructions')}</InstructionsText>
-      <Row>
-        <ButtonPressAnimation onPress={onCreateWallet}>
-          <CreateWalletButton>
-            <CreateWalletButtonText>Create a Wallet</CreateWalletButtonText>
-          </CreateWalletButton>
-        </ButtonPressAnimation>
-      </Row>
-    </Content>
-    <IntroAppVersion bottomInset={safeAreaInset.bottom} color="#2A2B30" />
-  </Container>
-);
+  // fetchAllTransactionsFromWalletConnectSessions = async allConnectors => {
+  //   if (!isEmpty(allConnectors)) {
+  //     const allTransactions = await walletConnectGetAllTransactions(
+  //       allConnectors
+  //     );
+  //     if (!isEmpty(allTransactions)) {
+  //       this.props.addTransactionsToApprove(allTransactions);
+  //     }
+  //   }
+  // };
 
-IntroScreen.propTypes = {
-  navigation: PropTypes.object,
-  onCreateWallet: PropTypes.func,
-  safeAreaInset: PropTypes.object,
-};
+  isSeedPhraseValid = () => {
+    const phraseCount = this.state.seedPhrase
+      .split(' ')
+      .filter(word => word !== '').length;
+    return phraseCount >= 12 && phraseCount <= 24;
+  };
 
-export default compose(
-  withHideSplashScreenOnMount,
-  withSafeAreaViewInsetValues,
-  withHandlers({
-    onCreateWallet: ({ navigation }) => () =>
-      navigation.navigate('WalletScreen'),
-  })
-)(IntroScreen);
+  onSeedPhraseChange = seedPhrase => {
+    this.setState({ seedPhrase });
+  };
+
+  onPasteSeedPhrase = () => {
+    // this.props.navigation.navigate('SwipeLayout');
+    Clipboard.getString()
+      .then(this.onSeedPhraseChange)
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  renderHelp = () => {
+    if (this.state.seedPhrase !== '') {
+      return null;
+    }
+    return (
+      <HelpText>
+        Use your 12 or 24 word seed phrase from an existing wallet.
+      </HelpText>
+    );
+  };
+
+  renderActionButton = () => {
+    if (this.state.seedPhrase !== '') {
+      return (
+        <ImportButton
+          disabled={!this.isSeedPhraseValid()}
+          onPress={this.onImportSeedPhrase}
+        >
+          <ImportIcon />
+          <ImportText padding>Import</ImportText>
+        </ImportButton>
+      );
+    } else {
+      return (
+        <ImportButton onPress={this.onPasteSeedPhrase}>
+          <ImportText>Paste</ImportText>
+        </ImportButton>
+      );
+    }
+  };
+
+  render() {
+    return (
+      <Container>
+        <Text size="large" weight="bold">
+          Import
+        </Text>
+
+        <Body>
+          <Input
+            autoFocus
+            value={this.state.seedPhrase}
+            placeholder={'Type your seed phrase'}
+            onChangeText={this.onSeedPhraseChange}
+          />
+          {this.renderHelp()}
+        </Body>
+
+        <Footer>
+          <HelpButton onPress={() => {}}>
+            <HelpText>Help</HelpText>
+          </HelpButton>
+          {this.renderActionButton()}
+        </Footer>
+      </Container>
+    );
+  }
+}
+
+export default withNavigation(IntroScreen);
+
+// export default compose(
+//   withNavigation,
+//   connect(
+//     () => ({}),
+//     {
+//       transactionsToApproveInit,
+//       accountUpdateAccountAddress,
+//     }
+//   )
+// )(IntroScreen);

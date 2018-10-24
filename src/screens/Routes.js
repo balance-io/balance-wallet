@@ -9,6 +9,8 @@ import TransactionConfirmationScreenWithData from './TransactionConfirmationScre
 import WalletScreen from './WalletScreen';
 import WebViewScreen from './WebViewScreen';
 import Navigation from '../navigation';
+import sheetTransition from '../navigation/transitions/sheet';
+import { deviceUtils } from '../utils';
 
 const SwipeStack = createSwipeNavigator(
   {
@@ -43,21 +45,41 @@ const AppStack = createStackNavigator(
     ConfirmTransaction: TransactionConfirmationScreenWithData,
     SendScreen,
     SwipeLayout: SwipeStack,
+    IntroScreen: {
+      navigationOptions: {
+        effect: 'sheet',
+        gestureResponseDistance: {
+          vertical: deviceUtils.dimensions.height / 2,
+        },
+      },
+      screen: IntroScreen,
+    },
   },
   {
     headerMode: 'none',
-    initialRouteName: 'SwipeLayout',
+    initialRouteName: 'IntroScreen',
+    // initialRouteName: 'SwipeLayout',
     mode: 'modal',
+    transitionConfig: sheetTransition,
   }
 );
 
 const IntroStack = createStackNavigator(
   {
-    IntroScreen,
+    IntroScreen: {
+      navigationOptions: {
+        effect: 'sheet',
+        gestureResponseDistance: {
+          vertical: deviceUtils.dimensions.height / 2,
+        },
+      },
+      screen: IntroScreen,
+    },
   },
   {
     headerMode: 'none',
-    mode: 'card', // Horizontal gestures
+    mode: 'modal', // Horizontal gestures
+    transitionConfig: sheetTransition,
   }
 );
 

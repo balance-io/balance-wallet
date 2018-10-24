@@ -52,7 +52,7 @@
     "react-native-firebase": "^4.3.8",
     "react-native-gesture-handler": "^1.0.7",
     "react-native-haptic-feedback": "^1.2.0",
-    "react-native-iphone-x-helper": "ptelad/react-native-iphone-x-helper#7/head",
+    "react-native-iphone-x-helper": "^1.2.0",
     "react-native-keychain": "^3.0.0",
     "react-native-languages": "^3.0.0",
     "react-native-level-fs": "^3.0.1",
@@ -113,8 +113,8 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-react-native": "^3.2.1",
-    "metro-react-native-babel-preset": "^0.48.1",
     "jest": "^22.4.3",
+    "metro-react-native-babel-preset": "^0.48.1",
     "prettier": "^1.14.3",
     "react-test-renderer": "^16.2.0",
     "schedule": "0.4.0"
