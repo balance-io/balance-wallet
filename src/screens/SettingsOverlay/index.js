@@ -8,16 +8,17 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { BlurView } from 'react-native-blur';
 
-import { withAccountSettings } from '../../hoc';
-import { Column, Row } from '../../components/layout';
-import { Text } from '../../components/text';
-import Icon from '../../components/icons/Icon';
+import { withAccountSettings } from 'hoc';
+import { Column, Row } from 'components/layout';
+import { Text } from 'components/text';
+import Icon from 'components/icons/Icon';
 import SettingsSection from './SettingsSection';
 import LanguageSection from './LanguageSection';
 import CurrencySection from './CurrencySection';
 import BackupSection from './BackupSection';
-import { colors, padding } from '../../styles';
+import { colors, padding } from 'styles';
 
 // ======================================================================
 // Styles
@@ -258,6 +259,7 @@ class SettingsOverlay extends React.Component {
       <Animated.View
         style={[overlayStyles, { opacity: this.props.overlayOpacity }]}
       >
+        <BlurView style={overlayStyles} blurType="light" blurAmount={2} />
         <Animated.View
           style={[
             modalStyles,

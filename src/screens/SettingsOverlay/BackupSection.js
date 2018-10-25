@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import TouchID from 'react-native-touch-id';
 import PasscodeAuth from 'react-native-passcode-auth';
 
-import { Monospace } from '../../components/text';
-import { Centered } from '../../components/layout';
-import { Button } from '../../components/buttons';
-import { loadSeedPhrase } from '../../model/wallet';
+import { Monospace } from 'components/text';
+import { Centered } from 'components/layout';
+import { Button } from 'components/buttons';
+import { loadSeedPhrase } from 'model/wallet';
 
 // ======================================================================
 // Styles

@@ -39,4 +39,6 @@ target 'BalanceWallet' do
 
 
 
+  pod 'react-native-blur', :path => '../node_modules/react-native-blur'
+
 end

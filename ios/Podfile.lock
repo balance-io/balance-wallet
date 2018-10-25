@@ -41,6 +41,8 @@ PODS:
   - Protobuf (3.6.1)
   - React (0.57.1):
     - React/Core (= 0.57.1)
+  - react-native-blur (0.8.0):
+    - React
   - React/Core (0.57.1):
     - yoga (= 0.57.1.React)
   - React/CxxBridge (0.57.1):
@@ -104,6 +106,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/GLog.podspec`)
   - React (from `../node_modules/react-native`)
+  - react-native-blur (from `../node_modules/react-native-blur`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -145,6 +148,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/GLog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-blur:
+    :path: "../node_modules/react-native-blur"
   RNLanguages:
     :path: "../node_modules/react-native-languages"
   RNReanimated:
@@ -166,10 +171,11 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-blur: c35c1f6c2c76db7108bde7ed343bd2b01d64e0c0
   RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
   RNReanimated: 45d9313b7a62318ed00d60a811937321e43e076e
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: eeff79d33c8b980ac2ea6395fd419f3c236ef0c9
+PODFILE CHECKSUM: 6cec57a3cba9d247fc724bf72fb141b9aede0f29
 
 COCOAPODS: 1.5.3
