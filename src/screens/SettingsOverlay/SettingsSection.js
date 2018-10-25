@@ -78,10 +78,6 @@ const SettingRowValue = styled(Text).attrs({
 const SettingRowArrow = styled(Icon).attrs({
   name: 'caretThin',
   color: colors.blueGreyDark,
-  // width: 16,
-  // height: 12,
-  // width: 20,
-  // height: 15,
 })``;
 
 const BackupRowIcon = styled(Icon).attrs({
@@ -149,7 +145,7 @@ class SettingsSection extends React.Component {
             </PrimarySettingRow>
           </SettingButton>
 
-          <SettingButton border onPress={onPressLanguage}>
+          <SettingButton onPress={onPressLanguage}>
             <PrimarySettingRow>
               <SettingRowIcon source={LanguageIcon} />
               <SettingRowLabel>Language</SettingRowLabel>
@@ -160,7 +156,8 @@ class SettingsSection extends React.Component {
             </PrimarySettingRow>
           </SettingButton>
 
-          <SettingButton onPress={onPressSecurity}>
+          {/*
+            <SettingButton onPress={onPressSecurity}>
             <PrimarySettingRow>
               <SettingRowIcon source={SecurityIcon} />
               <SettingRowLabel>Security</SettingRowLabel>
@@ -169,6 +166,7 @@ class SettingsSection extends React.Component {
               </SettingArrowGroup>
             </PrimarySettingRow>
           </SettingButton>
+        */}
         </SettingGroup>
 
         <SettingGroup>

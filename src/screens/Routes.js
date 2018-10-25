@@ -57,28 +57,9 @@ const AppStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: 'IntroScreen',
-    // initialRouteName: 'SwipeLayout',
+    // initialRouteName: 'IntroScreen',
+    initialRouteName: 'SwipeLayout',
     mode: 'modal',
-    transitionConfig: sheetTransition,
-  }
-);
-
-const IntroStack = createStackNavigator(
-  {
-    IntroScreen: {
-      navigationOptions: {
-        effect: 'sheet',
-        gestureResponseDistance: {
-          vertical: deviceUtils.dimensions.height / 2,
-        },
-      },
-      screen: IntroScreen,
-    },
-  },
-  {
-    headerMode: 'none',
-    mode: 'modal', // Horizontal gestures
     transitionConfig: sheetTransition,
   }
 );
@@ -86,7 +67,6 @@ const IntroStack = createStackNavigator(
 export default createSwitchNavigator(
   {
     App: AppStack,
-    Intro: IntroStack,
     Loading: LoadingScreen,
     WebView: WebViewScreen,
   },

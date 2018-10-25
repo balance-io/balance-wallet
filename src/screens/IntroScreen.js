@@ -1,33 +1,20 @@
-import {
-  account,
-  accountInitializeState,
-  accountUpdateAccountAddress,
-  commonStorage,
-} from 'balance-common';
-import PropTypes from 'prop-types';
-import { withNavigation } from 'react-navigation';
-import firebase from 'react-native-firebase';
 import React from 'react';
 import {
   Clipboard,
   KeyboardAvoidingView,
+  Linking,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withNavigation } from 'react-navigation';
 import { compose } from 'recompact';
 import styled from 'styled-components';
 
-import { Text, Monospace } from '../components/text';
-import Icon from '../components/icons/Icon';
-import { Column, Row } from '../components/layout';
-import { colors, fonts, padding } from '../styles';
-import { walletInit } from '../model/wallet';
-import {
-  walletConnectGetAllTransactions,
-  walletConnectInitAllConnectors,
-} from '../model/walletconnect';
-import { transactionsToApproveInit } from '../reducers/transactionsToApprove';
+import { Text } from 'components/text';
+import Icon from 'components/icons/Icon';
+import { Column } from 'components/layout';
+import { colors, fonts, padding } from 'styles';
 
 const Container = styled(Column).attrs({
   align: 'center',
@@ -36,10 +23,18 @@ const Container = styled(Column).attrs({
   flex: 1;
   flex-direction: column;
   ${padding(16)};
-  margin-top: 15;
+  padding-top: 0;
   background: ${colors.white};
   border-top-left-radius: 12;
   border-top-right-radius: 12;
+`;
+
+const HandleIcon = styled(Icon).attrs({
+  name: 'handle',
+  color: '#C4C6CB',
+})`
+  margin-top: 16px;
+  margin-bottom: 2;
 `;
 
 const Body = styled(Column).attrs({
@@ -55,7 +50,7 @@ const Input = styled(TextInput).attrs({
   placeholderTextColor: '#C4C6CB',
   multiline: true,
 })`
-  font-family: ${fonts.family['SFMono']};
+  font-family: ${fonts.family['SFProText']};
   font-weight: ${fonts.weight.semibold};
   font-size: ${fonts.size.large};
   margin-bottom: 20;
@@ -66,20 +61,20 @@ const Input = styled(TextInput).attrs({
 const HelpText = styled(Text).attrs({
   size: 'medium',
   weight: 'medium',
+  color: '#636875',
 })`
   text-align: center;
 `;
 
 const Footer = styled(KeyboardAvoidingView).attrs({
   behavior: 'padding',
-  keyboardVerticalOffset: 95,
+  keyboardVerticalOffset: 80,
 })`
   display: flex;
   align-self: stretch;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 15;
 `;
 
 const HelpButton = styled(TouchableOpacity)`
@@ -123,65 +118,16 @@ const ImportText = styled(Text).attrs({
 `;
 
 class IntroScreen extends React.Component {
+  static propTypes = {
+    screenProps: PropTypes.objectOf({
+      handleWalletConfig: PropTypes.func,
+    }),
+    navigation: PropTypes.object,
+  };
+
   state = {
     seedPhrase: '',
   };
-
-  onImportSeedPhrase = () => {
-    walletInit(this.state.seedPhrase)
-      .then(walletAddress => {
-        console.log('wallet address is', walletAddress);
-        this.setState({ seedPhrase: walletAddress });
-        // this.props.accountUpdateAccountAddress(walletAddress, 'BALANCEWALLET');
-        // this.props.transactionsToApproveInit();
-        //   walletConnectInitAllConnectors()
-        //     .then(allConnectors => {
-        //       this.props.setWalletConnectors(allConnectors);
-        //       firebase
-        //         .notifications()
-        //         .getInitialNotification()
-        //         .then(notificationOpen => {
-        //           if (!notificationOpen) {
-        //             this.fetchAllTransactionsFromWalletConnectSessions();
-        //           }
-        //         });
-        //     })
-        //     .catch(error => {
-        //       console.log('Unable to init all WalletConnect sessions');
-        //     });
-        //   firebase
-        //     .notifications()
-        //     .getInitialNotification()
-        //     .then(notificationOpen => {
-        //       console.log('on initial notification');
-        //       if (notificationOpen) {
-        //         console.log('on initial notification opened - while app closed');
-        //         const {
-        //           transactionId,
-        //           sessionId,
-        //         } = notificationOpen.notification.data;
-        //         this.onPushNotificationOpened(transactionId, sessionId);
-        //       }
-        //     });
-        //   /*
-        // */
-      })
-      .catch(error => {
-        console.log('failed to init wallet');
-        AlertIOS.alert('Error: Failed to initialize wallet.');
-      });
-  };
-
-  // fetchAllTransactionsFromWalletConnectSessions = async allConnectors => {
-  //   if (!isEmpty(allConnectors)) {
-  //     const allTransactions = await walletConnectGetAllTransactions(
-  //       allConnectors
-  //     );
-  //     if (!isEmpty(allTransactions)) {
-  //       this.props.addTransactionsToApprove(allTransactions);
-  //     }
-  //   }
-  // };
 
   isSeedPhraseValid = () => {
     const phraseCount = this.state.seedPhrase
@@ -190,31 +136,36 @@ class IntroScreen extends React.Component {
     return phraseCount >= 12 && phraseCount <= 24;
   };
 
-  onSeedPhraseChange = seedPhrase => {
+  onImportSeedPhrase = () => {
+    this.props.screenProps
+      .handleWalletConfig(this.state.seedPhrase)
+      .then(address => {
+        if (address) {
+          this.props.navigation.navigate('WalletScreen');
+        }
+      })
+      .catch(error => {
+        console.log('INTRO ERROR', error);
+      });
+  };
+
+  onChangeSeedPhrase = seedPhrase => {
     this.setState({ seedPhrase });
   };
 
   onPasteSeedPhrase = () => {
-    // this.props.navigation.navigate('SwipeLayout');
     Clipboard.getString()
-      .then(this.onSeedPhraseChange)
+      .then(this.onChangeSeedPhrase)
       .catch(error => {
         console.log(error);
       });
   };
 
-  renderHelp = () => {
-    if (this.state.seedPhrase !== '') {
-      return null;
-    }
-    return (
-      <HelpText>
-        Use your 12 or 24 word seed phrase from an existing wallet.
-      </HelpText>
-    );
+  onPressHelp = () => {
+    Linking.openURL('https://support.balance.io');
   };
 
-  renderActionButton = () => {
+  renderImportButton = () => {
     if (this.state.seedPhrase !== '') {
       return (
         <ImportButton
@@ -237,6 +188,7 @@ class IntroScreen extends React.Component {
   render() {
     return (
       <Container>
+        <HandleIcon />
         <Text size="large" weight="bold">
           Import
         </Text>
@@ -246,31 +198,19 @@ class IntroScreen extends React.Component {
             autoFocus
             value={this.state.seedPhrase}
             placeholder={'Type your seed phrase'}
-            onChangeText={this.onSeedPhraseChange}
+            onChangeText={this.onChangeSeedPhrase}
           />
-          {this.renderHelp()}
         </Body>
 
         <Footer>
-          <HelpButton onPress={() => {}}>
+          <HelpButton onPress={this.onPressHelp}>
             <HelpText>Help</HelpText>
           </HelpButton>
-          {this.renderActionButton()}
+          {this.renderImportButton()}
         </Footer>
       </Container>
     );
   }
 }
 
-export default withNavigation(IntroScreen);
-
-// export default compose(
-//   withNavigation,
-//   connect(
-//     () => ({}),
-//     {
-//       transactionsToApproveInit,
-//       accountUpdateAccountAddress,
-//     }
-//   )
-// )(IntroScreen);
+export default compose(withNavigation)(IntroScreen);

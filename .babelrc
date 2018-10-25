@@ -7,6 +7,12 @@
       {
         "id": ["lodash", "recompact", "recompose"]
       }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": ["./src"]
+      }
     ]
   ],
   "presets": ["module:metro-react-native-babel-preset"]

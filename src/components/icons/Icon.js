@@ -19,6 +19,7 @@ import CopyIcon from './svg/CopyIcon';
 import DotIcon from './svg/DotIcon';
 import ETHIcon from './svg/ETHIcon';
 import GearIcon from './svg/GearIcon';
+import HandleIcon from './svg/HandleIcon';
 import OfflineIcon from './svg/OfflineIcon';
 import ShareIcon from './svg/ShareIcon';
 import SpinnerIcon from './svg/SpinnerIcon';
@@ -36,6 +37,7 @@ Icon.propTypes = {
 Icon.IconTypes = {
   arrow: ArrowIcon,
   arrowCircled: ArrowCircledIcon,
+  assetListItemSkeleton: AssetListItemSkeletonIcon,
   avatar: AvatarIcon,
   balanceLogo: BalanceLogoIcon,
   btc: BTCIcon,
@@ -50,6 +52,7 @@ Icon.IconTypes = {
   dot: DotIcon,
   eth: ETHIcon,
   gear: GearIcon,
+  handle: HandleIcon,
   offline: OfflineIcon,
   spinner: SpinnerIcon,
   share: ShareIcon,

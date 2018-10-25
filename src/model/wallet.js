@@ -7,7 +7,9 @@ import {
   AUTHENTICATION_TYPE,
   canImplyAuthentication,
 } from 'react-native-keychain';
-import * as keychain from '../model/keychain';
+
+import * as keychain from 'model/keychain';
+
 const seedPhraseKey = 'seedPhrase';
 const privateKeyKey = 'privateKey';
 const addressKey = 'addressKey';
@@ -18,9 +20,10 @@ export function generateSeedPhrase() {
 
 export const walletInit = async (seedPhrase = null) => {
   let walletAddress = null;
-  walletAddress = await loadAddress();
-  if (!walletAddress) {
+  if (seedPhrase !== null) {
     walletAddress = await createWallet(seedPhrase);
+  } else {
+    walletAddress = await loadAddress();
   }
   return walletAddress;
 };
@@ -88,17 +91,26 @@ export const loadAddress = async () => {
 
 const createWallet = async seedPhrase => {
   const walletSeedPhrase = seedPhrase || generateSeedPhrase();
-  const wallet = ethers.Wallet.fromMnemonic(walletSeedPhrase);
-  wallet.provider = ethers.providers.getDefaultProvider();
-  saveSeedPhrase(walletSeedPhrase);
-  savePrivateKey(wallet.privateKey);
-  saveAddress(wallet.address);
 
-  console.log(
-    `Wallet: Generated wallet with public address: ${wallet.address}`
-  );
+  try {
+    const wallet = await ethers.Wallet.fromMnemonic(walletSeedPhrase);
 
-  return wallet.address;
+    wallet.provider = ethers.providers.getDefaultProvider();
+    saveSeedPhrase(walletSeedPhrase);
+    savePrivateKey(wallet.privateKey);
+    saveAddress(wallet.address);
+
+    console.log(
+      `Wallet: Generated wallet with public address: ${wallet.address}`
+    );
+
+    return wallet.address;
+  } catch (error) {
+    AlertIOS.alert(
+      'Unable to Import',
+      'Seed phrase invalid, please check that it was entered correctly.'
+    );
+  }
 };
 
 const saveSeedPhrase = async seedPhrase => {

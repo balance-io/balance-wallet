@@ -13,9 +13,9 @@ import {
 } from 'react-native';
 import { compose, onlyUpdateForKeys, withHandlers, withState } from 'recompact';
 import styled from 'styled-components';
+
 import { AssetList } from '../components/asset-list';
 import { UniqueTokenRow } from '../components/unique-token';
-import Avatar from '../components/Avatar';
 import { BalanceCoinRow } from '../components/coin-row';
 import {
   ActivityHeaderButton,
@@ -39,6 +39,7 @@ import { Text, TruncatedAddress } from 'components/text';
 import Icon from 'components/icons/Icon';
 import { position, colors } from '../styles';
 import SettingsOverlay from './SettingsOverlay';
+import Avatar from 'assets/avatar.png';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height - 120;
 
@@ -58,32 +59,21 @@ const Address = styled(TruncatedAddress).attrs({
   weight: 'bold',
   truncationLength: 4,
 })`
-  margin-top: 10;
   margin-bottom: 5;
 `;
 
-const AvatarImage = styled(Image)`
-  height: 65px;
-  width: 65px;
+const AvatarImage = styled(Image).attrs({
+  source: Avatar,
+})`
+  height: 85px;
+  width: 85px;
   border-radius: 32;
 `;
-
-const AvatarContainer = styled(View)`
-  shadow-color: #3a3a4f;
-  shadow-offset: 0px 6px;
-  shadow-opacity: 0.14;
-  shadow-radius: 10;
-`;
-
-const AvatarHero = ({ source }) => (
-  <AvatarContainer>
-    <AvatarImage source={source} />
-  </AvatarContainer>
-);
 
 const ProfileActionContainer = styled(Row)`
   align-items: center;
 `;
+
 const ProfileActionText = styled(Text).attrs({
   color: colors.appleBlue,
   size: 'medium',
@@ -234,17 +224,12 @@ class WalletScreen extends React.PureComponent {
         </Header>
 
         <HeaderColumn>
-          <AvatarHero
-            source={{
-              uri:
-                'https://sguru.org/wp-content/uploads/2017/06/cool-anonymous-profile-pictures-1699946_orig.jpg',
-            }}
-          />
+          <AvatarImage />
           <Address address={this.props.accountAddress} />
 
           <Row>
             <ProfileAction onPress={this.onPressCopy} icon="copy">
-              Copy Address
+              Copy
             </ProfileAction>
             <ProfileAction onPress={this.onPressShare} icon="share">
               Share
@@ -262,6 +247,7 @@ class WalletScreen extends React.PureComponent {
           ])}
           showShitcoins={showShitcoins}
         />
+
         <SettingsOverlay
           overlayOpacity={this.state.overlayOpacity}
           modalYPosition={this.state.modalYPosition}
