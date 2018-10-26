@@ -23,9 +23,9 @@ const SendScreen = ({ sections }) => (
       >
         <Button
           onPress={this.closeModal}
-          title="Cancel"
+          title={lang.t('wallet.action.cancel')}
           color="#5983FF"
-          accessibilityLabel="Cancel"
+          accessibilityLabel={lang.t('wallet.action.cancel')}
           style={{ fontSize: 18 }}
         />
         <Text style={{ fontSize: 18, fontWeight: '600' }}>{'Send'}</Text>

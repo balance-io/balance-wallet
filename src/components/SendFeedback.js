@@ -2,6 +2,7 @@ import { debounce } from 'lodash';
 import React from 'react';
 import { Alert, Clipboard } from 'react-native';
 import Mailer from 'react-native-mail';
+import lang from 'i18n-js';
 import { Button } from '../components/buttons';
 
 const FeedbackEmailAddress = 'contact+alphafeedback@balance.io';
@@ -10,11 +11,11 @@ const handleSendFeedbackError = debounce(
   error =>
     (error
       ? Alert.alert(
-          'Error launching email client',
-          'Would you like to manually copy our feedback email address to your clipboard?',
+          lang.t('wallet.feedback.error'),
+          lang.t('wallet.feedback.choice'),
           [
             {
-              text: 'Copy email address',
+              text: lang.t('wallet.feedback.copy_email_address'),
               onPress: () => Clipboard.setString(FeedbackEmailAddress),
             },
             { text: 'No thanks', style: 'cancel' },
@@ -28,7 +29,7 @@ const handleSendFeedback = () =>
   Mailer.mail(
     {
       recipients: [FeedbackEmailAddress],
-      subject: '📱 Balance Wallet Alpha Feedback',
+      subject: lang.t('wallet.feedback.email_subject'),
     },
     handleSendFeedbackError,
   );

@@ -21,6 +21,7 @@ const ActivityList = ({
   hasPendingTransaction,
   pendingTransactionsCount,
   sections,
+  transactionsCount,
 }) => (
   <SectionList
     contentContainerStyle={{ paddingBottom: 40 }}
@@ -44,6 +45,7 @@ ActivityList.propTypes = {
       title: PropTypes.string.isRequired,
     })
   ),
+  transactionsCount: PropTypes.number,
 };
 
 export default compose(
@@ -58,9 +60,9 @@ export default compose(
       transactions,
     });
 
-    const pendingTransactionsSection = sections[requests.length ? 1 : 0];
-    if (pendingTransactionsSection.title === 'Pending') {
-      pendingTransactionsCount = pendingTransactionsSection.data.length;
+    const pendingTxSection = sections[requests.length ? 1 : 0];
+    if (pendingTxSection && pendingTxSection.title === 'Pending') {
+      pendingTransactionsCount = pendingTxSection.data.length;
     }
 
     return {

@@ -181,7 +181,8 @@ class App extends Component {
     Navigation.handleAction(this.navigatorRef, action);
   };
 
-  fetchAllTransactionsFromWalletConnectSessions = async allConnectors => {
+  fetchAllTransactionsFromWalletConnectSessions = async () => {
+    const allConnectors = this.props.getValidWalletConnectors();
     if (!isEmpty(allConnectors)) {
       const allTransactions = await walletConnectGetAllTransactions(
         allConnectors

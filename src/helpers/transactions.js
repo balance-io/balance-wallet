@@ -42,12 +42,6 @@ export const getTransactionStatus = ({
 };
 
 const groupTransactionByDate = transactions => {
-  const sortedChronologically = sortList(
-    transactions,
-    'timestamp.ms',
-    Date.now()
-  ).reverse();
-
   return groupBy(sortedChronologically, ({ pending, timestamp: time }) => {
     if (pending) return 'Pending';
 

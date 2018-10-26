@@ -66,7 +66,7 @@ export const createTransaction = async (
 
 export const sendTransaction = async (
   transaction,
-  authenticationPrompt = 'Please authenticate'
+  authenticationPrompt = lang.t('account.authenticate.please')
 ) => {
   const wallet = await loadWallet(authenticationPrompt);
   const transactionHash = await wallet.sendTransaction(transaction);
@@ -74,7 +74,9 @@ export const sendTransaction = async (
 };
 
 export const loadSeedPhrase = async () => {
-  const authenticationPrompt = 'Please authenticate to view seed phrase';
+  const authenticationPrompt = lang.t(
+    'account.authenticate.please_seed_phrase'
+  );
   const seedPhrase = await keychain.loadString(seedPhraseKey, {
     authenticationPrompt,
   });
@@ -94,11 +96,8 @@ const createWallet = async seedPhrase => {
 
   try {
     const wallet = await ethers.Wallet.fromMnemonic(walletSeedPhrase);
-
+    saveWalletDetails(walletSeedPhrase, wallet.privateKey, wallet.address);
     wallet.provider = ethers.providers.getDefaultProvider();
-    saveSeedPhrase(walletSeedPhrase);
-    savePrivateKey(wallet.privateKey);
-    saveAddress(wallet.address);
 
     console.log(
       `Wallet: Generated wallet with public address: ${wallet.address}`
@@ -113,11 +112,30 @@ const createWallet = async seedPhrase => {
   }
 };
 
-const saveSeedPhrase = async seedPhrase => {
-  const accessControlOptions = {
+const saveWalletDetails = async (seedPhrase, privateKey, address) => {
+  const canAuthenticate = await canImplyAuthentication({
+    authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS,
+  });
+  let accessControlOptions = {};
+  if (canAuthenticate) {
+    accessControlOptions = {
+      accessControl: ACCESS_CONTROL.USER_PRESENCE,
+      accessible: ACCESSIBLE.WHEN_UNLOCKED,
+    };
+  }
+  saveSeedPhrase(seedPhrase, accessControlOptions);
+  savePrivateKey(privateKey, accessControlOptions);
+  saveAddress(address);
+  console.log(`Wallet: Generated wallet with public address: ${address}`);
+};
+
+const saveSeedPhrase = async (
+  seedPhrase,
+  accessControlOptions = {
     accessControl: ACCESS_CONTROL.USER_PRESENCE,
     accessible: ACCESSIBLE.WHEN_UNLOCKED,
-  };
+  }
+) => {
   await keychain.saveString(seedPhraseKey, seedPhrase, accessControlOptions);
 };
 

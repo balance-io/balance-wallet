@@ -23,8 +23,7 @@ export const addWalletConnector = walletConnector => (dispatch, getState) => {
 
 export const getValidWalletConnectors = () => (dispatch, getState) => {
   const { walletConnectors } = getState().walletconnect;
-  console.log('walletConnectors from state', walletConnectors);
-  const validConnectors = filter(walletConnectors, walletConnector => {
+  const validConnectors = pickBy(walletConnectors, walletConnector => {
     return new Date(walletConnector.expires) > new Date();
   });
   console.log('valid connectors', validConnectors);
