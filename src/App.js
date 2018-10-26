@@ -1,45 +1,36 @@
-import {
-  account,
-  accountInitializeState,
-  accountUpdateAccountAddress,
-  commonStorage,
-} from 'balance-common';
 import { get, isEmpty } from 'lodash';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { AlertIOS, AppRegistry, AppState, View } from 'react-native';
 import CodePush from 'react-native-code-push';
 import firebase from 'react-native-firebase';
-import { NavigationActions } from 'react-navigation';
-import { connect, Provider } from 'react-redux';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { accountInitializeState, accountUpdateAccountAddress, commonStorage } from 'balance-common';
+import { AlertIOS, AppRegistry, AppState, View } from 'react-native';
 import { compose, withProps } from 'recompact';
+import Routes from './screens/Routes';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { connect, Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import styled from 'styled-components';
+import { NavigationActions } from 'react-navigation';
 import {
-  walletConnectGetAllTransactions,
-  walletConnectGetTransaction,
-  walletConnectInitAllConnectors,
-} from './model/walletconnect';
-import { walletInit } from './model/wallet';
-import transactionsToApprove, {
   addTransactionToApprove,
   addTransactionsToApprove,
   transactionIfExists,
   transactionsToApproveInit,
-} from './reducers/transactionsToApprove';
-import walletconnect, {
+} from './redux/transactionsToApprove';
+import {
   getValidWalletConnectors,
   setWalletConnectors,
-} from './reducers/walletconnect';
-import Routes from './screens/Routes';
+} from './redux/walletconnect';
+import {
+  walletConnectInitAllConnectors,
+  walletConnectGetAllTransactions,
+  walletConnectGetTransaction,
+} from './model/walletconnect';
+import store from './redux/store';
+import { walletInit } from './model/wallet';
 import Navigation from './navigation';
 import OfflineBadge from 'components/OfflineBadge';
-
-const store = createStore(
-  combineReducers({ account, transactionsToApprove, walletconnect }),
-  applyMiddleware(thunk)
-);
 
 const Container = styled(View)`
   flex: 1;
@@ -99,6 +90,7 @@ class App extends Component {
               .setTitle(notification.title)
               .setBody(notification.body)
               .setData(notification.data);
+
             firebase.notifications().displayNotification(localNotification);
           });
         } else {

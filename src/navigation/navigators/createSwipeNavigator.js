@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { createElement, PureComponent } from 'react';
 import { createNavigator, StackRouter } from 'react-navigation';
 import { FlatList, StatusBar, View } from 'react-native';
-import { deviceUtils } from '../utils';
+import { deviceUtils } from '../../utils';
 
 const EMPTY_ARRAY = [];
 
@@ -79,10 +79,8 @@ export default function createSwipeNavigator(screens, options) {
      * @param  {String} routeName   The name of the route to get the index of.
      * @return {Number}             The index of the route which will be zero if the route does not exist.
      */
-    getRouteIndex = routeName => {
-      const routeIndex = (routeOrder || EMPTY_ARRAY).indexOf(routeName);
-
-      return routeIndex > -1 ? routeIndex : 0;
+    getRouteIndex = (routeName) => {
+      return (routeOrder || EMPTY_ARRAY).indexOf(routeName);
     };
 
     /**
@@ -100,12 +98,20 @@ export default function createSwipeNavigator(screens, options) {
 
     /**
      * Go back to the previous route with a scroll animation.
+     * If the route is not part of the swipe navigator
+     * use the standard navigation.goBack behavior.
      */
     goBack = () => {
+      const { navigation } = this.props;
+
       const previousRoute = this.getPreviousRoute();
       const routeIndex = this.getRouteIndex(previousRoute.routeName);
 
-      this.scrollToIndex(routeIndex, true);
+      if (routeIndex === -1) {
+        navigation.goBack();
+      } else {
+        this.scrollToIndex(routeIndex, true);
+      }
     };
 
     handleFlatListRef = flatListRef => {
@@ -114,6 +120,8 @@ export default function createSwipeNavigator(screens, options) {
 
     /**
      * Navigate to a screen with certain params and a scroll animation.
+     * If the route is not part of the swipe navigator
+     * use the standard navigation.goBack behavior.
      * @param  {String} routeName   The screen to navigate to.
      * @param  {Object} params      Parameters to be passed to the screen.
      */
@@ -122,9 +130,13 @@ export default function createSwipeNavigator(screens, options) {
 
       const routeIndex = this.getRouteIndex(routeName);
 
-      navigation.setParams(params);
+      if (routeIndex === -1) {
+        navigation.navigate(routeName, params);
+      } else {
+        navigation.setParams(params);
 
-      this.scrollToIndex(routeIndex, true);
+        this.scrollToIndex(routeIndex, true);
+      }
     };
 
     /**

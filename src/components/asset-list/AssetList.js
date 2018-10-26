@@ -1,12 +1,10 @@
-import { INITIAL_ACCOUNT_STATE } from 'balance-common';
-import { get, isEqual, omit } from 'lodash';
+import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { compose, onlyUpdateForKeys, withProps, withState } from 'recompact';
+import { compose, onlyUpdateForKeys, withHandlers, withState } from 'recompact';
 import { withHideSplashScreen, withSafeAreaViewInsetValues } from '../../hoc';
-import { FabWrapper, FloatingActionButton, WalletConnectFab } from '../fab';
+import { FabWrapper, FloatingActionButton } from '../fab';
 import { ListFooter, SectionList } from '../list';
-import { FlexItem } from '../layout';
 import AssetListHeader from './AssetListHeader';
 import AssetListItem from './AssetListItem';
 import AssetListSkeleton from './AssetListSkeleton';
@@ -20,97 +18,58 @@ const buildListBottomPadding = safeAreaInset => {
   return safeAreaInset.bottom + fabSizeWithPadding - ListFooter.height;
 };
 
-const renderSectionHeader = ({ section }) => <AssetListHeader {...section} />;
-
 const AssetList = ({
   fetchData,
   isEmpty,
-  onPressWalletConnect,
-  onSectionsLoaded,
   safeAreaInset,
   sections,
+  hideHeader,
   onLayout,
   ...props
-}) => (
-  <FlexItem>
-    <FabWrapper
-      items={[
-        <WalletConnectFab
-          disabled={isEmpty}
-          key="walletConnectFab"
-          onPress={onPressWalletConnect}
-        />,
-      ]}
-    >
-      {isEmpty ? (
-        <AssetListSkeleton onLayout={onLayout} />
-      ) : (
-        <SectionList
-          contentContainerStyle={{
-            // We want to add enough spacing below the list so that when the user scrolls to the bottom,
-            // the bottom of the list content lines up with the top of the FABs (+ padding).
-            paddingBottom: buildListBottomPadding(safeAreaInset),
-          }}
-          enablePullToRefresh
-          fetchData={fetchData}
-          keyExtractor={assetListKeyExtractor}
-          onLayout={onLayout}
-          renderItem={AssetListItem}
-          renderSectionHeader={renderSectionHeader}
-          sections={sections}
-        />
-      )}
-    </FabWrapper>
-  </FlexItem>
-);
+}) => (isEmpty ? (
+  <AssetListSkeleton onLayout={onLayout} />
+) : (
+  <SectionList
+    contentContainerStyle={{
+      // We want to add enough spacing below the list so that when the user scrolls to the bottom,
+      // the bottom of the list content lines up with the top of the FABs (+ padding).
+      paddingBottom: buildListBottomPadding(safeAreaInset),
+    }}
+    enablePullToRefresh
+    fetchData={fetchData}
+    keyExtractor={assetListKeyExtractor}
+    onLayout={onLayout}
+    renderItem={AssetListItem}
+    renderSectionHeader={!hideHeader && (({ section }) => <AssetListHeader {...section} />)}
+    sections={sections}
+    hideHeader={hideHeader}
+  />
+));
 
 AssetList.propTypes = {
   fetchData: PropTypes.func.isRequired,
+  hideHeader: PropTypes.bool,
   isEmpty: PropTypes.bool,
   onLayout: PropTypes.func,
-  onPressWalletConnect: PropTypes.func,
   onSectionsLoaded: PropTypes.func,
   safeAreaInset: PropTypes.object,
   sections: PropTypes.arrayOf(PropTypes.object),
-};
-
-const InitialAccountAssetsState = get(
-  INITIAL_ACCOUNT_STATE,
-  'accountInfo.assets[0]',
-  {}
-);
-
-const isInitialAccountAssetsState = sectionData => {
-  const currentBalance = get(sectionData, 'balance.display');
-  const initialBalance = get(InitialAccountAssetsState, 'balance.display');
-
-  if (!isEqual(currentBalance, initialBalance)) {
-    return false;
-  }
-
-  const currentState = omit(sectionData, ['balance', 'native']);
-  const initialState = omit(InitialAccountAssetsState, ['balance', 'native']);
-
-  return isEqual(currentState, initialState);
 };
 
 export default compose(
   withState('didLoad', 'toggleDidLoad', false),
   withHideSplashScreen,
   withSafeAreaViewInsetValues,
-  withProps(({ didLoad, onSectionsLoaded, sections, toggleDidLoad }) => {
-    let isEmpty = false;
+  withHandlers({
+    onLayout: ({ didLoad, onSectionsLoaded, toggleDidLoad }) => () => {
+      if (!didLoad) {
+        if (typeof onSectionsLoaded === 'function') {
+          onSectionsLoaded();
+        }
 
-    if (!didLoad && (sections && sections.length)) {
-      onSectionsLoaded();
-      toggleDidLoad(true);
-    }
-
-    if (sections.length === 1) {
-      isEmpty = isInitialAccountAssetsState(sections[0].data[0]);
-    }
-
-    return { isEmpty };
+        toggleDidLoad(true);
+      }
+    },
   }),
   onlyUpdateForKeys(['isEmpty', 'sections'])
 )(AssetList);

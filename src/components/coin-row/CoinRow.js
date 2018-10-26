@@ -5,12 +5,14 @@ import styled from 'styled-components/primitives';
 import { colors, padding } from '../../styles';
 import { CoinIcon } from '../coin-icon';
 import { Column, Row } from '../layout';
+import { TouchableOpacity } from 'react-native';
 
 const CoinRowPaddingVertical = 12;
 
 const Container = styled(Row)`
   ${padding(CoinRowPaddingVertical, 19, CoinRowPaddingVertical, 15)}
   background-color: ${colors.white};
+  width: 100%;
   ${({ containerStyles }) => containerStyles}
 `;
 
@@ -22,33 +24,39 @@ const Content = styled(Column)`
   ${({ contentStyles }) => contentStyles};
 `;
 
-const CoinRow = pure(
-  ({
-    bottomRowRender,
-    children,
-    coinIconRender,
-    containerStyles,
-    contentStyles,
-    symbol,
-    topRowRender,
-    ...props
-  }) => (
-    <Container align="center" styles={containerStyles}>
-      {createElement(coinIconRender, { symbol, ...props })}
-      <Content justify="space-between" styles={contentStyles}>
-        <Row align="center" justify="space-between">
-          {topRowRender({ symbol, ...props })}
-        </Row>
-        <Row align="center" justify="space-between">
-          {bottomRowRender({ symbol, ...props })}
-        </Row>
-      </Content>
-      {typeof children === 'function'
-        ? children({ symbol, ...props })
-        : children}
-    </Container>
-  )
-);
+const CoinRow = pure(({
+  bottomRowRender,
+  children,
+  coinIconRender,
+  containerStyles,
+  contentStyles,
+  onPress,
+  symbol,
+  topRowRender,
+  ...props
+}) => (
+  <Container
+    component={TouchableOpacity}
+    align="center"
+    onPress={onPress}
+    activeOpacity={onPress ? 0.2 : 1}
+    style={containerStyles}
+  >
+    {createElement(coinIconRender, { symbol, ...props })}
+    <Content justify="space-between" styles={contentStyles}>
+      <Row align="center" justify="space-between">
+        {topRowRender({ symbol, ...props })}
+      </Row>
+      <Row align="center" justify="space-between">
+        {bottomRowRender({ symbol, ...props })}
+      </Row>
+    </Content>
+    {(typeof children === 'function')
+      ? children({ symbol, ...props })
+      : children
+    }
+  </Container>
+));
 
 CoinRow.propTypes = {
   bottomRowRender: PropTypes.func,
@@ -56,6 +64,7 @@ CoinRow.propTypes = {
   children: PropTypes.node,
   containerStyles: PropTypes.string,
   contentStyles: PropTypes.string,
+  onPress: PropTypes.func,
   symbol: PropTypes.string,
   topRowRender: PropTypes.func,
 };

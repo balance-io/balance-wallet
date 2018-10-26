@@ -40,6 +40,7 @@ import Icon from 'components/icons/Icon';
 import { position, colors } from '../styles';
 import SettingsOverlay from './SettingsOverlay';
 import Avatar from 'assets/avatar.png';
+import { FabWrapper, WalletConnectFab, SendFab } from '../components/fab';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height - 120;
 
@@ -173,6 +174,7 @@ class WalletScreen extends React.PureComponent {
       navigation,
       onHideSplashScreen,
       onPressProfile,
+      onPressSend,
       onPressWalletConnect,
       onRefreshList,
       onToggleShowShitcoins,
@@ -211,6 +213,11 @@ class WalletScreen extends React.PureComponent {
       };
     }
 
+    const fabItems = [
+      <SendFab disable={isEmpty} key="sendFab" onPress={onPressSend} />,
+      <WalletConnectFab disable={isEmpty} key="walletConnectFab" onPress={onPressWalletConnect} />,
+    ];
+
     // allow navigation to any Settings section via navigation.params
     const settingsSection = navigation.getParam('settingsSection', 'Settings');
 
@@ -237,16 +244,21 @@ class WalletScreen extends React.PureComponent {
           </Row>
         </HeaderColumn>
 
-        <AssetList
-          fetchData={onRefreshList}
-          onPressWalletConnect={onPressWalletConnect}
-          onSectionsLoaded={onHideSplashScreen}
-          sections={filterEmptyAssetSections([
-            sections.balances,
-            sections.collectibles,
-          ])}
-          showShitcoins={showShitcoins}
-        />
+        <FlexItem>
+          <FabWrapper items={fabItems}>
+            <AssetList
+              fetchData={onRefreshList}
+              onPressSend={onPressSend}
+              onPressWalletConnect={onPressWalletConnect}
+              onSectionsLoaded={onHideSplashScreen}
+              sections={filterEmptyAssetSections([
+                sections.balances,
+                sections.collectibles,
+              ])}
+              showShitcoins={showShitcoins}
+            />
+          </FabWrapper>
+        </FlexItem>
 
         <SettingsOverlay
           overlayOpacity={this.state.overlayOpacity}
@@ -272,6 +284,7 @@ WalletScreen.propTypes = {
   fetchingUniqueTokens: PropTypes.bool.isRequired,
   onHideSplashScreen: PropTypes.func,
   onPressProfile: PropTypes.func.isRequired,
+  onPressSend: PropTypes.func.isRequired,
   onPressWalletConnect: PropTypes.func.isRequired,
   onRefreshList: PropTypes.func.isRequired,
   onSectionsLoaded: PropTypes.func,
@@ -288,6 +301,7 @@ export default compose(
   withSafeTimeout,
   withState('showShitcoins', 'toggleShowShitcoins', true),
   withHandlers({
+    onPressSend: ({ navigation }) => () => navigation.navigate('SendScreen'),
     onPressWalletConnect: ({ navigation }) => () =>
       navigation.navigate('QRScannerScreen'),
     onRefreshList: ({

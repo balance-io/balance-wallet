@@ -22,8 +22,13 @@ import GearIcon from './svg/GearIcon';
 import HandleIcon from './svg/HandleIcon';
 import OfflineIcon from './svg/OfflineIcon';
 import ShareIcon from './svg/ShareIcon';
+import FaceIdIcon from './svg/FaceIdIcon';
+import HandleIcon from './svg/HandleIcon';
+import ProgressIcon from './svg/ProgressIcon';
+import SendIcon from './svg/SendIcon';
 import SpinnerIcon from './svg/SpinnerIcon';
 import ThreeDotsIcon from './svg/ThreeDotsIcon';
+import TouchIdIcon from './svg/TouchIdIcon';
 import WalletConnectIcon from './svg/WalletConnectIcon';
 import WarningIcon from './svg/WarningIcon';
 
@@ -54,10 +59,15 @@ Icon.IconTypes = {
   gear: GearIcon,
   handle: HandleIcon,
   offline: OfflineIcon,
+  faceid: FaceIdIcon,
+  handle: HandleIcon,
+  progress: ProgressIcon,
   spinner: SpinnerIcon,
   share: ShareIcon,
   threeDots: ThreeDotsIcon,
+  touchid: TouchIdIcon,
   walletConnect: WalletConnectIcon,
+  send: SendIcon,
   warning: WarningIcon,
 };
 

@@ -69,8 +69,7 @@ export const sendTransaction = async (
   authenticationPrompt = lang.t('account.authenticate.please')
 ) => {
   const wallet = await loadWallet(authenticationPrompt);
-  const transactionHash = await wallet.sendTransaction(transaction);
-  return transactionHash;
+  return await wallet.sendTransaction(transaction);
 };
 
 export const loadSeedPhrase = async () => {

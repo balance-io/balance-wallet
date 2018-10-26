@@ -65,7 +65,7 @@ const Button = ({
       >
         {children}
       </Text>
-      <InnerBorder radius={type === 'rounded' ? 14 : 50} />
+      {type !== 'pill' && <InnerBorder radius={(type === 'rounded') ? 14 : 50} />}
     </Container>
   </ButtonPressAnimation>
 );

@@ -12,11 +12,16 @@ const Svg = styled(omitProps('direction')(SvgElement))`
   transform: rotate(${props => calcDirectionToDegrees(props.direction)}deg);
 `;
 
-const CaretIcon = ({ color, ...props }) => (
+const CaretIcon = ({
+  color,
+  direction,
+  size,
+  ...props
+}) => (
   <Svg
     {...props}
-    height={props.height || '19'}
-    width={props.width || '10'}
+    height={size ? size * 1.9 : '19'}
+    width={size || '10'}
     viewBox="0 0 10 19"
   >
     <Path
@@ -30,6 +35,7 @@ const CaretIcon = ({ color, ...props }) => (
 CaretIcon.propTypes = {
   color: PropTypes.string,
   direction: directionPropType,
+  size: PropTypes.number,
 };
 
 CaretIcon.defaultProps = {
