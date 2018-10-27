@@ -11,9 +11,9 @@ import { Button } from '../buttons';
 import { Centered, Column } from '../layout';
 import AssetListHeader from './AssetListHeader';
 import AssetListItemSkeleton from './AssetListItemSkeleton';
-import Icon from 'components/icons/Icon';
-import Divider from 'components/Divider';
-import { Text } from 'components/text';
+import Icon from '~/components/icons/Icon';
+import Divider from '~/components/Divider';
+import { Text } from '~/components/text';
 
 const Container = styled(Column)`
   ${position.size('100%')};

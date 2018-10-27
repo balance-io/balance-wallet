@@ -4,16 +4,16 @@ import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Column, Row } from 'components/layout';
-import { Text } from 'components/text';
-import Icon from 'components/icons/Icon';
-import { LANGUAGES } from 'utils/constants';
-import { colors, padding } from 'styles';
+import { Column, Row } from '~/components/layout';
+import { Text } from '~/components/text';
+import Icon from '~/components/icons/Icon';
+import { LANGUAGES } from '~/utils/constants';
+import { colors, padding } from '~/styles';
 
-import BackupIcon from 'assets/backup-icon.png';
-import CurrencyIcon from 'assets/currency-icon.png';
-import LanguageIcon from 'assets/language-icon.png';
-import SecurityIcon from 'assets/security-icon.png';
+import BackupIcon from '~/assets/backup-icon.png';
+import CurrencyIcon from '~/assets/currency-icon.png';
+import LanguageIcon from '~/assets/language-icon.png';
+import SecurityIcon from '~/assets/security-icon.png';
 
 // ======================================================================
 // Styles

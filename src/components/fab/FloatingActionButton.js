@@ -44,39 +44,41 @@ const enhance = withHandlers({
   },
 });
 
-const FloatingActionButton = enhance(({
-  children,
-  disabled,
-  onPress,
-  onPressIn,
-  onPressOut,
-  size,
-  style,
-  ...props
-}) => (
-  <ButtonPressAnimation
-    disabled={disabled}
-    onPress={onPress}
-    onPressIn={onPressIn}
-    onPressOut={onPressOut}
-    style={style}
-  >
-    <ShadowStack
-      {...position.sizeAsObject(size)}
-      borderRadius={FloatingActionButtonBorderRadius}
-      shadows={buildFabShadow(disabled)}
+const FloatingActionButton = enhance(
+  ({
+    children,
+    disabled,
+    onPress,
+    onPressIn,
+    onPressOut,
+    size,
+    style,
+    ...props
+  }) => (
+    <ButtonPressAnimation
+      disabled={disabled}
+      onPress={onPress}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      style={style}
     >
       <ShadowStack
         {...position.sizeAsObject(size)}
         borderRadius={FloatingActionButtonBorderRadius}
         shadows={buildFabShadow(disabled)}
       >
-        <Container {...props} disabled={disabled}>
-          <Fragment>
-            {typeof children === 'function' ? children({ size }) : children}
-            {!disabled && <InnerBorder />}
-          </Fragment>
-        </Container>
+        <ShadowStack
+          {...position.sizeAsObject(size)}
+          borderRadius={FloatingActionButtonBorderRadius}
+          shadows={buildFabShadow(disabled)}
+        >
+          <Container {...props} disabled={disabled}>
+            <Fragment>
+              {typeof children === 'function' ? children({ size }) : children}
+              {!disabled && <InnerBorder />}
+            </Fragment>
+          </Container>
+        </ShadowStack>
       </ShadowStack>
     </ButtonPressAnimation>
   )

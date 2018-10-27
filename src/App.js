@@ -3,7 +3,11 @@ import CodePush from 'react-native-code-push';
 import firebase from 'react-native-firebase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { accountInitializeState, accountUpdateAccountAddress, commonStorage } from 'balance-common';
+import {
+  accountInitializeState,
+  accountUpdateAccountAddress,
+  commonStorage,
+} from 'balance-common';
 import { AlertIOS, AppRegistry, AppState, View } from 'react-native';
 import { compose, withProps } from 'recompact';
 import Routes from './screens/Routes';
@@ -12,6 +16,7 @@ import { connect, Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import styled from 'styled-components';
 import { NavigationActions } from 'react-navigation';
+
 import {
   addTransactionToApprove,
   addTransactionsToApprove,
@@ -30,7 +35,7 @@ import {
 import store from './redux/store';
 import { walletInit } from './model/wallet';
 import Navigation from './navigation';
-import OfflineBadge from 'components/OfflineBadge';
+import OfflineBadge from '~/components/OfflineBadge';
 
 const Container = styled(View)`
   flex: 1;

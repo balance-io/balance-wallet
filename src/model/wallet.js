@@ -8,7 +8,7 @@ import {
   canImplyAuthentication,
 } from 'react-native-keychain';
 
-import * as keychain from 'model/keychain';
+import * as keychain from '~/model/keychain';
 
 const seedPhraseKey = 'seedPhrase';
 const privateKeyKey = 'privateKey';

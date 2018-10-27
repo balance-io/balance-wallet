@@ -23,7 +23,6 @@ import HandleIcon from './svg/HandleIcon';
 import OfflineIcon from './svg/OfflineIcon';
 import ShareIcon from './svg/ShareIcon';
 import FaceIdIcon from './svg/FaceIdIcon';
-import HandleIcon from './svg/HandleIcon';
 import ProgressIcon from './svg/ProgressIcon';
 import SendIcon from './svg/SendIcon';
 import SpinnerIcon from './svg/SpinnerIcon';

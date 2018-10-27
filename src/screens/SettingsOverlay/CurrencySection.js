@@ -3,10 +3,10 @@ import { Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { OptionList, OptionListItem } from 'components/list';
-import { Text } from 'components/text';
-import Icon from 'components/icons/Icon';
-import { CURRENCIES, NUM_CURRENCIES } from 'utils/constants';
+import { OptionList, OptionListItem } from '~/components/list';
+import { Text } from '~/components/text';
+import Icon from '~/components/icons/Icon';
+import { CURRENCIES, NUM_CURRENCIES } from '~/utils/constants';
 
 // ======================================================================
 // Styles

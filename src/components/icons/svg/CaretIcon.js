@@ -1,23 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { omitProps } from 'recompact';
 import { Path } from 'svgs';
-import styled from 'styled-components/primitives';
-import { calcDirectionToDegrees, colors } from '../../../styles';
 import { directionPropType } from '../../../utils';
-import SvgElement from '../Svg';
-import { withRotationForDirection } from 'hoc';
+import Svg from '../Svg';
+import { withRotationForDirection } from '~/hoc';
+import { colors } from '~/styles';
 
-const Svg = styled(omitProps('direction')(SvgElement))`
-  transform: rotate(${props => calcDirectionToDegrees(props.direction)}deg);
-`;
-
-const CaretIcon = ({
-  color,
-  direction,
-  size,
-  ...props
-}) => (
+const CaretIcon = ({ color, direction, size, ...props }) => (
   <Svg
     {...props}
     height={size ? size * 1.9 : '19'}

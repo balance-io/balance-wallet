@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import { Animated, NetInfo } from 'react-native';
 import styled from 'styled-components';
 
-import Icon from 'components/icons/Icon';
-import { Text } from 'components/text';
-import { colors, padding } from 'styles';
+import Icon from '~/components/icons/Icon';
+import { Text } from '~/components/text';
+import { colors, padding } from '~/styles';
 
 const Badge = styled(Animated.View)`
   position: absolute;

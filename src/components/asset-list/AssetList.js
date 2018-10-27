@@ -26,25 +26,28 @@ const AssetList = ({
   hideHeader,
   onLayout,
   ...props
-}) => (isEmpty ? (
-  <AssetListSkeleton onLayout={onLayout} />
-) : (
-  <SectionList
-    contentContainerStyle={{
-      // We want to add enough spacing below the list so that when the user scrolls to the bottom,
-      // the bottom of the list content lines up with the top of the FABs (+ padding).
-      paddingBottom: buildListBottomPadding(safeAreaInset),
-    }}
-    enablePullToRefresh
-    fetchData={fetchData}
-    keyExtractor={assetListKeyExtractor}
-    onLayout={onLayout}
-    renderItem={AssetListItem}
-    renderSectionHeader={!hideHeader && (({ section }) => <AssetListHeader {...section} />)}
-    sections={sections}
-    hideHeader={hideHeader}
-  />
-));
+}) =>
+  isEmpty ? (
+    <AssetListSkeleton onLayout={onLayout} />
+  ) : (
+    <SectionList
+      contentContainerStyle={{
+        // We want to add enough spacing below the list so that when the user scrolls to the bottom,
+        // the bottom of the list content lines up with the top of the FABs (+ padding).
+        paddingBottom: buildListBottomPadding(safeAreaInset),
+      }}
+      enablePullToRefresh
+      fetchData={fetchData}
+      keyExtractor={assetListKeyExtractor}
+      onLayout={onLayout}
+      renderItem={AssetListItem}
+      renderSectionHeader={
+        !hideHeader && (({ section }) => <AssetListHeader {...section} />)
+      }
+      sections={sections}
+      hideHeader={hideHeader}
+    />
+  );
 
 AssetList.propTypes = {
   fetchData: PropTypes.func.isRequired,

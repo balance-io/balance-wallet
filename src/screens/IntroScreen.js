@@ -11,10 +11,10 @@ import { withNavigation } from 'react-navigation';
 import { compose } from 'recompact';
 import styled from 'styled-components';
 
-import { Text } from 'components/text';
-import Icon from 'components/icons/Icon';
-import { Column } from 'components/layout';
-import { colors, fonts, padding } from 'styles';
+import { Text } from '~/components/text';
+import Icon from '~/components/icons/Icon';
+import { Column } from '~/components/layout';
+import { colors, fonts, padding } from '~/styles';
 
 const Container = styled(Column).attrs({
   align: 'center',

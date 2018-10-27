@@ -1,5 +1,5 @@
 import { withSafeTimeout } from '@hocs/safe-timers';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {
@@ -14,33 +14,33 @@ import {
 import { compose, onlyUpdateForKeys, withHandlers, withState } from 'recompact';
 import styled from 'styled-components';
 
-import { AssetList } from '../components/asset-list';
-import { UniqueTokenRow } from '../components/unique-token';
-import { BalanceCoinRow } from '../components/coin-row';
+import { AssetList } from '~/components/asset-list';
+import { UniqueTokenRow } from '~/components/unique-token';
+import { BalanceCoinRow } from '~/components/coin-row';
 import {
   ActivityHeaderButton,
   Header,
   HeaderButton,
-} from '../components/header';
-import { FlexItem, Page, Column, Row } from '../components/layout';
+} from '~/components/header';
+import { FlexItem, Page, Column, Row } from '~/components/layout';
+import { FabWrapper, WalletConnectFab, SendFab } from '~/components/fab';
+import { Text, TruncatedAddress } from '~/components/text';
+import Icon from '~/components/icons/Icon';
 import {
   areAssetsEqualToInitialAccountAssetsState,
   buildUniqueTokenList,
   groupAssetsByMarketValue,
   sortAssetsByNativeAmount,
-} from '../helpers/assets';
+} from '~/helpers/assets';
 import {
   withAccountAddress,
   withAccountAssets,
   withHideSplashScreen,
   withRequestsInit,
-} from '../hoc';
-import { Text, TruncatedAddress } from 'components/text';
-import Icon from 'components/icons/Icon';
-import { position, colors } from '../styles';
+} from '~/hoc';
+import { position, colors } from '~/styles';
 import SettingsOverlay from './SettingsOverlay';
-import Avatar from 'assets/avatar.png';
-import { FabWrapper, WalletConnectFab, SendFab } from '../components/fab';
+import Avatar from '~/assets/avatar.png';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height - 120;
 
@@ -215,7 +215,11 @@ class WalletScreen extends React.PureComponent {
 
     const fabItems = [
       <SendFab disable={isEmpty} key="sendFab" onPress={onPressSend} />,
-      <WalletConnectFab disable={isEmpty} key="walletConnectFab" onPress={onPressWalletConnect} />,
+      <WalletConnectFab
+        disable={isEmpty}
+        key="walletConnectFab"
+        onPress={onPressWalletConnect}
+      />,
     ];
 
     // allow navigation to any Settings section via navigation.params
@@ -290,6 +294,7 @@ WalletScreen.propTypes = {
   onSectionsLoaded: PropTypes.func,
   onToggleShowShitcoins: PropTypes.func,
   showShitcoins: PropTypes.bool,
+  toggleSwiping: PropTypes.func,
   uniqueTokens: PropTypes.array.isRequired,
 };
 

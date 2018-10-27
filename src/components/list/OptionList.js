@@ -3,9 +3,9 @@ import { ScrollView, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Row } from 'components/layout';
-import Icon from 'components/icons/Icon';
-import { colors, padding } from 'styles';
+import { Row } from '~/components/layout';
+import Icon from '~/components/icons/Icon';
+import { colors, padding } from '~/styles';
 
 // ======================================================================
 // OptionListItem

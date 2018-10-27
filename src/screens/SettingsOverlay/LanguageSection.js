@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components';
 
-import { OptionList, OptionListItem } from 'components/list';
-import { Text } from 'components/text';
-import { LANGUAGES, NUM_LANGUAGES } from 'utils/constants';
+import { OptionList, OptionListItem } from '~/components/list';
+import { Text } from '~/components/text';
+import { LANGUAGES, NUM_LANGUAGES } from '~/utils/constants';
 
 // ======================================================================
 // Styles

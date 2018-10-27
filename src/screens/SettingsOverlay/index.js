@@ -10,15 +10,15 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { BlurView } from 'react-native-blur';
 
-import { withAccountSettings } from 'hoc';
-import { Column, Row } from 'components/layout';
-import { Text } from 'components/text';
-import Icon from 'components/icons/Icon';
+import { withAccountSettings } from '~/hoc';
+import { Row } from '~/components/layout';
+import { Text } from '~/components/text';
+import Icon from '~/components/icons/Icon';
 import SettingsSection from './SettingsSection';
 import LanguageSection from './LanguageSection';
 import CurrencySection from './CurrencySection';
 import BackupSection from './BackupSection';
-import { colors, padding } from 'styles';
+import { colors } from '~/styles';
 
 // ======================================================================
 // Styles
@@ -90,6 +90,7 @@ const HeaderBackButton = styled(Icon).attrs({
   color: colors.appleBlue,
   height: 16,
 })``;
+// transform: rotate(180deg);
 
 const HeaderBackText = styled(Text).attrs({
   size: 'large',
