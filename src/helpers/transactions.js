@@ -42,7 +42,7 @@ export const getTransactionStatus = ({
 };
 
 const groupTransactionByDate = transactions => {
-  return groupBy(sortedChronologically, ({ pending, timestamp: time }) => {
+  return groupBy(transactions, ({ pending, timestamp: time }) => {
     if (pending) return 'Pending';
 
     const { ms } = time;
