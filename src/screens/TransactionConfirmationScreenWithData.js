@@ -27,12 +27,12 @@ class TransactionConfirmationScreenWithData extends Component {
     try {
       const { transactionDetails } = this.props.navigation.state.params;
       const txPayload = transactionDetails.callData;
-      const transactionReceipt = await sendTransaction(
+      const transactionHash = await sendTransaction(
         txPayload,
         lang.t('wallet.transaction.confirm')
       );
 
-      if (transactionReceipt && transactionReceipt.hash) {
+      if (transactionHash) {
         const txDetails = {
           asset: get(transactionDetails, 'transactionDisplayDetails.asset'),
           from: get(transactionDetails, 'transactionDisplayDetails.from'),
@@ -44,7 +44,7 @@ class TransactionConfirmationScreenWithData extends Component {
             transactionDetails,
             'transactionDisplayDetails.gasPrice'
           ),
-          hash: transactionReceipt.hash,
+          hash: transactionHash,
           nonce: get(transactionDetails, 'transactionDisplayDetails.nonce'),
           to: get(transactionDetails, 'transactionDisplayDetails.to'),
           value: get(transactionDetails, 'transactionDisplayDetails.value'),
@@ -59,13 +59,14 @@ class TransactionConfirmationScreenWithData extends Component {
           walletConnector,
           transactionDetails.transactionId,
           true,
-          transactionReceipt.hash
+          transactionHash
         );
         this.closeTransactionScreen();
       } else {
         await this.handleCancelTransaction();
       }
     } catch (error) {
+      console.log('authentication error', error)
       await this.sendFailedTransactionStatus();
       AlertIOS.alert(lang.t('wallet.transaction.alert.authentication'));
     }
