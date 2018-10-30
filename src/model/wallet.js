@@ -129,19 +129,12 @@ const saveWalletDetails = async (seedPhrase, privateKey, address) => {
 
 const saveSeedPhrase = async (
   seedPhrase,
-  accessControlOptions = {
-    accessControl: ACCESS_CONTROL.USER_PRESENCE,
-    accessible: ACCESSIBLE.WHEN_UNLOCKED,
-  }
+  accessControlOptions = {}
 ) => {
   await keychain.saveString(seedPhraseKey, seedPhrase, accessControlOptions);
 };
 
-const savePrivateKey = async privateKey => {
-  const accessControlOptions = {
-    accessControl: ACCESS_CONTROL.USER_PRESENCE,
-    accessible: ACCESSIBLE.WHEN_UNLOCKED,
-  };
+const savePrivateKey = async (privateKey, accessControlOptions = {}) => {
   await keychain.saveString(privateKeyKey, privateKey, accessControlOptions);
 };
 
