@@ -96,7 +96,6 @@ const createWallet = async seedPhrase => {
   try {
     const wallet = await ethers.Wallet.fromMnemonic(walletSeedPhrase);
     saveWalletDetails(walletSeedPhrase, wallet.privateKey, wallet.address);
-    wallet.provider = ethers.providers.getDefaultProvider();
 
     console.log(
       `Wallet: Generated wallet with public address: ${wallet.address}`
