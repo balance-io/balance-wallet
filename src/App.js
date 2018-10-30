@@ -60,6 +60,7 @@ class App extends Component {
   navigatorRef = null;
 
   componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
     firebase
       .messaging()
       .getToken()
