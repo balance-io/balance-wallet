@@ -132,11 +132,7 @@ class App extends Component {
       const notificationOpen = await firebase
         .notifications()
         .getInitialNotification();
-      if (notificationOpen) {
-        console.log('on initial notification opened - while app closed');
-        const { transactionId, sessionId } = notificationOpen.notification.data;
-        this.onPushNotificationOpened(transactionId, sessionId);
-      } else {
+      if (!notificationOpen) {
         this.fetchAllTransactionsFromWalletConnectSessions();
       }
 
