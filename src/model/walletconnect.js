@@ -1,23 +1,23 @@
-import RNWalletConnect from 'rn-walletconnect-wallet';
-import lang from 'i18n-js';
 import { commonStorage } from 'balance-common';
+import { get, mapValues, values } from 'lodash';
 import { AlertIOS } from 'react-native';
-import { assign, get, mapValues, values } from 'lodash';
-const PUSH_ENDPOINT =
-  'https://us-central1-balance-424a3.cloudfunctions.net/push';
+import RNWalletConnect from 'rn-walletconnect-wallet';
+
+const PUSH_ENDPOINT = 'https://us-central1-balance-424a3.cloudfunctions.net/push';
 
 export const walletConnectInit = async (accountAddress, uriString) => {
   const fcmTokenLocal = await commonStorage.getLocal('balanceWalletFcmToken');
-  const fcmToken = fcmTokenLocal ? fcmTokenLocal.data : null;
+  const fcmToken = get(fcmTokenLocal, 'data', null);
+
   if (fcmToken) {
     try {
       const walletConnector = new RNWalletConnect({
-        uri: uriString,
         push: {
-          type: 'fcm',
           token: fcmToken,
+          type: 'fcm',
           webhook: PUSH_ENDPOINT,
         },
+        uri: uriString,
       });
       await walletConnector.approveSession({ accounts: [accountAddress] });
       console.log('walletConnector.expires', new Date(walletConnector.expires));
@@ -41,11 +41,10 @@ export const walletConnectInit = async (accountAddress, uriString) => {
 export const walletConnectInitAllConnectors = async () => {
   try {
     const allSessions = await commonStorage.getAllValidWalletConnectSessions();
-    console.log('allSessions', allSessions);
     const allConnectors = mapValues(allSessions, session => {
       const walletConnector = new RNWalletConnect({
-        uri: session.uriString,
         push: null,
+        uri: session.uriString,
       });
       walletConnector.expires = session.expiration;
       return walletConnector;
@@ -60,7 +59,7 @@ export const walletConnectInitAllConnectors = async () => {
 export const walletConnectDisconnect = async walletConnector => {
   if (walletConnector) {
     try {
-      await commonStorage.removeWalletConnectSession(walletConnector.sessionId);
+      await commonStorage.removeWalletConnectSession(walletConnector._sessionId);
       await walletConnector.killSession();
     } catch (error) {
       AlertIOS.alert('Failed to disconnect WalletConnect session');
@@ -68,48 +67,26 @@ export const walletConnectDisconnect = async walletConnector => {
   }
 };
 
+const getTransactionForSession = (walletConnector) => new Promise((resolve, reject) => {
+  const { dappName, sessionId } = walletConnector;
+  walletConnector.getAllCallRequests()
+    .then((allCalls) =>
+      resolve(mapValues(allCalls, (transactionPayload, callId) => ({
+        callData: get(transactionPayload, 'data.params[0]', null),
+        dappName,
+        sessionId,
+        transactionId: callId,
+      }))))
+    .catch(error => resolve({}));
+});
+
 export const walletConnectGetAllTransactions = async walletConnectors => {
   try {
-    const sessionToTransactions = mapValues(
-      walletConnectors,
-      walletConnector =>
-        new Promise((resolve, reject) => {
-          const sessionId = walletConnector.sessionId;
-          const dappName = walletConnector.dappName;
-          walletConnector
-            .getAllCallRequests()
-            .then(allCalls => {
-              const sessionTransactionMapping = mapValues(
-                allCalls,
-                (transactionPayload, callId) => {
-                  const callData = get(
-                    transactionPayload,
-                    'data.params[0]',
-                    null
-                  );
-                  return {
-                    sessionId,
-                    transactionId: callId,
-                    callData,
-                    dappName,
-                  };
-                }
-              );
-              resolve(sessionTransactionMapping);
-            })
-            .catch(error => {
-              resolve({});
-            });
-        })
-    );
-    const sessionTransactionValues = values(sessionToTransactions);
-    const transactionValues = await Promise.all(sessionTransactionValues);
-    const allTransactions = assign({}, ...transactionValues);
-    return allTransactions;
+    const sessionToTransactions = mapValues(walletConnectors, getTransactionForSession);
+    const transactionValues = await Promise.all(values(sessionToTransactions));
+    return { ...transactionValues };
   } catch (error) {
-    AlertIOS.alert(
-      'Error fetching all transactions from open WalletConnect sessions.'
-    );
+    AlertIOS.alert('Error fetching all transactions from open WalletConnect sessions.');
     return {};
   }
 };
@@ -117,10 +94,12 @@ export const walletConnectGetAllTransactions = async walletConnectors => {
 export const walletConnectGetTransaction = async (callId, walletConnector) => {
   try {
     if (walletConnector) {
-      const dappName = walletConnector.dappName;
+      const { dappName } = walletConnector;
       const callData = await walletConnector.getCallRequest(callId);
-      transaction = get(callData, 'data.params[0]', null);
-      return { callData: transaction, dappName };
+      return {
+        callData: get(callData, 'data.params[0]', null),
+        dappName,
+      };
     }
     return null;
   } catch (error) {

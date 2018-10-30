@@ -52,15 +52,9 @@ export const getNativeAmount = (
       prices
     );
     _nativeAmount = formatInputDecimals(nativeAmount, assetAmount);
-    const displayAmount = convertAssetAmountToDisplaySpecific(
-      _nativeAmount,
-      prices,
-      nativeCurrency
-    );
-    return displayAmount;
-  } else {
-    return _nativeAmount;
+    return convertAssetAmountToDisplaySpecific(_nativeAmount, prices, nativeCurrency);
   }
+  return _nativeAmount;
 };
 
 const getTransactionDisplayDetails = (
@@ -71,14 +65,19 @@ const getTransactionDisplayDetails = (
 ) => {
   const tokenTransferHash = smartContractMethods.token_transfer.hash;
   const timestampInMs = Date.now();
-  if (transaction.data == '0x') {
+  if (transaction.data === '0x') {
     const value = fromWei(convertHexToString(transaction.value));
     const nativeAmount = getNativeAmount(prices, nativeCurrency, value, 'ETH');
     return {
+      asset: {
+        address: null,
+        decimals: 18,
+        name: 'Ethereum',
+        symbol: 'ETH',
+      },
       from: transaction.from,
       gasLimit: BigNumber(convertHexToString(transaction.gasLimit)),
       gasPrice: BigNumber(convertHexToString(transaction.gasPrice)),
-      asset: { address: null, decimals: 18, name: 'Ethereum', symbol: 'ETH' },
       nativeAmount,
       nonce: Number(convertHexToString(transaction.nonce)),
       timestampInMs,
@@ -89,8 +88,8 @@ const getTransactionDisplayDetails = (
     const contractAddress = transaction.to;
     const asset = getAssetDetails(contractAddress, assets);
     const dataPayload = transaction.data.replace(tokenTransferHash, '');
-    const toAddress = '0x' + dataPayload.slice(0, 64).replace(/^0+/, '');
-    const amount = '0x' + dataPayload.slice(64, 128).replace(/^0+/, '');
+    const toAddress = `0x${dataPayload.slice(0, 64).replace(/^0+/, '')}`;
+    const amount = `0x${dataPayload.slice(64, 128).replace(/^0+/, '')}`;
     const value = fromWei(convertHexToString(amount), asset.decimals);
     const nativeAmount = getNativeAmount(
       prices,
@@ -99,20 +98,20 @@ const getTransactionDisplayDetails = (
       asset.symbol
     );
     return {
+      asset,
       from: transaction.from,
       gasLimit: BigNumber(convertHexToString(transaction.gasLimit)),
       gasPrice: BigNumber(convertHexToString(transaction.gasPrice)),
-      asset,
       nativeAmount,
       nonce: Number(convertHexToString(transaction.nonce)),
       timestampInMs,
       to: toAddress,
       value,
     };
-  } else {
-    console.log('This type of transaction is currently not supported.');
-    return null;
   }
+
+  console.log('This type of transaction is currently not supported.');
+  return null;
 };
 
 export const addTransactionToApprove = (

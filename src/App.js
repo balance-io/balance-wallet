@@ -16,7 +16,7 @@ import { connect, Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import styled from 'styled-components';
 import { NavigationActions } from 'react-navigation';
-
+import { withWalletConnectConnections } from './hoc';
 import {
   addTransactionToApprove,
   addTransactionsToApprove,
@@ -24,16 +24,13 @@ import {
   transactionsToApproveInit,
 } from './redux/transactionsToApprove';
 import {
-  getValidWalletConnectors,
-  setWalletConnectors,
-} from './redux/walletconnect';
-import {
   walletConnectInitAllConnectors,
   walletConnectGetAllTransactions,
   walletConnectGetTransaction,
 } from './model/walletconnect';
 import store from './redux/store';
 import { walletInit } from './model/wallet';
+import Routes from './screens/Routes';
 import Navigation from './navigation';
 import OfflineBadge from '~/components/OfflineBadge';
 
@@ -47,17 +44,18 @@ class App extends Component {
   };
 
   static propTypes = {
-    accountUpdateAccountAddress: PropTypes.func,
     accountInitializeState: PropTypes.func,
-    addTransactionToApprove: PropTypes.func,
+    accountUpdateAccountAddress: PropTypes.func,
     addTransactionsToApprove: PropTypes.func,
+    addTransactionToApprove: PropTypes.func,
     getValidWalletConnectors: PropTypes.func,
     setWalletConnectors: PropTypes.func,
     transactionIfExists: PropTypes.func,
     transactionsToApproveInit: PropTypes.func,
-  };
+    walletConnectors: PropTypes.arrayOf(PropTypes.object),
+  }
 
-  navigatorRef = null;
+  navigatorRef = null
 
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
@@ -150,7 +148,7 @@ class App extends Component {
       this.fetchAllTransactionsFromWalletConnectSessions();
     }
     this.setState({ appState: nextAppState });
-  };
+  }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
@@ -202,11 +200,8 @@ class App extends Component {
   };
 
   fetchAndAddTransaction = async (callId, sessionId) => {
-    const walletConnector = this.props.walletConnectors[sessionId];
-    const transactionDetails = await walletConnectGetTransaction(
-      callId,
-      walletConnector
-    );
+    const walletConnector = this.props.walletConnectors.find(({ _sessionId }) => (_sessionId === sessionId));
+    const transactionDetails = await walletConnectGetTransaction(callId, walletConnector);
     if (!transactionDetails) return null;
 
     const { callData, dappName } = transactionDetails;
@@ -235,15 +230,14 @@ class App extends Component {
 
 const AppWithRedux = compose(
   withProps({ store }),
+  withWalletConnectConnections,
   connect(
-    ({ walletconnect: { walletConnectors } }) => ({ walletConnectors }),
+    null,
     {
       addTransactionToApprove,
       addTransactionsToApprove,
       accountInitializeState,
       accountUpdateAccountAddress,
-      getValidWalletConnectors,
-      setWalletConnectors,
       transactionIfExists,
       transactionsToApproveInit,
     }

@@ -12,9 +12,8 @@ shadow.build = (...options) => css`
   box-shadow: ${shadow.buildString(...options)};
 `;
 
-shadow.buildString = (x, y, radius, color = shadow.color) =>
-  `${addUnitToNumberValues(x)} ${addUnitToNumberValues(
-    y
-  )} ${addUnitToNumberValues(radius)} ${color}`;
+shadow.buildString = (x, y, radius, color = shadow.color) => (
+  `${addUnitToNumberValues(x)} ${addUnitToNumberValues(y)} ${addUnitToNumberValues(radius)} ${color}`
+);
 
 export default shadow;
