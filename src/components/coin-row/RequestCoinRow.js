@@ -27,18 +27,6 @@ const buttonContainerStyles = css`
   padding-right: 12;
 `;
 
-const RequestCoinRowButton = ({ navigation, transactionDetails }) => (
-  <Button
-    bgColor={colors.primaryBlue}
-    containerStyles={buttonContainerStyles}
-    onPress={onPressOpen}
-    size="small"
-    textProps={{ size: 'smedium' }}
-  >
-    Open
-  </Button>
-);
-
 const RequestCoinRow = ({
   expirationColor,
   expiresAt,
@@ -60,7 +48,15 @@ const RequestCoinRow = ({
       </Text>
     )}
   >
-    <RequestCoinRowButton navigation={navigation} transactionDetails={item} />
+    <Button
+      bgColor={colors.primaryBlue}
+      containerStyles={buttonContainerStyles}
+      onPress={onPressOpen}
+      size="small"
+      textProps={{ size: 'smedium' }}
+    >
+      Open
+    </Button>
   </CoinRow>
 );
 
@@ -87,11 +83,15 @@ export default compose(
     };
   }),
   withHandlers({
-    onPressOpen: ({ transactionDetails, navigation }) => () =>
-      navigation.navigate({
+    onPressOpen: ({ item, transactionDetails, navigation }) => () => {
+      // XXX TODO
+      console.log('transactionDetails', transactionDetails);
+      console.log('ITem', item);
+      return navigation.navigate({
         params: { transactionDetails },
         routeName: 'ConfirmTransaction',
-      }),
+      });
+    },
   }),
   onlyUpdateForKeys(['expirationColor', 'percentElapsed']),
 )(RequestCoinRow);

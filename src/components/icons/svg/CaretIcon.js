@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Path } from 'svgs';
-import { directionPropType } from '../../../utils';
-import Svg from '../Svg';
 import { withRotationForDirection } from '~/hoc';
 import { colors } from '~/styles';
+import Svg from '../Svg';
 
-const CaretIcon = ({ color, direction, size, ...props }) => (
+const CaretIcon = ({ color, size, ...props }) => (
   <Svg
     {...props}
     height={size ? size * 1.9 : '19'}
@@ -23,13 +22,11 @@ const CaretIcon = ({ color, direction, size, ...props }) => (
 
 CaretIcon.propTypes = {
   color: PropTypes.string,
-  direction: directionPropType,
   size: PropTypes.number,
 };
 
 CaretIcon.defaultProps = {
   color: colors.black,
-  direction: 'right',
 };
 
 export default withRotationForDirection(CaretIcon);

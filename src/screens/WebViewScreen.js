@@ -1,23 +1,20 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Modal, WebView, Dimensions } from 'react-native';
+import { Modal, WebView } from 'react-native';
+import { pure } from 'recompose';
+import { deviceUtils } from '../utils';
 
-const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
+const WebViewScreen = ({ navigation }) => (
+  <Modal visible={true}>
+    <WebView
+      source={{ uri: navigation.getParam('uri', 'https://balance.io') }}
+      style={deviceUtils.dimensions}
+    />
+  </Modal>
+);
 
-class WebViewScreen extends React.PureComponent {
-  render() {
-    const { navigation } = this.props;
-    const uri = navigation.getParam('uri', 'https://balance.io');
+WebViewScreen.propTypes = {
+  navigation: PropTypes.object,
+};
 
-    return (
-      <Modal visible={true}>
-        <WebView
-          source={{ uri }}
-          style={{ height: ScreenHeight, width: ScreenWidth }}
-        />
-      </Modal>
-    );
-  }
-}
-
-export default WebViewScreen;
+export default pure(WebViewScreen);
