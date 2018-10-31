@@ -43,10 +43,10 @@ export const updateLocalRequests = async (address, network, requests) => {
  * @desc remove transaction request
  * @param  {String}   [address]
  * @param  {String}   [network]
- * @param  {String}   [transactionId]
+ * @param  {String}   [callId]
  * @return {Void}
  */
-export const removeLocalRequest = async (address, network, transactionId) => {
+export const removeLocalRequest = async (address, network, callId) => {
   if (!address) return;
   let accountLocal = await commonStorage.getAccountLocal(address);
   if (!accountLocal) {
@@ -59,7 +59,7 @@ export const removeLocalRequest = async (address, network, transactionId) => {
     accountLocal[network].requests = {};
   }
   let updatedRequests = accountLocal[network].requests;
-  delete updatedRequests[transactionId];
+  delete updatedRequests[callId];
   accountLocal[network].requests = { ...updatedRequests };
   await commonStorage.saveLocal(address.toLowerCase(), accountLocal);
 };

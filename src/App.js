@@ -30,7 +30,6 @@ import {
 } from './model/walletconnect';
 import store from './redux/store';
 import { walletInit } from './model/wallet';
-import Routes from './screens/Routes';
 import Navigation from './navigation';
 import OfflineBadge from '~/components/OfflineBadge';
 
