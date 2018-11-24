@@ -1,4 +1,4 @@
-import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import createSwipeNavigator from '../navigation/navigators/createSwipeNavigator';
 import { buildTransitions, expanded, sheet } from '../navigation/transitions';
 import ActivityScreen from './ActivityScreen';
@@ -44,7 +44,7 @@ const AppStack = createStackNavigator({
   ActivityScreen: {
     navigationOptions: {
       effect: 'sheet',
-      gesturesEnabled: false // @NOTE: disabled the gesture for ActivityScreen due to conflict with the Notification Center gesture
+      gesturesEnabled: false, // @NOTE: disabled the gesture for ActivityScreen due to conflict with the Notification Center gesture
     },
     screen: ActivityScreen,
   },
@@ -84,7 +84,7 @@ const IntroStack = createStackNavigator({
   mode: 'card', // Horizontal gestures
 });
 
-export default createSwitchNavigator(
+const MainNavigator = createSwitchNavigator(
   {
     App: AppStack,
     Intro: IntroStack,
@@ -97,3 +97,4 @@ export default createSwitchNavigator(
   },
 );
 
+export default createAppContainer(MainNavigator);

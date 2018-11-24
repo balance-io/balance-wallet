@@ -13,6 +13,7 @@ import { deviceUtils } from '../utils';
 const BackgroundButton = styled(TouchableOpacity)`
   ${position.cover}
   z-index: 0;
+  background-color: transparent;
 `;
 
 const Container = styled(Centered).attrs({ direction: 'column' })`
