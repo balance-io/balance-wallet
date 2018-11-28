@@ -20,7 +20,7 @@ import { BalanceCoinRow } from '~/components/coin-row';
 import {
   ActivityHeaderButton,
   Header,
-  HeaderButton,
+  ProfileHeaderButton,
 } from '~/components/header';
 import { FlexItem, Page, Column, Row } from '~/components/layout';
 import { FabWrapper, WalletConnectFab, SendFab } from '~/components/fab';
@@ -39,59 +39,14 @@ import {
   withRequestsInit,
 } from '~/hoc';
 import { position, colors } from '~/styles';
-import SettingsOverlay from './SettingsOverlay';
-import Avatar from '~/assets/avatar.png';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height - 120;
 
 // ======================================================================
 // Styles
 // ======================================================================
 
-const HeaderColumn = styled(Column)`
-  align-items: center;
-  justify-content: center;
-  margin-top: 5;
-  margin-bottom: 5;
-`;
 
-const Address = styled(TruncatedAddress).attrs({
-  size: 'big',
-  weight: 'bold',
-  truncationLength: 4,
-})`
-  margin-bottom: 5;
-`;
 
-const AvatarImage = styled(Image).attrs({
-  source: Avatar,
-})`
-  height: 85px;
-  width: 85px;
-  border-radius: 32;
-`;
-
-const ProfileActionContainer = styled(Row)`
-  align-items: center;
-`;
-
-const ProfileActionText = styled(Text).attrs({
-  color: colors.appleBlue,
-  size: 'medium',
-  weight: 'semibold',
-})`
-  margin-left: 5;
-  margin-right: 16;
-`;
-
-const ProfileAction = ({ icon, children, onPress }) => (
-  <TouchableOpacity onPress={onPress}>
-    <ProfileActionContainer>
-      <Icon name={icon} color={colors.appleBlue} />
-      <ProfileActionText>{children}</ProfileActionText>
-    </ProfileActionContainer>
-  </TouchableOpacity>
-);
 
 // ======================================================================
 // Component
@@ -106,175 +61,91 @@ const UniqueTokenRenderItem = renderItemProps => (
 const filterEmptyAssetSections = sections =>
   sections.filter(({ totalItems }) => totalItems);
 
-class WalletScreen extends React.PureComponent {
-  state = {
-    settingsVisible: false,
-    overlayOpacity: new Animated.Value(0),
-    modalYPosition: new Animated.Value(SCREEN_HEIGHT),
+const WalletScreen = ({
+  assets,
+  assetsCount,
+  assetsTotalUSD,
+  dispatch,
+  fetching,
+  navigation,
+  onHideSplashScreen,
+  onPressProfile,
+  onPressSend,
+  onPressWalletConnect,
+  isLoading,
+  onRefreshList,
+  onToggleShowShitcoins,
+  showShitcoins,
+  uniqueTokens,
+}) => {
+  const sections = {
+    balances: {
+      data: sortAssetsByNativeAmount(assets, showShitcoins),
+      renderItem: BalanceRenderItem,
+      title: 'Balances',
+      totalItems: get(assetsTotalUSD, 'amount') ? assetsCount : 0,
+      totalValue: get(assetsTotalUSD, 'display', ''),
+    },
+    collectibles: {
+      data: buildUniqueTokenList(uniqueTokens),
+      renderItem: UniqueTokenRenderItem,
+      title: 'Collectibles',
+      totalItems: uniqueTokens.length,
+      totalValue: '',
+    },
   };
 
-  showSettingsOverlay = () => {
-    this.setState({ settingsVisible: true }, () => {
-      Animated.parallel([
-        Animated.spring(this.state.overlayOpacity, {
-          toValue: 1,
-          tension: 90,
-          friction: 11,
-          useNativeDriver: true,
-        }).start(),
-        Animated.spring(this.state.modalYPosition, {
-          toValue: 0,
-          tension: 90,
-          friction: 11,
-          useNativeDriver: true,
-        }).start(),
-      ]);
-    });
-    this.props.toggleSwiping(false);
-  };
-
-  hideSettingsOverlay = () => {
-    Animated.parallel([
-      Animated.spring(this.state.overlayOpacity, {
-        toValue: 0,
-        tension: 120,
-        friction: 12,
-        useNativeDriver: true,
-      }).start(),
-      Animated.spring(this.state.modalYPosition, {
-        toValue: SCREEN_HEIGHT,
-        tension: 120,
-        friction: 12,
-        useNativeDriver: true,
-      }).start(() => {
-        this.setState({ settingsVisible: false });
-      }),
-    ]);
-    this.props.toggleSwiping(true);
-  };
-
-  onPressCopy = () => {
-    Clipboard.setString(this.props.accountAddress);
-  };
-
-  onPressShare = () => {
-    Share.share({
-      message: this.props.accountAddress,
-      title: 'My account address',
-    });
-  };
-
-  render() {
-    const {
-      assets,
-      assetsCount,
-      assetsTotalUSD,
-      dispatch,
-      fetching,
-      navigation,
-      onHideSplashScreen,
-      onPressProfile,
-      onPressSend,
-      onPressWalletConnect,
-      onRefreshList,
-      onToggleShowShitcoins,
-      showShitcoins,
-      uniqueTokens,
-    } = this.props;
-
-    const sections = {
-      balances: {
-        data: sortAssetsByNativeAmount(assets, showShitcoins),
-        renderItem: BalanceRenderItem,
-        title: 'Balances',
-        totalItems: get(assetsTotalUSD, 'amount') ? assetsCount : 0,
-        totalValue: get(assetsTotalUSD, 'display', ''),
-      },
-      collectibles: {
-        data: buildUniqueTokenList(uniqueTokens),
-        renderItem: UniqueTokenRenderItem,
-        title: 'Collectibles',
-        totalItems: uniqueTokens.length,
-        totalValue: '',
-      },
+  const assetsByMarketValue = groupAssetsByMarketValue(assets);
+  const totalShitcoins = get(assetsByMarketValue, 'noValue', []).length;
+  if (totalShitcoins) {
+    sections.balances.contextMenuOptions = {
+      cancelButtonIndex: 1,
+      destructiveButtonIndex: showShitcoins ? 0 : 99, // 99 is an arbitrarily high number used to disable the 'destructiveButton' option
+      onPress: onToggleShowShitcoins,
+      options: [
+        `${showShitcoins ? 'Hide' : 'Show'} assets with no price data`,
+        'Cancel',
+      ],
     };
-
-    const assetsByMarketValue = groupAssetsByMarketValue(assets);
-    const totalShitcoins = get(assetsByMarketValue, 'noValue', []).length;
-    if (totalShitcoins) {
-      sections.balances.contextMenuOptions = {
-        cancelButtonIndex: 1,
-        destructiveButtonIndex: showShitcoins ? 0 : 99, // 99 is an arbitrarily high number used to disable the 'destructiveButton' option
-        onPress: onToggleShowShitcoins,
-        options: [
-          `${showShitcoins ? 'Hide' : 'Show'} assets with no price data`,
-          'Cancel',
-        ],
-      };
-    }
-
-    const fabItems = [
-      <SendFab disable={isEmpty} key="sendFab" onPress={onPressSend} />,
-      <WalletConnectFab
-        disable={isEmpty}
-        key="walletConnectFab"
-        onPress={onPressWalletConnect}
-      />,
-    ];
-
-    // allow navigation to any Settings section via navigation.params
-    const settingsSection = navigation.getParam('settingsSection', 'Settings');
-
-    return (
-      <Page component={FlexItem} style={position.sizeAsObject('100%')}>
-        <Header justify="space-between">
-          <HeaderButton onPress={this.showSettingsOverlay}>
-            <Icon name="gear" />
-          </HeaderButton>
-          <ActivityHeaderButton />
-        </Header>
-
-        <HeaderColumn>
-          <AvatarImage />
-          <Address address={this.props.accountAddress} />
-
-          <Row>
-            <ProfileAction onPress={this.onPressCopy} icon="copy">
-              Copy
-            </ProfileAction>
-            <ProfileAction onPress={this.onPressShare} icon="share">
-              Share
-            </ProfileAction>
-          </Row>
-        </HeaderColumn>
-
-        <FlexItem>
-          <FabWrapper items={fabItems}>
-            <AssetList
-              fetchData={onRefreshList}
-              onPressSend={onPressSend}
-              onPressWalletConnect={onPressWalletConnect}
-              onSectionsLoaded={onHideSplashScreen}
-              sections={filterEmptyAssetSections([
-                sections.balances,
-                sections.collectibles,
-              ])}
-              showShitcoins={showShitcoins}
-            />
-          </FabWrapper>
-        </FlexItem>
-
-        <SettingsOverlay
-          overlayOpacity={this.state.overlayOpacity}
-          modalYPosition={this.state.modalYPosition}
-          section={settingsSection}
-          visible={this.state.settingsVisible}
-          onPressClose={this.hideSettingsOverlay}
-        />
-      </Page>
-    );
   }
-}
+
+  console.log('⏰️⏰️⏰️⏰️sections', sections);
+
+  const fabItems = [
+    <SendFab disable={isEmpty} key="sendFab" onPress={onPressSend} />,
+    <WalletConnectFab
+      disable={isEmpty}
+      key="walletConnectFab"
+      onPress={onPressWalletConnect}
+    />,
+  ];
+
+  return (
+    <Page component={FlexItem} style={position.sizeAsObject('100%')}>
+      <Header justify="space-between">
+        <ProfileHeaderButton navigation={navigation} />
+        {(!isEmpty && !isLoading) && (
+          <ActivityHeaderButton navigation={navigation}/>
+        )}
+      </Header>
+      <FlexItem>
+        <FabWrapper disable={isEmpty || isLoading} items={fabItems}>
+          <AssetList
+            fetchData={onRefreshList}
+            onPressSend={onPressSend}
+            onPressWalletConnect={onPressWalletConnect}
+            onSectionsLoaded={onHideSplashScreen}
+            sections={filterEmptyAssetSections([
+              sections.balances,
+              sections.collectibles,
+            ])}
+            showShitcoins={showShitcoins}
+          />
+        </FabWrapper>
+      </FlexItem>
+    </Page>
+  );
+};
 
 WalletScreen.propTypes = {
   assets: PropTypes.array,
@@ -330,5 +201,5 @@ export default compose(
       }
     },
   }),
-  onlyUpdateForKeys(['isScreenActive', ...Object.keys(WalletScreen.propTypes)])
+  onlyUpdateForKeys(['isScreenActive', ...Object.keys(WalletScreen.propTypes)]),
 )(WalletScreen);

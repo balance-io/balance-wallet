@@ -5,6 +5,7 @@ import sheetTransition from '../navigation/transitions/sheet';
 import ActivityScreen from './ActivityScreen';
 import IntroScreen from './IntroScreen';
 import LoadingScreen from './LoadingScreen';
+import ProfileScreen from './ProfileScreen';
 import QRScannerScreenWithData from './QRScannerScreenWithData';
 import WebViewScreen from './WebViewScreen';
 import SendQRScannerScreenWithData from './SendQRScannerScreenWithData';
@@ -14,8 +15,14 @@ import WalletScreen from './WalletScreen';
 import { deviceUtils } from '../utils';
 import Navigation from '../navigation';
 
+
 const SwipeStack = createSwipeNavigator(
   {
+    ProfileScreen: {
+      name: 'ProfileScreen',
+      screen: ProfileScreen,
+      statusBarColor: 'dark-content',
+    },
     WalletScreen: {
       name: 'WalletScreen',
       screen: WalletScreen,
@@ -33,7 +40,7 @@ const SwipeStack = createSwipeNavigator(
     mode: 'modal',
     onSwipeStart: () => Navigation.pauseNavigationActions(),
     onSwipeEnd: navigation => Navigation.resumeNavigationActions(navigation),
-  }
+  },
 );
 
 const AppStack = createStackNavigator(
@@ -74,7 +81,7 @@ const AppStack = createStackNavigator(
     initialRouteName: 'SwipeLayout',
     mode: 'modal',
     transitionConfig: sheetTransition,
-  }
+  },
 );
 
 export default createSwitchNavigator(
@@ -87,5 +94,5 @@ export default createSwitchNavigator(
     headerMode: 'none',
     initialRouteName: 'Loading',
     mode: 'modal',
-  }
+  },
 );

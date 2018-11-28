@@ -115,6 +115,7 @@ class App extends Component {
 
   handleWalletConfig = async seedPhrase => {
     try {
+      console.log('seedPhrase', seedPhrase)
       const walletAddress = await walletInit(seedPhrase);
 
       console.log('wallet address is', walletAddress);

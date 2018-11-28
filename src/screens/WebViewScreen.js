@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Modal, WebView } from 'react-native';
-import { pure } from 'recompose';
+import { pure } from 'recompact';
 import { deviceUtils } from '../utils';
 
 const WebViewScreen = ({ navigation }) => (
