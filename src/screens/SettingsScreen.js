@@ -44,12 +44,14 @@ const SettingsScreen = ({
   onPressBackButton,
   onToggleShowSeedPhrase,
   seedPhrase,
+  style,
 }) => (
   <Page
     align="stretch"
     component={Column}
     justify="center"
     showBottomInset
+    style={style}
   >
     <Header align="end" justify="end">
       <BackButton

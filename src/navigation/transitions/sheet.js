@@ -46,7 +46,6 @@ export default function sheet(navigation, transitionProps, prevTransitionProps) 
         effect: transitionName,
       }));
 
-
       const statusBarHeight = getStatusBarHeight(true);
       const distanceFromTop = 14;
       const scaleEnd = 1 - ((statusBarHeight + (isIphoneX() ? distanceFromTop : 0)) / deviceUtils.dimensions.height);

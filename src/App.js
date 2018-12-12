@@ -8,6 +8,7 @@ import { AppRegistry, AlertIOS, AppState } from 'react-native';
 import { compose, withProps } from 'recompact';
 import { connect, Provider } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import { useScreens } from 'react-native-screens';
 import Piwik from 'react-native-matomo';
 import { withWalletConnectConnections } from './hoc';
 import {
@@ -25,6 +26,9 @@ import store from './redux/store';
 import { walletInit } from './model/wallet';
 import Routes from './screens/Routes';
 import Navigation from './navigation';
+
+// Enable react-native-screens
+useScreens();
 
 class App extends Component {
   static propTypes = {

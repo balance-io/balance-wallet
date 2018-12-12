@@ -33,11 +33,12 @@ const QRScannerScreen = ({
   sheetHeight,
   showWalletConnectSheet,
   walletConnectorsCount,
+  style,
 }) => {
   const showSheet = showWalletConnectSheet && !!walletConnectorsCount;
 
   return (
-    <Container>
+    <Container style={style}>
       {isScreenActive && (
         <QRCodeScanner
           {...this.props}

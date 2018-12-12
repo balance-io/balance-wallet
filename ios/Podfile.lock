@@ -56,6 +56,8 @@ PODS:
     - React
   - RNReanimated (1.0.0-alpha.10):
     - React
+  - RNScreens (1.0.0-alpha.16):
+    - React
   - SDWebImage/Core (4.4.2)
   - SDWebImage/GIF (4.4.2):
     - FLAnimatedImage (~> 1.0)
@@ -72,6 +74,7 @@ DEPENDENCIES:
   - React/RCTImage (from `../node_modules/react-native`)
   - RNLanguages (from `../node_modules/react-native-languages`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
@@ -100,6 +103,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-languages"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
@@ -120,9 +125,10 @@ SPEC CHECKSUMS:
   react-native-fast-image: cba3d9bf9c2cf8ddb643d887a686c53a5dd90a2c
   RNLanguages: e3ae05ef105937645218272429dac0c3f7633451
   RNReanimated: 45d9313b7a62318ed00d60a811937321e43e076e
+  RNScreens: 354046589421edc3d83d5c6212475bf1fb9a731d
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 49f66978b10019df5c3f0971f9cb6e6bc610c256
+PODFILE CHECKSUM: 3155e5956b15d1c511c3db1999e98a626b54b5fa
 
 COCOAPODS: 1.5.3

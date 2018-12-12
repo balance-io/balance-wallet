@@ -19,7 +19,11 @@ export function buildTransitions(navigation, transitions) {
       return currentTransition(navigation, transitionProps, prevTransitionProps);
     }
 
-    return {};
+    return {
+      containerStyle: {
+        backgroundColor: 'transparent',
+      }
+    };
   };
 }
 

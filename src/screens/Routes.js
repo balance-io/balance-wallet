@@ -1,5 +1,5 @@
 import { createAppContainer, createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import createSwipeNavigator from '../navigation/navigators/createSwipeNavigator';
+import createSwipeNavigator from '../navigation/navigators/createSwipeNavigatorV2';
 import { buildTransitions, expanded, sheet } from '../navigation/transitions';
 import ActivityScreen from './ActivityScreen';
 import ExpandedAssetScreen from './ExpandedAssetScreen';
@@ -36,6 +36,9 @@ const SwipeStack = createSwipeNavigator({
 }, {
   headerMode: 'none',
   initialRouteName: 'WalletScreen',
+  cardStyle: {
+    backgroundColor: 'transparent',
+  },
   onSwipeStart: () => Navigation.pauseNavigationActions(),
   onSwipeEnd: (navigation) => Navigation.resumeNavigationActions(navigation),
 });
@@ -82,6 +85,9 @@ const IntroStack = createStackNavigator({
 }, {
   headerMode: 'none',
   mode: 'card', // Horizontal gestures
+  cardStyle: {
+    backgroundColor: 'transparent',
+  },
 });
 
 const MainNavigator = createSwitchNavigator(
@@ -94,6 +100,9 @@ const MainNavigator = createSwitchNavigator(
     headerMode: 'none',
     initialRouteName: 'Loading',
     mode: 'modal',
+    cardStyle: {
+      backgroundColor: 'transparent',
+    },
   },
 );
 

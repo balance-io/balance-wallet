@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { StatusBar, TouchableOpacity } from 'react-native';
+import { StatusBar, TouchableOpacity, Text, View } from 'react-native';
 import { compose, defaultProps, withHandlers, withProps } from 'recompact';
 import styled from 'styled-components/primitives';
 import { TokenExpandedState, UniqueTokenExpandedState } from '../components/expanded-state';
@@ -10,10 +10,12 @@ import { withAccountAssets } from '../hoc';
 import { padding, position } from '../styles';
 import { deviceUtils } from '../utils';
 
+console.disableYellowBox = true;
+
 const BackgroundButton = styled(TouchableOpacity)`
   ${position.cover}
-  z-index: 0;
   background-color: transparent;
+  z-index: 0;
 `;
 
 const Container = styled(Centered).attrs({ direction: 'column' })`
@@ -22,27 +24,11 @@ const Container = styled(Centered).attrs({ direction: 'column' })`
   height: 100%;
 `;
 
-const ExpandedAssetScreen = ({
-  containerPadding,
-  onPressBackground,
-  panelWidth,
-  type,
-  ...props
-}) => {
-  const expandedStateProps = {
-    ...props,
-    panelWidth,
-  };
-
+const ExpandedAssetScreen = () => {
   return (
-    <Container containerPadding={containerPadding}>
-      <StatusBar barStyle="light-content" />
-      <BackgroundButton onPress={onPressBackground} />
-      {type === 'token'
-        ? <TokenExpandedState {...expandedStateProps} />
-        : <UniqueTokenExpandedState {...expandedStateProps} />
-      }
-    </Container>
+    <View style={{ flex: 1 }}>
+      <Text>Hello</Text>
+    </View>
   );
 };
 
@@ -54,39 +40,5 @@ ExpandedAssetScreen.propTypes = {
   type: PropTypes.oneOf(['token', 'unique_token']),
 };
 
-const ExpandedAssetScreenDefaultProps = {
-  containerPadding: 15,
-};
-
-ExpandedAssetScreen.defaultProps = ExpandedAssetScreenDefaultProps;
-
-export default compose(
-  defaultProps(ExpandedAssetScreenDefaultProps),
-  withAccountAssets,
-  withProps(({
-    allAssets,
-    containerPadding,
-    navigation,
-    uniqueTokens,
-  }) => {
-    const { name, type } = navigation.state.params;
-
-    let selectedAsset = {};
-
-    if (type === 'token') {
-      [selectedAsset] = filter(allAssets, (asset) => asset.symbol === name);
-    } else if (type === 'unique_token') {
-      [selectedAsset] = filter(uniqueTokens, (asset) => asset.name === name);
-    }
-
-    return {
-      asset: selectedAsset,
-      panelWidth: deviceUtils.dimensions.width - (containerPadding * 2),
-      type,
-    };
-  }),
-  withHandlers({
-    onPressBackground: ({ navigation }) => () => navigation.goBack(),
-  }),
-)(ExpandedAssetScreen);
+export default ExpandedAssetScreen;
 

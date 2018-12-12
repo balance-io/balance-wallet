@@ -25,8 +25,7 @@ import {
 import { position } from '../styles';
 
 const WalletPage = styled(Page)`
-  ${position.size('100%')};
-  flex: 1;
+
 `;
 
 class WalletScreen extends Component {
@@ -56,6 +55,7 @@ class WalletScreen extends Component {
       onRefreshList,
       sections,
       transitionProps,
+      style,
     } = this.props;
 
     const {
@@ -71,8 +71,7 @@ class WalletScreen extends Component {
     });
 
     return (
-      <WalletPage>
-        {showBlur && <BlurOverlay opacity={blurOpacity} />}
+      <WalletPage style={style}>
         <Header justify="space-between">
           <ProfileHeaderButton navigation={navigation} />
           {(!isEmpty && !isLoading) && (

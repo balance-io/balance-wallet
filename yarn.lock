@@ -6701,7 +6701,7 @@ react-native-randombytes@^3.1.0:
     buffer "^4.9.1"
     sjcl "^1.0.3"
 
-react-native-reanimated@^1.0.0-alpha.9:
+react-native-reanimated@^1.0.0-alpha.10, react-native-reanimated@^1.0.0-alpha.9:
   version "1.0.0-alpha.10"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.10.tgz#e9e6fb35a2cf52fdc912b9fbc76f34f80698e530"
 
@@ -6720,6 +6720,10 @@ react-native-safe-area-view@mikedemarais/react-native-safe-area-view:
 "react-native-screens@^1.0.0 || ^1.0.0-alpha":
   version "1.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.16.tgz#e3651b7077ea8fa04e8dd3265ad9b87f1f77a758"
+
+"react-native-screens@git+https://github.com/balance-io/react-native-screens.git#master":
+  version "1.0.0-alpha.18"
+  resolved "git+https://github.com/balance-io/react-native-screens.git#b7c91ece313c258192d4c9969dba3a01c69637ff"
 
 react-native-shimmer-placeholder@^1.0.29:
   version "1.0.29"
@@ -6874,6 +6878,12 @@ react-navigation-tabs@^1.0.0:
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     react-native-tab-view "^1.0.0"
+
+react-navigation-transitioner@^1.0.0-alpha.3:
+  version "1.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/react-navigation-transitioner/-/react-navigation-transitioner-1.0.0-alpha.3.tgz#a509d328ab531edd9b32e2c257f3747a5107787c"
+  dependencies:
+    react-native-reanimated "^1.0.0-alpha.10"
 
 react-navigation@3:
   version "3.0.0"
