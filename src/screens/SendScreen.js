@@ -18,13 +18,14 @@ import { compose, withHandlers } from 'recompact';
 import styled from 'styled-components/primitives';
 import { AssetList, UniqueTokenRow } from '../components/asset-list';
 import { Button, BlockButton, LongPressButton } from '../components/buttons';
-import { SendCoinRow } from '../components/coin-row';
+import { SendCoinRow, SendNftCoinRow } from '../components/coin-row';
 import { AddressField, UnderlineField } from '../components/fields';
 import { Icon } from '../components/icons';
 import { PillLabel } from '../components/labels';
 import { Column, Flex, FlyInView, Row } from '../components/layout';
 import { ShadowStack } from '../components/shadow-stack';
 import { Monospace } from '../components/text';
+import { UniqueTokenCard } from '../components/unique-token';
 import { withAccountAddress, withAccountAssets, withRequestsInit } from '../hoc';
 import { colors, fonts, padding, shadow } from '../styles';
 import { deviceUtils } from '../utils';
@@ -95,6 +96,9 @@ const CameraIcon = styled(Icon).attrs({
 })`
   margin-top: -5px;
 `;
+
+const CardMargin = 15;
+const CardSize = (deviceUtils.dimensions.width - CardMargin);
 
 const Container = styled(Column)`
   background-color: ${colors.white};
@@ -205,10 +209,12 @@ class SendScreen extends Component {
     } = this.props;
 
     const asset = get(navigation, 'state.params.asset');
+    const isNft = get(navigation, 'state.params.isNft', false);
 
+    console.log('GOT ASSET', asset);
     if (isValidAddress && !prevProps.isValidAddress) {
       if (asset) {
-        sendUpdateSelected(asset);
+        sendUpdateSelected(asset, isNft);
       }
 
       Keyboard.dismiss();
@@ -274,11 +280,11 @@ class SendScreen extends Component {
     sendUpdateNativeAmount(String(value));
   };
 
-  onPressAssetHandler = (symbol) => {
+  onPressAssetHandler = (symbol, isNft) => {
     const { sendUpdateSelected } = this.props;
 
     return () => {
-      sendUpdateSelected(symbol);
+      sendUpdateSelected(symbol, isNft);
     };
   };
 
@@ -390,10 +396,16 @@ class SendScreen extends Component {
       },
       collectibles: {
         data: uniqueTokens,
-        renderItem: UniqueTokenRow,
+        renderItem: (itemProps) => (
+          <SendNftCoinRow
+            {...itemProps}
+            onPress={this.onPressAssetHandler(itemProps.item, true)}
+          />
+        ),
       },
     };
 
+    // TODO add sections.collectibles
     return (
       <FlyInView style={{ flex: 1 }}>
         <AssetList
@@ -499,15 +511,26 @@ class SendScreen extends Component {
           shouldRasterizeIOS={true}
           width={deviceUtils.dimensions.width}
         >
-          <SendCoinRow item={selected} onPress={this.onPressAssetHandler('')}>
+          {(selected.isNft)
+            ? (<SendNftCoinRow item={selected} onPress={this.onPressAssetHandler('')}/>)
+          : (<SendCoinRow item={selected} onPress={this.onPressAssetHandler('')}>
             <Column>
               <Icon name="caret" direction="up" size={5} color={colors.dark} />
               <Icon name="caret" direction="down" size={5} color={colors.dark} />
             </Column>
-          </SendCoinRow>
+          </SendCoinRow>)}
         </ShadowStack>
         <TransactionContainer>
-          <Column>
+        {(selected.isNft) ?
+          (<UniqueTokenCard
+            disabled={true}
+            item={selected}
+            key={selected.id}
+            size={CardSize}
+            style={{ marginLeft: 0 }}
+            onPress={() => {}}
+           />) :
+          (<Column>
             <Row justify="space-between">
               <NumberInput
                 autoFocus
@@ -532,6 +555,7 @@ class SendScreen extends Component {
               <NumberInputLabel>USD</NumberInputLabel>
             </Row>
           </Column>
+          )}
           {this.renderSendButton()}
           {isIphoneX() ? this.renderTransactionSpeed() : null}
         </TransactionContainer>

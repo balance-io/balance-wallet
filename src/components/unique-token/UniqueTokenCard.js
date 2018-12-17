@@ -25,6 +25,7 @@ const InnerBorder = styled.View`
 `;
 
 const UniqueTokenCard = ({
+  disabled,
   item: {
     background,
     image_preview_url,
@@ -37,7 +38,7 @@ const UniqueTokenCard = ({
   const backgroundColor = background || colors.lightestGrey;
 
   return (
-    <ButtonPressAnimation onPress={onPress} scaleTo={0.96}>
+    <ButtonPressAnimation disabled={disabled || false} onPress={onPress} scaleTo={0.96}>
       <ShadowStack
         {...props}
         {...position.sizeAsObject(size)}
@@ -62,6 +63,7 @@ const UniqueTokenCard = ({
 };
 
 UniqueTokenCard.propTypes = {
+  disabled: PropTypes.bool,
   item: PropTypes.shape({
     background: PropTypes.string,
     image_preview_url: PropTypes.string,
