@@ -211,7 +211,6 @@ class SendScreen extends Component {
     const asset = get(navigation, 'state.params.asset');
     const isNft = get(navigation, 'state.params.isNft', false);
 
-    console.log('GOT ASSET', asset);
     if (isValidAddress && !prevProps.isValidAddress) {
       if (asset) {
         sendUpdateSelected(asset, isNft);
@@ -432,10 +431,11 @@ class SendScreen extends Component {
   }
 
   renderSendButton() {
-    const { assetAmount, isSufficientBalance, isSufficientGas } = this.props;
+    const { assetAmount, isSufficientBalance, isSufficientGas, navigation } = this.props;
     const { biometryType, sendLongPressProgress } = this.state;
+    const isNft = get(navigation, 'state.params.isNft', false);
 
-    const isZeroAssetAmount = Number(assetAmount) <= 0;
+    const isZeroAssetAmount = (!isNft && Number(assetAmount) <= 0);
     const leftIconName = biometryType === 'FaceID' ? 'faceid' : 'touchid';
 
     let disabled = true;
