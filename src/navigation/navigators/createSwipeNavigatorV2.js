@@ -22,6 +22,12 @@ const {
   startClock,
   stopClock,
   spring,
+  and,
+  divide,
+  debug,
+  abs,
+  round,
+  greaterThan,
 } = Animated;
 
 function runSpring(clock, value, velocity, dest) {
@@ -73,6 +79,7 @@ export default function createSwipeNavigator(screens, options) {
     prevDragX = new Value(0);
     transX = new Value(0);
     clock = new Clock();
+    nextIndex = new Value(1);
 
     gestureState = new Value(-1);
 
@@ -86,27 +93,52 @@ export default function createSwipeNavigator(screens, options) {
       },
     ]);
 
+    nextIndex = cond(
+      greaterThan(this.nextIndex, (routeOrder.length - 1)),
+      set(this.nextIndex, sub(this.nextIndex, 1)),
+      cond(
+        lessThan(this.dragX, 0),
+        set(this.nextIndex, add(this.nextIndex, 1)),
+        set(this.nextIndex, sub(this.nextIndex, 1)),
+      ),
+    );
+
     snapPoint = cond(
-      lessThan(add(this.transX, multiply(0.2, this.dragVX)), 0),
-      -0.1,
-      0.1,
+      greaterThan(this.nextIndex, (routeOrder.length - 1)),
+      [
+        debug('reanimated.nextIndex', this.nextIndex),
+        multiply(-deviceUtils.dimensions.width, sub(this.nextIndex, 1)),
+      ],
+      [
+        debug('reanimated.nextIndex', this.nextIndex),
+        multiply(-deviceUtils.dimensions.width, this.nextIndex),
+      ],
     );
 
     _transX = cond(
-      eq(this.gestureState, State.ACTIVE),
-      [
-        stopClock(this.clock),
-        set(this.transX, add(this.transX, sub(this.dragX, this.prevDragX))),
-        set(this.prevDragX, this.dragX),
-        this.transX,
-      ],
-      [
-        set(this.prevDragX, 0),
-        set(
+      and(
+        lessThan(this.dragX, 0),
+        lessThan(this.transX, -deviceUtils.dimensions.width * (routeOrder.length - 1)),
+      ),
+      -deviceUtils.dimensions.width * (routeOrder.length - 1),
+      cond(
+        eq(this.gestureState, State.ACTIVE),
+        [
+          debug('reanimated.dragX', this.dragX),
+          debug('reanimated.transX', this.transX),
+          stopClock(this.clock),
+          set(this.transX, add(this.transX, sub(this.dragX, this.prevDragX))),
+          set(this.prevDragX, this.dragX),
           this.transX,
-          runSpring(this.clock, this.transX, this.dragVX, this.snapPoint),
-        ),
-      ],
+        ],
+        [
+          set(this.prevDragX, 0),
+          set(
+            this.transX,
+            runSpring(this.clock, this.transX, this.dragVX, this.snapPoint),
+          ),
+        ],
+      ),
     );
 
     renderScreens() {
