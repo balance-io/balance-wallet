@@ -21,12 +21,6 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
   }
 
   return {
-    transitionSpec: {
-      timing: nextEffect === transitionName && nextIndex > prevIndex ? Animated.spring : Animated.timing,
-      tension: 120,
-      friction: 12,
-      useNativeDriver: true,
-    },
     screenInterpolator: (sceneProps = {}) => {
       const {
         layout,
@@ -35,10 +29,10 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
       } = sceneProps;
 
       store.dispatch(updateTransitionProps({
-        nextIndex,
-        prevIndex,
-        position,
         effect: transitionName,
+        nextIndex,
+        position,
+        prevIndex,
       }));
 
       const opacityEnd = 0.75;
@@ -104,6 +98,12 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
           translateX,
         }],
       };
+    },
+    transitionSpec: {
+      friction: 12,
+      tension: 120,
+      timing: ((nextEffect === transitionName) && (nextIndex > prevIndex)) ? Animated.spring : Animated.timing,
+      useNativeDriver: true,
     },
   };
 }
