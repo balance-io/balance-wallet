@@ -3,7 +3,6 @@ package com.balancewallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.swmansion.rnscreens.RNScreensPackage;
 import de.bonify.reactnativepiwik.PiwikPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.cmcewen.blurview.BlurViewPackage;
@@ -51,7 +50,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNScreensPackage(),
             new PiwikPackage(),
             new FastImageViewPackage(),
             new BlurViewPackage(),

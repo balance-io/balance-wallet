@@ -17,9 +17,10 @@ const ModalElement = styled(Column)`
   border-radius: 12;
   flex-shrink: 0;
   height: ${({ height }) => height};
+  overflow: hidden;
   shadow-color: ${colors.dark};
   shadow-offset: 0px 10px;
-  shadow-opacity: 0.6;
+  shadow-opacity: 0.7;
   shadow-radius: 50;
   width: 100%;
 `;

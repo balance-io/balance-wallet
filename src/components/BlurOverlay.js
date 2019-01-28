@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { VibrancyView } from 'react-native-blur';
-import { pure } from 'recompact';
+import { BlurView } from 'react-native-blur';
 import { position } from '../styles';
 
 const styles = StyleSheet.create({
@@ -12,14 +11,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const BlurOverlay = ({
-  backgroundColor,
-  blurAmount,
-  blurType,
-  opacity,
-}) => (
-  <Animated.View style={[styles.overlay, { backgroundColor, opacity }]}>
-    <VibrancyView
+const BlurOverlay = ({ blurAmount, blurType, opacity }) => (
+  <Animated.View style={[styles.overlay, { opacity }]}>
+    <BlurView
       blurAmount={blurAmount}
       blurType={blurType}
       style={styles.overlay}
@@ -28,9 +22,8 @@ const BlurOverlay = ({
 );
 
 BlurOverlay.propTypes = {
-  backgroundColor: PropTypes.string,
   blurAmount: PropTypes.number,
-  blurType: PropTypes.oneOf(['dark', 'light', 'xlight']).isRequired,
+  blurType: PropTypes.oneOf(['dark', 'light', 'xlight']),
   opacity: PropTypes.object,
 };
 
@@ -39,4 +32,4 @@ BlurOverlay.defaultProps = {
   blurType: 'dark',
 };
 
-export default pure(BlurOverlay);
+export default BlurOverlay;

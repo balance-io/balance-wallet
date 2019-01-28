@@ -7,7 +7,6 @@ const base = {
   blue: '#657fe6', // '101, 127, 230'
   blueActive: '#5a71cc', // '90, 113, 204'
   blueGreyDark: '#3C4252', // '60, 66, 82'
-  blueGreyDarker: '#0F0F11', // '15, 15, 17'
   blueGreyLight: '#A1A5AC', // '102, 106, 115'
   blueGreyLighter: '#888D96', // '136, 141, 150'
   blueGreyMedium: '#636875', // '99, 104, 117'
@@ -56,8 +55,8 @@ const assetIcon = {
 
 const sendScreen = {
   brightBlue: base.appleBlue, // 14, 118, 253
-  grey: '#d8d8d8', // '216, 216, 216'
   lightGrey: '#fafafa', // '250, 250, 250'
+  grey: '#d8d8d8', // '216, 216, 216'
 };
 
 assetIcon.random = () => {
@@ -66,8 +65,8 @@ assetIcon.random = () => {
 };
 
 const transparent = {
-  purpleTransparent: chroma(base.purple).alpha(0.7), // '50, 50, 93'
   whiteTransparent: chroma(base.white).alpha(0.8), // '255, 255, 255'
+  purpleTransparent: chroma(base.purple).alpha(0.7), // '50, 50, 93'
 };
 
 const vendor = {

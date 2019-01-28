@@ -108,12 +108,11 @@ export default compose(
   withHandlers({
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
     onPressCopyAddress: ({ accountAddress }) => () => Clipboard.setString(accountAddress),
-    onPressShareAddress: ({ accountAddress }) => () => (
+    onPressShareAddress: ({ accountAddress }) => () =>
       Share.share({
         message: accountAddress,
         title: 'My account address:',
-      })
-    ),
+      }),
   }),
   onlyUpdateForKeys(['accountAddress']),
 )(ReceiveScreen);

@@ -1,13 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { pure } from 'recompact';
 import styled from 'styled-components/primitives';
 import { colors, padding, position } from '../../../styles';
 import { Icon } from '../../icons';
-import { Centered, FlexItem, Row } from '../../layout';
+import { Centered, Row } from '../../layout';
 import { TruncatedText } from '../../text';
 import FloatingPanel from '../FloatingPanel';
+
+const ActionIcon = styled(Icon)`
+  ${position.maxSize('100%')};
+`;
 
 const Container = styled(Row).attrs({
   align: 'center',
@@ -25,6 +28,14 @@ const IconContainer = styled(Centered)`
   width: 24;
 `;
 
+const Label = styled(TruncatedText).attrs({
+  family: 'SFProText',
+  size: 'bmedium',
+  weight: 'semibold',
+})`
+  flex: 1;
+`;
+
 const AssetPanelAction = ({
   color,
   icon,
@@ -36,17 +47,11 @@ const AssetPanelAction = ({
     component={TouchableOpacity}
     onPress={onPress}
   >
-    <FlexItem>
-      <TruncatedText color={color} size="bmedium" weight="semibold">
-        {label}
-      </TruncatedText>
-    </FlexItem>
+    <Label color={color}>
+      {label}
+    </Label>
     <IconContainer>
-      <Icon
-        color={color}
-        name={icon}
-        style={position.maxSizeAsObject('100%')}
-      />
+      <ActionIcon color={color} name={icon} />
     </IconContainer>
   </Container>
 );
@@ -62,4 +67,4 @@ AssetPanelAction.defaultProps = {
   color: colors.sendScreen.brightBlue,
 };
 
-export default pure(AssetPanelAction);
+export default AssetPanelAction;

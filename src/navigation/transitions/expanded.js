@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import { Animated } from 'react-native';
 import { updateTransitionProps } from '../../redux/navigation';
 import store from '../../redux/store';
+import { colors } from '../../styles';
 import { deviceUtils, statusBar } from '../../utils';
 
 export const transitionName = 'expanded';
@@ -21,6 +22,15 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
   }
 
   return {
+    containerStyles: {
+      backgroundColor: colors.black,
+    },
+    transitionSpec: {
+      timing: nextEffect === transitionName && nextIndex > prevIndex ? Animated.spring : Animated.timing,
+      tension: 120,
+      friction: 12,
+      useNativeDriver: true,
+    },
     screenInterpolator: (sceneProps = {}) => {
       const {
         layout,
@@ -29,10 +39,10 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
       } = sceneProps;
 
       store.dispatch(updateTransitionProps({
-        effect: transitionName,
         nextIndex,
-        position,
         prevIndex,
+        position,
+        effect: transitionName,
       }));
 
       const opacityEnd = 0.75;
@@ -98,12 +108,6 @@ export default function expanded(navigation, transitionProps, prevTransitionProp
           translateX,
         }],
       };
-    },
-    transitionSpec: {
-      friction: 12,
-      tension: 120,
-      timing: ((nextEffect === transitionName) && (nextIndex > prevIndex)) ? Animated.spring : Animated.timing,
-      useNativeDriver: true,
     },
   };
 }
