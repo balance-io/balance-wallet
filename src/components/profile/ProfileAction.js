@@ -15,13 +15,7 @@ const ProfileAction = ({
   ...props
 }) => (
   <ButtonPressAnimation onPress={onPress} {...props}>
-    <Row
-      align="center"
-      css={`
-        ${padding(8, 9)};
-        background-color: ${colors.white};
-      `}
-    >
+    <Row align="center" css={padding(8, 9)}>
       <Icon
         color={colors.appleBlue}
         name={icon}

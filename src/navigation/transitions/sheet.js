@@ -1,10 +1,9 @@
-import { get } from 'lodash';
 import { Animated } from 'react-native';
+import { get } from 'lodash';
 import { getStatusBarHeight, isIphoneX } from 'react-native-iphone-x-helper';
-import { updateTransitionProps } from '../../redux/navigation';
 import store from '../../redux/store';
-import { colors } from '../../styles';
 import { deviceUtils, statusBar } from '../../utils';
+import { updateTransitionProps } from '../../redux/navigation';
 
 export const transitionName = 'sheet';
 
@@ -23,9 +22,6 @@ export default function sheet(navigation, transitionProps, prevTransitionProps) 
   }
 
   return {
-    containerStyles: {
-      backgroundColor: colors.black,
-    },
     transitionSpec: {
       timing: nextEffect === transitionName && nextIndex > prevIndex ? Animated.spring : Animated.timing,
       tension: 58,
