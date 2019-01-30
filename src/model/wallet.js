@@ -87,7 +87,14 @@ export const signMessage = async (message, authenticationPrompt = lang.t('wallet
 };
 
 export const loadSeedPhrase = async (authenticationPrompt = lang.t('wallet.authenticate.please_seed_phrase')) => {
-  const seedPhrase = await keychain.loadString(seedPhraseKey, { authenticationPrompt });
+  const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
+  console.log('can authenticate', canAuthenticate);
+  let seedPhrase = null;
+  if (canAuthenticate) {
+    seedPhrase = await keychain.loadString(seedPhraseKey, { authenticationPrompt });
+  } else {
+    seedPhrase = await keychain.loadString(seedPhraseKey);
+  }
   return seedPhrase;
 };
 
@@ -126,8 +133,15 @@ const savePrivateKey = async (privateKey, accessControlOptions = {}) => {
 };
 
 const loadPrivateKey = async (authenticationPrompt = lang.t('wallet.authenticate.please')) => {
+  const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
+  console.log('can authenticate', canAuthenticate);
   try {
-    const privateKey = await keychain.loadString(privateKeyKey, { authenticationPrompt });
+    let privateKey = null;
+    if (canAuthenticate) {
+      privateKey = await keychain.loadString(privateKeyKey, { authenticationPrompt });
+    } else {
+      privateKey = await keychain.loadString(privateKeyKey);
+    }
     return privateKey;
   } catch (error) {
     return null;
