@@ -24,7 +24,10 @@ export default compose(
   withIsWalletEmpty,
   withRequests,
   withHandlers({
-    onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
+    onPressBackButton: ({ navigation, screenProps }) => () => {
+      screenProps.nav.state.nav.routes[0].index = 0;
+      navigation.navigate('WalletScreen');
+    },
     onPressSettings: ({ navigation }) => () => navigation.navigate('SettingsModal'),
   }),
   withTrackingScreen,

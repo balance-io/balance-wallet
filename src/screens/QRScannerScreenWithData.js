@@ -26,6 +26,7 @@ class QRScannerScreenWithData extends Component {
     addWalletConnector: PropTypes.func,
     isFocused: PropTypes.bool,
     navigation: PropTypes.object,
+    screenProps: PropTypes.object,
     setSafeTimeout: PropTypes.func,
   }
 
@@ -54,7 +55,10 @@ class QRScannerScreenWithData extends Component {
     this.setState({ sheetHeight: get(nativeEvent, 'layout.height') });
   }
 
-  handlePressBackButton = () => this.props.navigation.navigate('WalletScreen')
+  handlePressBackButton = () => {
+    this.props.screenProps.nav.state.nav.routes[0].index = 2;
+    this.props.navigation.navigate('WalletScreen');
+  }
 
   handleReenableScanning = () => this.setState({ enableScanning: true })
 

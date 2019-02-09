@@ -39,6 +39,11 @@ ProfileHeaderButton.propTypes = {
 export default compose(
   pure,
   withRequests,
-  withHandlers({ onPress: ({ navigation }) => () => navigation.navigate('ProfileScreen') }),
+  withHandlers({
+    onPress: ({ navigation, screenProps }) => () => {
+      screenProps.nav.state.nav.routes[0].index = 1;
+      navigation.navigate('ProfileScreen');
+    },
+  }),
   pickProps(Object.keys(ProfileHeaderButton.propTypes)),
 )(ProfileHeaderButton);

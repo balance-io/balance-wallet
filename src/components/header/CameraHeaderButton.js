@@ -38,7 +38,10 @@ CameraHeaderButton.propTypes = {
 
 export default compose(
   withHandlers({
-    onPress: ({ navigation }) => () => navigation.navigate('QRScannerScreen'),
+    onPress: ({ navigation, screenProps }) => () => {
+      screenProps.nav.state.nav.routes[0].index = 1;
+      navigation.navigate('QRScannerScreen');
+    },
   }),
   onlyUpdateForPropTypes,
 )(CameraHeaderButton);

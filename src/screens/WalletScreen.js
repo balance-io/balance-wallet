@@ -40,6 +40,7 @@ class WalletScreen extends PureComponent {
     navigation: PropTypes.object,
     onRefreshList: PropTypes.func.isRequired,
     refreshAccount: PropTypes.func,
+    screenProps: PropTypes.object,
     sections: PropTypes.array,
     showBlur: PropTypes.bool,
     toggleShowShitcoins: PropTypes.func,
@@ -95,13 +96,14 @@ class WalletScreen extends PureComponent {
       onRefreshList,
       sections,
       showBlur,
+      screenProps,
     } = this.props;
 
     return (
       <Page style={{ flex: 1, ...position.sizeAsObject('100%') }}>
         <Header justify="space-between">
-          <ProfileHeaderButton navigation={navigation} />
-          <CameraHeaderButton navigation={navigation} />
+          <ProfileHeaderButton screenProps={screenProps} navigation={navigation} />
+          <CameraHeaderButton screenProps={screenProps} navigation={navigation} />
         </Header>
         <FabWrapper disabled={isEmpty}>
           <AssetList

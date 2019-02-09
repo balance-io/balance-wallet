@@ -217,7 +217,7 @@ class App extends Component {
         <OfflineBadge />
         <Routes
           ref={this.handleNavigatorRef}
-          screenProps={{ handleWalletConfig: this.handleWalletConfig }}
+          screenProps={{ handleWalletConfig: this.handleWalletConfig, nav: this.navigatorRef }}
         />
       </FlexItem>
     </Provider>
