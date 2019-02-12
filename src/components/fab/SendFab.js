@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withNavigation } from 'react-navigation';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import {
   compose,
   onlyUpdateForKeys,
@@ -38,7 +38,7 @@ export default compose(
   withNavigation,
   withHandlers({
     onPress: ({ navigation }) => () => {
-      Piwik.trackEvent('Navigation', 'send-fab', 'SendFabNav');
+      Matomo.trackEvent('Navigation', 'send-fab', 'SendFabNav');
       navigation.navigate('SendSheet');
     },
   }),

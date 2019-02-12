@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Vibration } from 'react-native';
 import firebase from 'react-native-firebase';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import Permissions from 'react-native-permissions';
 import { withNavigationFocus } from 'react-navigation';
 import { compose } from 'recompact';
@@ -47,7 +47,7 @@ class QRScannerScreenWithData extends Component {
       });
 
       this.setState({ enableScanning: true });
-      Piwik.trackScreen('QRScannerScreen', 'QRScannerScreen');
+      Matomo.trackScreen('QRScannerScreen', 'QRScannerScreen');
     }
   }
 
@@ -111,14 +111,14 @@ class QRScannerScreenWithData extends Component {
     const address = getEthereumAddressFromQRCodeData(data);
 
     if (address) {
-      Piwik.trackEvent('QRScanner', 'address', 'QRScannedAddress');
+      Matomo.trackEvent('QRScanner', 'address', 'QRScannedAddress');
       navigation.navigate('WalletScreen');
       navigation.navigate('SendSheet', { address });
       return setSafeTimeout(this.handleReenableScanning, 1000);
     }
 
     if (data.startsWith('ethereum:wc')) {
-      Piwik.trackEvent('QRScanner', 'walletconnect', 'QRScannedWC');
+      Matomo.trackEvent('QRScanner', 'walletconnect', 'QRScannedWC');
       const walletConnector = await walletConnectInit(accountAddress, data);
       addWalletConnector(walletConnector);
       const hasPushPermissions = await this.checkPushNotificationPermissions();
@@ -129,7 +129,7 @@ class QRScannerScreenWithData extends Component {
       }
     }
 
-    Piwik.trackEvent('QRScanner', 'unknown', 'QRScannedUnknown');
+    Matomo.trackEvent('QRScanner', 'unknown', 'QRScannedUnknown');
     return Alert({
       callback: this.handleReenableScanning,
       message: lang.t('wallet.unrecognized_qrcode'),

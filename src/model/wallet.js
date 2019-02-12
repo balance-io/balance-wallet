@@ -7,7 +7,7 @@ import {
   AUTHENTICATION_TYPE,
   canImplyAuthentication,
 } from 'react-native-keychain';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import * as keychain from './keychain';
 
 const seedPhraseKey = 'balanceWalletSeedPhrase';
@@ -61,7 +61,7 @@ export const sendTransaction = async ({ tracking, transaction }) => {
     }
     try {
       const result = await wallet.sendTransaction(transaction);
-      Piwik.trackEvent('Send', tracking.action, tracking.name, tracking.amount);
+      Matomo.trackEvent('Send', tracking.action, tracking.name, tracking.amount);
       return result.hash;
     } catch (error) {
       AlertIOS.alert(lang.t('wallet.transaction.alert.failed_transaction'));

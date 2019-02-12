@@ -3,7 +3,7 @@ import { isSameDay } from 'date-fns';
 import { get, join, map } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import { withNavigationFocus } from 'react-navigation';
 import {
   compose,
@@ -73,14 +73,14 @@ class WalletScreen extends PureComponent {
     } = this.props;
 
     if (isFocused && !prevProps.isFocused) {
-      Piwik.trackScreen('WalletScreen', 'WalletScreen');
+      Matomo.trackScreen('WalletScreen', 'WalletScreen');
       const totalTrackingAmount = get(assetsTotal, 'totalTrackingAmount', null);
       const assetSymbols = join(map(assets || {}, (asset) => asset.symbol));
       if (totalTrackingAmount && (!trackingDate || !isSameDay(trackingDate, Date.now()))) {
-        Piwik.trackEvent('Balance', 'AssetsCount', 'TotalAssetsCount', allAssetsCount);
-        Piwik.trackEvent('Balance', 'AssetSymbols', 'AssetSymbols', assetSymbols);
-        Piwik.trackEvent('Balance', 'NFTCount', 'TotalNFTCount', uniqueTokens.length);
-        Piwik.trackEvent('Balance', 'Total', 'TotalUSDBalance', totalTrackingAmount);
+        Matomo.trackEvent('Balance', 'AssetsCount', 'TotalAssetsCount', allAssetsCount);
+        Matomo.trackEvent('Balance', 'AssetSymbols', 'AssetSymbols', assetSymbols);
+        Matomo.trackEvent('Balance', 'NFTCount', 'TotalNFTCount', uniqueTokens.length);
+        Matomo.trackEvent('Balance', 'Total', 'TotalUSDBalance', totalTrackingAmount);
 
         updateTrackingDate();
       }

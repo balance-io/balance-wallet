@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import { compose, pure, withHandlers } from 'recompact';
 import styled from 'styled-components/primitives';
 import { colors, position } from '../../styles';
@@ -74,7 +74,7 @@ export default compose(
   withHandlers({
     onPress: ({ item, onPress }) => () => {
       if (onPress) {
-        Piwik.trackEvent('UniqueTokens', 'open', 'OpenUniqueToken');
+        Matomo.trackEvent('UniqueTokens', 'open', 'OpenUniqueToken');
         onPress(item);
       }
     },

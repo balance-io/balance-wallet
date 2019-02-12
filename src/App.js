@@ -7,7 +7,7 @@ import {
 import { get, isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Piwik from 'react-native-matomo';
+import Matomo from 'react-native-matomo';
 import { AlertIOS, AppRegistry, AppState } from 'react-native';
 import { StackActions } from 'react-navigation';
 import CodePush from 'react-native-code-push';
@@ -71,7 +71,7 @@ class App extends Component {
     await this.handleWalletConfig();
     this.props.onHideSplashScreen();
     await this.props.refreshAccount();
-    Piwik.initTracker('https://matomo.balance.io/piwik.php', 2);
+    Matomo.initTracker('https://matomo.balance.io/piwik.php', 2);
     AppState.addEventListener('change', this.handleAppStateChange);
     firebase.messaging().getToken()
       .then(fcmToken => {
@@ -144,7 +144,7 @@ class App extends Component {
 
   handleAppStateChange = async (nextAppState) => {
     if (this.state.appState.match(/unknown|background/) && nextAppState === 'active') {
-      Piwik.trackEvent('screen', 'view', 'app');
+      Matomo.trackEvent('screen', 'view', 'app');
       this.fetchAllRequestsFromWalletConnectSessions();
     }
     this.setState({ appState: nextAppState });
