@@ -6,7 +6,7 @@ import com.facebook.react.ReactApplication;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
-import de.bonify.reactnativepiwik.PiwikPackage;
+import de.bonify.reactnativepiwik.MatomoPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.reactcommunity.rnlanguages.RNLanguagesPackage;
@@ -56,7 +56,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNDeviceInfo(),
             new RNScreensPackage(),
             new RNVersionNumberPackage(),
-            new PiwikPackage(),
+            new MatomoPackage(),
             new FastImageViewPackage(),
             new BlurViewPackage(),
             new RNLanguagesPackage(),

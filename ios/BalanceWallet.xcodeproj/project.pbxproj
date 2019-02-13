@@ -49,7 +49,7 @@
 		396C4BA42EEC4D0985CEBB42 /* SF-Pro-Text-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA887652F27F43869229AD50 /* SF-Pro-Text-SemiboldItalic.otf */; };
 		3C363E14D5DE4A028E43EA38 /* SF-Pro-Display-UltralightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DCA738BE00E04734AEDA2F07 /* SF-Pro-Display-UltralightItalic.otf */; };
 		3C41C1415A994234A0FF2589 /* SF-Pro-Text-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 233322FCDC624F6FA60C4B52 /* SF-Pro-Text-Heavy.otf */; };
-		3C8B1D23221377EE00BEA3AB /* libBNFMatomo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8B1D222213775E00BEA3AB /* libBNFMatomo.a */; };
+		3CDE61532214B57E00B17716 /* libBNFMatomo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDE61522214B56200B17716 /* libBNFMatomo.a */; };
 		4013198EBD3D4D6F8052D25E /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF45B9EB38D4E8FA18A04C6 /* SF-Pro-Display-Light.otf */; };
 		41804DE52CE94296995264E0 /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35A24AFF4AB449C287EE66A8 /* SF-Pro-Text-Medium.otf */; };
 		424410A1E84845328C5A0CAB /* Graphik-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 182DC054E3584C83822F2A82 /* Graphik-RegularItalic.otf */; };
@@ -434,19 +434,19 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFirebase;
 		};
-		3C8B1D212213775E00BEA3AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C8B1D1D2213775E00BEA3AB /* BNFMatomo.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9A01249E21B5AF5E004E207B;
-			remoteInfo = BNFMatomo;
-		};
 		3CD4E8CC216989E8000FA5BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 137BEEE47D2E4F7AB452C0BD /* SRSRadialGradient.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 47413E2820DBB5D000CCDA85;
 			remoteInfo = "SRSRadialGradien-tvOS";
+		};
+		3CDE61512214B56200B17716 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CDE614D2214B56200B17716 /* BNFMatomo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9A01249E21B5AF5E004E207B;
+			remoteInfo = BNFMatomo;
 		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -639,7 +639,7 @@
 		3A7E5E09E14B4EA4B52CC6EE /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		3C379D5D20FD1F92009AF81F /* BalanceWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BalanceWallet.entitlements; path = BalanceWallet/BalanceWallet.entitlements; sourceTree = "<group>"; };
 		3C39C266218BBE66004C763F /* FastImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
-		3C8B1D1D2213775E00BEA3AB /* BNFMatomo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BNFMatomo.xcodeproj; path = "../node_modules/react-native-matomo/ios/BNFMatomo.xcodeproj"; sourceTree = "<group>"; };
+		3CDE614D2214B56200B17716 /* BNFMatomo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BNFMatomo.xcodeproj; path = "../node_modules/react-native-matomo/ios/BNFMatomo.xcodeproj"; sourceTree = "<group>"; };
 		3CE850D5210FEA8F00672599 /* libGoogleToolboxForMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGoogleToolboxForMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE850D7210FEACE00672599 /* libnanopb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libnanopb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EA8003C5E2D46E38184714B /* Graphik-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Graphik-ThinItalic.otf"; path = "../src/assets/fonts/Graphik-ThinItalic.otf"; sourceTree = "<group>"; };
@@ -735,7 +735,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C8B1D23221377EE00BEA3AB /* libBNFMatomo.a in Frameworks */,
+				3CDE61532214B57E00B17716 /* libBNFMatomo.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -1126,10 +1126,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3C8B1D1E2213775E00BEA3AB /* Products */ = {
+		3CDE614E2214B56200B17716 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3C8B1D222213775E00BEA3AB /* libBNFMatomo.a */,
+				3CDE61522214B56200B17716 /* libBNFMatomo.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1155,7 +1155,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				3C8B1D1D2213775E00BEA3AB /* BNFMatomo.xcodeproj */,
+				3CDE614D2214B56200B17716 /* BNFMatomo.xcodeproj */,
 				3C39C266218BBE66004C763F /* FastImage.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -1376,8 +1376,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 3C8B1D1E2213775E00BEA3AB /* Products */;
-					ProjectRef = 3C8B1D1D2213775E00BEA3AB /* BNFMatomo.xcodeproj */;
+					ProductGroup = 3CDE614E2214B56200B17716 /* Products */;
+					ProjectRef = 3CDE614D2214B56200B17716 /* BNFMatomo.xcodeproj */;
 				},
 				{
 					ProductGroup = 24979D4220F83E3E007EB0DA /* Products */;
@@ -1839,18 +1839,18 @@
 			remoteRef = 3C63E308210FD58100CD471C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3C8B1D222213775E00BEA3AB /* libBNFMatomo.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBNFMatomo.a;
-			remoteRef = 3C8B1D212213775E00BEA3AB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		3CD4E8CD216989E8000FA5BD /* libSRSRadialGradien-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libSRSRadialGradien-tvOS.a";
 			remoteRef = 3CD4E8CC216989E8000FA5BD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3CDE61522214B56200B17716 /* libBNFMatomo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBNFMatomo.a;
+			remoteRef = 3CDE61512214B56200B17716 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {
