@@ -1,4 +1,5 @@
 import { withSendComponentWithData } from 'balance-common';
+import { compose } from 'recompact';
 import SendSheet from './SendSheet';
 import { sendTransaction } from '../model/wallet';
 
@@ -19,3 +20,16 @@ SendSheetWithData.navigationOptions = ({ navigation }) => {
 };
 
 export default SendSheetWithData;
+
+
+// const SendSheetWithData = compose(
+//   withState('isAuthorizing')
+// )(withSendComponentWithData(SendSheet, {
+//   gasFormat: 'short',
+//   sendTransactionCallback: async (test) => {
+//     const tx = await sendTransaction(test);
+//     console.log('sendTransactionCallback', tx);
+
+//     return tx;
+//   },
+// }));
