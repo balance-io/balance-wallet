@@ -1,38 +1,68 @@
 import { withSafeTimeout } from '@hocs/safe-timers';
 import lang from 'i18n-js';
+import { get } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Vibration } from 'react-native';
 import firebase from 'react-native-firebase';
 import Piwik from 'react-native-matomo';
+import Permissions from 'react-native-permissions';
+import { withNavigationFocus } from 'react-navigation';
 import { compose } from 'recompact';
 import { Alert } from '../components/alerts';
+import {
+  withAccountAddress,
+  withAddWalletConnector,
+  withWalletConnectConnections,
+} from '../hoc';
 import { walletConnectInit } from '../model/walletconnect';
-import { withAccountAddress, withAddWalletConnector } from '../hoc';
 import { getEthereumAddressFromQRCodeData } from '../utils';
 import QRScannerScreen from './QRScannerScreen';
+import withStatusBarStyle from '../hoc/withStatusBarStyle';
 
-class QRScannerScreenWithData extends PureComponent {
+class QRScannerScreenWithData extends Component {
   static propTypes = {
     accountAddress: PropTypes.string,
     addWalletConnector: PropTypes.func,
-    isScreenActive: PropTypes.bool,
+    isFocused: PropTypes.bool,
     navigation: PropTypes.object,
     setSafeTimeout: PropTypes.func,
   }
 
-  state = { enableScanning: true }
+  state = {
+    enableScanning: true,
+    requestingNotificationPermissionAlert: false,
+    isCameraAuthorized: true,
+    sheetHeight: 240,
+  }
 
-  componentDidUpdate = (prevProps) => {
-    if (this.props.isScreenActive && !prevProps.isScreenActive) {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.isFocused && !prevProps.isFocused) {
+      Permissions.request('camera').then(permission => {
+        const isCameraAuthorized = permission === 'authorized';
+
+        if (prevState.isCameraAuthorized !== isCameraAuthorized) {
+          this.setState({ isCameraAuthorized });
+        }
+      });
+
       this.setState({ enableScanning: true });
       Piwik.trackScreen('QRScannerScreen', 'QRScannerScreen');
     }
   }
 
+  handleSheetLayout = ({ nativeEvent }) => {
+    this.setState({ sheetHeight: get(nativeEvent, 'layout.height') });
+  }
+
   handlePressBackButton = () => this.props.navigation.navigate('WalletScreen')
 
   handleReenableScanning = () => this.setState({ enableScanning: true })
+
+  handleReenableScanningWithPushPermissions = () => this.setState({
+    enableScanning: true,
+    requestingNotificationPermissionAlert: false,
+  });
 
   checkPushNotificationPermissions = async () => {
     const arePushNotificationsAuthorized = await firebase
@@ -40,18 +70,29 @@ class QRScannerScreenWithData extends PureComponent {
       .hasPermission();
 
     if (!arePushNotificationsAuthorized) {
-      // TODO: try catch around Alert?
+      this.setState({ requestingNotificationPermissionAlert: true });
       Alert({
         buttons: [{
-          onPress: async () => firebase.messaging().requestPermission(),
+          onPress: async () => {
+            try {
+              await firebase.messaging().requestPermission();
+              this.handleReenableScanningWithPushPermissions();
+            } catch (error) {
+              this.handleReenableScanningWithPushPermissions();
+            }
+          },
           text: 'Okay',
         }, {
+          onPress: () => this.handleReenableScanningWithPushPermissions(),
           style: 'cancel',
           text: 'Dismiss',
         }],
         message: lang.t('wallet.push_notifications.please_enable_body'),
         title: lang.t('wallet.push_notifications.please_enable_title'),
       });
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -79,31 +120,44 @@ class QRScannerScreenWithData extends PureComponent {
     if (data.startsWith('ethereum:wc')) {
       Piwik.trackEvent('QRScanner', 'walletconnect', 'QRScannedWC');
       const walletConnector = await walletConnectInit(accountAddress, data);
-      await this.checkPushNotificationPermissions();
       addWalletConnector(walletConnector);
-      return setSafeTimeout(this.handleReenableScanning, 1000);
+      const hasPushPermissions = await this.checkPushNotificationPermissions();
+      if (hasPushPermissions) {
+        return setSafeTimeout(this.handleReenableScanning, 2000);
+      } else {
+        return;
+      }
     }
 
     Piwik.trackEvent('QRScanner', 'unknown', 'QRScannedUnknown');
     return Alert({
+      callback: this.handleReenableScanning,
       message: lang.t('wallet.unrecognized_qrcode'),
       title: lang.t('wallet.unrecognized_qrcode_title'),
-      callback: this.handleReenableScanning,
     });
   }
 
   render = () => (
     <QRScannerScreen
       {...this.props}
-      enableScanning={this.state.enableScanning && this.props.isScreenActive}
+      {...this.state}
+      enableScanning={
+        this.state.enableScanning
+        && this.props.isFocused
+        && !this.state.requestingNotificationPermissionAlert
+      }
       onPressBackButton={this.handlePressBackButton}
       onScanSuccess={this.handleScanSuccess}
+      onSheetLayout={this.handleSheetLayout}
     />
   )
 }
 
 export default compose(
+  withNavigationFocus,
   withAccountAddress,
   withAddWalletConnector,
   withSafeTimeout,
+  withWalletConnectConnections,
+  withStatusBarStyle('light-content'),
 )(QRScannerScreenWithData);

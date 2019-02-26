@@ -13,7 +13,6 @@ import {
 } from 'lodash';
 import { createElement } from 'react';
 import { createSelector } from 'reselect';
-import { RequestCoinRow, TransactionCoinRow } from '../components/coin-row';
 import TransactionStatusTypes from './transactionStatusTypes';
 
 const accountAddressSelector = state => state.accountAddress;
@@ -57,7 +56,7 @@ const groupTransactionByDate = ({ pending, timestamp: time }) => {
   return format(timestamp, `MMMM${isThisYear(timestamp) ? '' : ' YYYY'}`);
 };
 
-const normalizeTransactions = ({ accountAddress, nativeCurrency, transactions }) =>
+const normalizeTransactions = ({ accountAddress, nativeCurrency, transactions }) => (
   transactions.map(({
     asset,
     native,
@@ -73,7 +72,8 @@ const normalizeTransactions = ({ accountAddress, nativeCurrency, transactions })
     },
     status: getTransactionStatus({ accountAddress, ...tx }),
     symbol: get(asset, 'symbol'),
-  }));
+  }))
+);
 
 const renderItemElement = renderItem => renderItemProps => createElement(renderItem, renderItemProps);
 
@@ -96,17 +96,15 @@ const buildTransactionsSections = (
 
     sectionedTransactions = Object.keys(transactionsByDate).map(section => ({
       data: transactionsByDate[section],
-      renderItem: renderItemElement(TransactionCoinRow),
       title: section,
     }));
-  }
 
+  }
 
   let requestsToApprove = [];
   if (!isEmpty(requests)) {
     requestsToApprove = [{
       data: requests,
-      renderItem: renderItemElement(RequestCoinRow),
       title: 'Requests',
     }];
   }
