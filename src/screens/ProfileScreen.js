@@ -9,9 +9,11 @@ import { FlexItem, Page } from '../components/layout';
 import { Icon } from '../components/icons';
 import { ProfileMasthead } from '../components/profile';
 import { colors, position } from '../styles';
+import { LoadingOverlay } from '../components/modal';
 
 const ProfileScreen = ({
   accountAddress,
+  areTransactionsFetching,
   blurOpacity,
   hasPendingTransaction,
   isEmpty,
@@ -43,6 +45,7 @@ const ProfileScreen = ({
         onPress={onPressBackButton}
       />
     </Header>
+    {areTransactionsFetching && <LoadingOverlay title="Importing..." />}
     <ActivityList
       accountAddress={accountAddress}
       hasPendingTransaction={hasPendingTransaction}
@@ -64,6 +67,7 @@ const ProfileScreen = ({
 
 ProfileScreen.propTypes = {
   accountAddress: PropTypes.string,
+  areTransactionsFetching: PropTypes.bool,
   blurOpacity: PropTypes.object,
   hasPendingTransaction: PropTypes.bool,
   isEmpty: PropTypes.bool,

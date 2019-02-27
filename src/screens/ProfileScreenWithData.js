@@ -14,6 +14,7 @@ import {
   withTrackingScreen,
 } from '../hoc';
 import ProfileScreen from './ProfileScreen';
+import withAreTransactionsFetching from '../hoc/withAreTransactionsFetching';
 
 export default compose(
   setDisplayName('ProfileScreen'),
@@ -22,6 +23,7 @@ export default compose(
   withAccountTransactions,
   withBlurTransitionProps,
   withIsWalletEmpty,
+  withAreTransactionsFetching,
   withRequests,
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
