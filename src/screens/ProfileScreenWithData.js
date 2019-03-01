@@ -30,7 +30,8 @@ export default compose(
     onPressSettings: ({ navigation }) => () => navigation.navigate('SettingsModal'),
   }),
   withTrackingScreen,
-  withProps(({ isWalletEmpty, transactionsCount }) => ({
+  withProps(({ isWalletEmpty, transactionsCount, areTransactionsFetched }) => ({
     isEmpty: isWalletEmpty && !transactionsCount,
+    showSpinner: !areTransactionsFetched && !isWalletEmpty,
   })),
 )(ProfileScreen);
